@@ -49,6 +49,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-bootstrap": "^0.32.37"
+    "@types/react-bootstrap": "^0.32.37",
+    "nth-check": ">=2.0.1"
   }
 }
