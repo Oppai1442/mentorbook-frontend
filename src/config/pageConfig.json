@@ -1,0 +1,12 @@
+{
+    "pages": {
+      "page_1": {
+        "navigator": true,
+        "footer": false
+      },
+      "page_2": {
+        "navigator": false,
+        "footer": true
+      }
+    }
+  }
