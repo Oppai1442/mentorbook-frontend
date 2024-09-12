@@ -2,6 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import routes from './routes';
+import Navbar from './components/Navbar';
 
 const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const App: React.FC = () => {
           </li>
         </ul>
       </nav>
+      <Navbar /> {/* Load Navbar */}
 
       <Routes>
         {routes.map((route) => (
