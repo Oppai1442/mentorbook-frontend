@@ -1,7 +1,7 @@
 // routes.ts
-import About from '../components/About';
-import Home from '../components/Home';
-import NotFound from '../components/NotFound';
+import { About } from '../pages/About';
+import { Home } from '../pages/Home';
+import { NotFound } from '../pages/NotFound';
 
 const routes = [
   { path: '/', element: Home },
