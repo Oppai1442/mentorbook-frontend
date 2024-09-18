@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import notFound from './NotFound.module.css'; // Đảm bảo rằng bạn đã chuyển đổi nội dung CSS sang file này
+import notFound from './NotFound.module.css';
 
 const NotFound: React.FC = () => {
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ const NotFound: React.FC = () => {
                 <div className={notFound['left-section']}>
                     <div className={notFound['inner-content']}>
                         <h1 className={notFound['heading']}>404</h1>
-                        <p className={notFound['subheading']}>Looks like the page you were looking for is no longer here. <a href="#" onClick={handleGoBack}>Home</a></p>
+                        <p className={notFound['subheading']}>Looks like the page you were looking for is no longer here. <a href="/" onClick={handleGoBack}>Home</a></p>
                     </div>
                 </div>
                 <div className={notFound['right-section']}>
