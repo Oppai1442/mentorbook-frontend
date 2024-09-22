@@ -6,6 +6,8 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { pageConfigs } from './config/pageConfig';
 import './styles/global.css'
+import './assets/fontawesome/css/all.css'
+import './assets/fontawesome/js/all.js'
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -22,6 +24,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 const App: React.FC = () => {
+
   return (
     <Router>
       <Layout>
