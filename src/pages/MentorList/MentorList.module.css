@@ -1,0 +1,30 @@
+.mentorListContainer {
+    display: flex;
+    gap: 20px;
+}
+
+.mentorList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    flex: 1;
+    padding: 20px;
+    background-color: #1c1c1c; /* Nền tối */
+    border-radius: 8px;
+}
+
+.mentorCard {
+    background-color: #2b2b2b; /* Màu tối hơn cho thẻ mentor */
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.mentorCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+}
