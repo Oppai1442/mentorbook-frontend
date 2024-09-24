@@ -88,7 +88,7 @@ const Navbar: React.FC = () => {
             </li>
             {/* Login/Register Buttons for non-logged-in users */}
             <li className="nav-item">
-              <a className="nav-link btn btn-outline-light ms-lg-3" href="/login">
+              <a className="nav-link btn btn-outline-light ms-lg-3" href="/auth">
                 Login
               </a>
             </li>
