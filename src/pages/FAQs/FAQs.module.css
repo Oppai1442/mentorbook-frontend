@@ -1,0 +1,28 @@
+.faqsContainer {
+  background-color: #1c1c1c; /* Màu nền tối */
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.faqsList {
+  max-width: 800px;
+  margin: auto;
+}
+
+.card {
+  background-color: #2c2c2c; /* Màu tối cho card */
+  border: none; /* Không viền */
+}
+
+.card-header {
+  cursor: pointer;
+}
+
+.faqButton {
+  color: #f8f9fa; /* Màu chữ sáng */
+  font-size: 18px;
+}
+
+.faqButton:hover {
+  color: #00bfff; /* Màu chữ khi hover */
+}
