@@ -1,0 +1,24 @@
+/* ChatWindow.module.css */
+.chatWindow {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 300px;
+    background-color: #343a40;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    z-index: 1001;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.chatContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
