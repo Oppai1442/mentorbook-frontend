@@ -22,21 +22,21 @@ const Sidebar: React.FC = () => {
             <h4>Filter Mentors</h4>
             
             <div className={styles.filterSection}>
-                <label htmlFor="mentorName">Mentor Name</label>
+                <label className={`${styles.label}`} htmlFor="mentorName">Mentor Name</label>
                 <input
                     id="mentorName"
                     type="text"
                     value={mentorName}
-                    className="form-control"
+                    className={`form-control ${styles.input}`}
                     onChange={(e) => setMentorName(e.target.value)}
                 />
             </div>
             
             <div className={styles.filterSection}>
-                <label>Industry</label>
+                <label className={`${styles.label}`}>Industry</label>
                 <select
                     value={selectedIndustry}
-                    className="form-select"
+                    className={`form-select ${styles.select}`}
                     onChange={(e) => setSelectedIndustry(e.target.value)}
                 >
                     <option value="">All Industries</option>
@@ -49,10 +49,10 @@ const Sidebar: React.FC = () => {
             </div>
             
             <div className={styles.filterSection}>
-                <label>Minimum Rating</label>
+                <label className={`${styles.label}`}>Minimum Rating</label>
                 <select
                     value={selectedRating || ''}
-                    className="form-select"
+                    className={`form-select ${styles.select}`}
                     onChange={(e) => setSelectedRating(Number(e.target.value))}
                 >
                     <option value="">Any Rating</option>
@@ -65,17 +65,17 @@ const Sidebar: React.FC = () => {
             </div>
             
             <div className={styles.filterSection}>
-                <label htmlFor="minReviews">Minimum Reviews</label>
+                <label className={`${styles.label}`} htmlFor="minReviews">Minimum Reviews</label>
                 <input
                     id="minReviews"
                     type="number"
-                    className="form-control"
+                    className={`form-control ${styles.input}`}
                     value={minReviews}
                     onChange={(e) => setMinReviews(Number(e.target.value))}
                 />
             </div>
 
-            <button className="btn btn-secondary w-100" onClick={handleResetFilters}>
+            <button className={`btn btn-secondary w-100 ${styles.button}`} onClick={handleResetFilters}>
                 Reset Filters
             </button>
         </div>
