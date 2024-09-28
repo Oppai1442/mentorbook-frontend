@@ -1,9 +1,19 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import navBar from './Navbar.module.css';
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate()
+
+  const handleLoginRedirect = () => {
+    navigate('/auth', {state: {isLogin: true}})
+  }
+
+  const handleSignUpRedirect = () => {
+    navigate('/auth', {state: {isLogin: false}})
+  }
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
@@ -88,14 +98,17 @@ const Navbar: React.FC = () => {
             </li>
             {/* Login/Register Buttons for non-logged-in users */}
             <li className="nav-item">
-              <a className="nav-link btn btn-outline-light ms-lg-3" href="/auth">
+              <a
+                className="nav-link btn btn-outline-light ms-lg-3"
+                onClick={handleLoginRedirect}
+              >
                 Login
               </a>
             </li>
             <li className="nav-item">
               <a
                 className="nav-link btn btn-outline-light ms-lg-2"
-                href="/register"
+                onClick={handleSignUpRedirect}
               >
                 Register
               </a>
