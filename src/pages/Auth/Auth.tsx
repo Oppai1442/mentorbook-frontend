@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Auth.module.css'; // Import CSS module
+import { useLocation } from 'react-router-dom';
 
 const Auth: React.FC = () => {
+  const location = useLocation()
+
   const [isRightPanelActive, setRightPanelActive] = useState(false);
 
+  const isLogin = location.state?.isLogin
+  
   const handleSignUpClick = () => {
     setRightPanelActive(true);
   };
@@ -12,12 +17,21 @@ const Auth: React.FC = () => {
     setRightPanelActive(false);
   };
 
+  useEffect(() => {
+    if (isLogin) {
+      setRightPanelActive(false);
+    } else {
+      setRightPanelActive(true);
+    }
+  }, [isLogin]);
+
+
   return (
     <div className={styles.body}>
         <div className={styles.container + ' ' + (isRightPanelActive ? styles.rightPanelActive : '')} id="container">
         <div className={styles.formContainer + ' ' + styles.signUpContainer}>
             <form className={`${styles.form}`} action="#">
-            <h1 className={`${styles.h1}`}>Create Account</h1>
+            <h1 className={`${styles.h1}`}>Create Account </h1>
             <div className={styles.socialContainer}>
                 <a href="#" className={`${styles.social} ${styles.a}`}><i className="fab fa-facebook-f"></i></a>
                 <a href="#" className={`${styles.social} ${styles.a}`}><i className="fab fa-google-plus-g"></i></a>
@@ -42,8 +56,15 @@ const Auth: React.FC = () => {
             <span className={`${styles.span}`}>or use your account</span>
             <input className={`${styles.input}`} type="email" placeholder="Email" />
             <input className={`${styles.input}`} type="password" placeholder="Password" />
-            <a href="#">Forgot your password?</a>
+            <div className={`${styles.rememberContainer}`}>
+              <label className={`${styles.rememberLabel}`}>
+                <input type="checkbox" className={`${styles.rememberCheckBox}`} />
+                Remember Me
+              </label>
+            </div>
+
             <button className={styles.button} type="button">Sign In</button>
+            <a href="#" className={`${styles.a}`}>Forgot your password?</a>
             </form>
         </div>
 
