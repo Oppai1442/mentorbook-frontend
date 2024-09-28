@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="/faq" className="text-light">
+                <a href="/FAQs" className="text-light">
                   FAQ
                 </a>
               </li>
@@ -76,7 +76,7 @@ const Footer: React.FC = () => {
         {/* Copyright Section */}
         <div className="row mt-3">
           <div className="col text-center">
-            <p className="mb-0">© 2024 Mentor Booking. All rights reserved.</p>
+            <p className="mb-0">© 2024 MentorNest. All rights reserved.</p>
           </div>
         </div>
       </div>
