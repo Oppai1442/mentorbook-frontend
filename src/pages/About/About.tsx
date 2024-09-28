@@ -10,7 +10,7 @@ const About: React.FC = () => {
       <div className="col-lg-6 mb-4">
         <h2 className="mb-4">About Us</h2>
         <p className="lead">
-          Welcome to <strong>Mentor Booking</strong>, your go-to platform for
+          Welcome to <strong>MentorNest</strong>, your go-to platform for
           connecting with experienced professionals from a wide array of
           industries. Whether you're an aspiring professional seeking guidance,
           a student needing career advice, or a seasoned expert looking to
@@ -18,7 +18,7 @@ const About: React.FC = () => {
           happen.
         </p>
         <p>
-          At Mentor Booking, we believe that everyone deserves access to quality
+          At MentorNest, we believe that everyone deserves access to quality
           mentorship that can help them grow both personally and professionally.
           That's why we have built an intuitive and easy-to-use platform where
           mentees can browse through a vast selection of mentors, book sessions
@@ -33,7 +33,7 @@ const About: React.FC = () => {
             Strategy, Data Science
           </strong>
           , and more. Whether you're just starting your journey or looking to
-          advance in your career, Mentor Booking has something for everyone.
+          advance in your career, MentorNest has something for everyone.
         </p>
       </div>
       <div className="col-lg-6">
@@ -72,7 +72,7 @@ const About: React.FC = () => {
     </div>
     <div className="row mt-5">
       <div className="col-lg-6 mb-4">
-        <h3>Why Choose Mentor Booking?</h3>
+        <h3>Why Choose MentorNest?</h3>
         <ul className="list-unstyled">
           <li className="mb-3">
             <i className="fas fa-check-circle text-primary" />{" "}
