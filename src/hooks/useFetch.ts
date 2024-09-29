@@ -1,39 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-interface UseFetchProps<T> {
-  data: T | null;
-  loading: boolean;
-  error: string | null;
-}
+type FetchFunction = () => Promise<any>;
 
-function useFetch<T>(url: string, options?: RequestInit): UseFetchProps<T> {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+const useFetch = (input: string | FetchFunction) => {
+    const [data, setData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<any>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                let result;
+                if (typeof input === 'function') {
+                    result = await input();
+                } else {
+                    const response = await fetch(input);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    result = await response.json();
+                }
+                setData(result);
+            } catch (err) {
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-      try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json();
-        setData(result);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
+        fetchData();
+    }, [input]);
 
-    fetchData();
-  }, [url, options]);
-
-  return { data, loading, error };
-}
+    return { data, loading, error };
+};
 
 export default useFetch;
