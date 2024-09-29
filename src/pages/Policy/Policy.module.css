@@ -4,16 +4,16 @@
     padding: 2rem;
   }
   
-  h2 {
+  .h2 {
     color: #ffd700;
   }
   
-  p, li {
+  p, .li {
     font-size: 1rem;
     line-height: 1.6;
   }
   
-  ul {
+  .ul {
     list-style-type: disc;
     padding-left: 2rem;
   }
