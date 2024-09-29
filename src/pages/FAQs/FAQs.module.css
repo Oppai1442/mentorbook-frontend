@@ -1,28 +1,12 @@
-.faqsContainer {
-  background-color: #1c1c1c; /* Màu nền tối */
-  padding: 20px;
-  border-radius: 8px;
+.accordion-button::after {
+  content: '';
+  border: solid transparent;
+  border-width: 0 5px 5px 5px;
+  border-top-color: #000; /* Màu mũi tên */
+  transform: rotate(0); /* Hướng ban đầu */
+  transition: transform 0.3s ease;
 }
 
-.faqsList {
-  max-width: 800px;
-  margin: auto;
-}
-
-.card {
-  background-color: #2c2c2c; /* Màu tối cho card */
-  border: none; /* Không viền */
-}
-
-.card-header {
-  cursor: pointer;
-}
-
-.faqButton {
-  color: #f8f9fa; /* Màu chữ sáng */
-  font-size: 18px;
-}
-
-.faqButton:hover {
-  color: #00bfff; /* Màu chữ khi hover */
+.accordion-button.collapsed::after {
+  transform: rotate(180deg); /* Quay mũi tên khi đóng */
 }
