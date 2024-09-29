@@ -15,7 +15,6 @@ const mentors = [
         rating: 4.6,
         reviews: 95,
     },
-    // Add more mentors here
 ];
 
 const MentorList: React.FC = () => {
