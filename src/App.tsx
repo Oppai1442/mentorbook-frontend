@@ -12,7 +12,7 @@ import './assets/fontawesome/css/all.css'
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const path = location.pathname.substring(1) || 'home';
-  const config = pageConfigs[path] || pageConfigs['notFound']; // Dùng cấu hình tương ứng cho từng page
+  const config = pageConfigs[path] || pageConfigs['notFound'];
 
   return (
     <>
