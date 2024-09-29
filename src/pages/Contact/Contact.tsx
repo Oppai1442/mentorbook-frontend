@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Contact.module.css';
 import useFetch from '../../hooks/useFetch';
+import { getGeocode } from '../../services/mapService';
 
 const Contact: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -24,8 +25,7 @@ const Contact: React.FC = () => {
         console.log(formData);
     };
 
-    const [mapSrc, setMapSrc] = useState<string>('');
-    const { data, loading, error } = useFetch<{ url: string }>('http://localhost:8080/api/maps/geocode');
+    const { data, loading, error } = useFetch(getGeocode);
 
     return (
         <div className={`container ${styles.contactContainer}`}>
@@ -90,23 +90,21 @@ const Contact: React.FC = () => {
             </div>
 
             <div className={styles.map}>
-            {loading && <p>Loading map...</p>}
-            {error && <p>Error fetching map: {error}</p>}
-            {(data && data.url) && (
-                <div className={styles.map}>
                 <h2>Our Location</h2>
-                <iframe
-                    title="Google Maps Location"
-                    src={data.url}
-                    width="100%"
-                    height="300"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                />
-                </div>
-            )}
+                {loading && <p>Loading map...</p>}
+                {error && <p>Error fetching map: {error}</p>}
+                {(data && data.url) && (
+                    <iframe
+                        title="Google Maps Location"
+                        src={data.url}
+                        width="100%"
+                        height="300"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                    />
+                )}
             </div>
 
             
