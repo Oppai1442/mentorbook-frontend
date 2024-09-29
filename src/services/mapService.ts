@@ -1,5 +1,4 @@
-// src/api/mapService.ts
-const BASE_URL = 'http://localhost:8080/api/maps';
+const BASE_URL = process.env.REACT_APP_API_URL + '/api/maps';
 
 export const getGeocode = async () => {
   const response = await fetch(`${BASE_URL}/geocode`);
