@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Contact.module.css';
+import useFetch from '../../hooks/useFetch';
 
 const Contact: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -24,21 +25,7 @@ const Contact: React.FC = () => {
     };
 
     const [mapSrc, setMapSrc] = useState<string>('');
-
-    useEffect(() => {
-      const fetchMapData = async () => {
-        try {
-          const response = await fetch('http://localhost:8080/api/maps/geocode');
-          const data = await response.json();
-          // Giả sử API trả về URL dưới dạng một trường 'url'
-          setMapSrc(data.url);
-        } catch (error) {
-          console.error('Error fetching map data:', error);
-        }
-      };
-  
-      fetchMapData();
-    }, []);
+    const { data, loading, error } = useFetch<{ url: string }>('http://localhost:8080/api/maps/geocode');
 
     return (
         <div className={`container ${styles.contactContainer}`}>
@@ -103,11 +90,14 @@ const Contact: React.FC = () => {
             </div>
 
             <div className={styles.map}>
+            {loading && <p>Loading map...</p>}
+            {error && <p>Error fetching map: {error}</p>}
+            {(data && data.url) && (
+                <div className={styles.map}>
                 <h2>Our Location</h2>
                 <iframe
                     title="Google Maps Location"
-                    
-                    src={mapSrc}
+                    src={data.url}
                     width="100%"
                     height="300"
                     style={{ border: 0 }}
@@ -115,7 +105,11 @@ const Contact: React.FC = () => {
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                 />
+                </div>
+            )}
             </div>
+
+            
         </div>
     );
 };
