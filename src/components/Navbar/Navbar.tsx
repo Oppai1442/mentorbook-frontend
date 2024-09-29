@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
-import navBar from './Navbar.module.css';
+import styles from './Navbar.module.css';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate()
@@ -18,13 +18,13 @@ const Navbar: React.FC = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
         {/* Brand/Logo */}
-        <a className="navbar-brand" href="/">
+        <a className="navbar-brand d-flex align-items-center p-0" href="/">
           <img
-            src={logo}
-            alt="Logo"
-            className={`d-inline-block align-text-top ${navBar['logo']}`}
+              src={logo}
+              alt="Logo"
+              className={`img-fluid w-50 d-inline-block `}
           />
-        </a>
+      </a>
         {/* Hamburger Menu for Mobile */}
         <button
           className="navbar-toggler"
