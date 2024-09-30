@@ -6,14 +6,14 @@
 /* Khi chiều cao màn hình lớn hơn 1080px */
 @media (min-height: 1080px) {
   .container {
-      height: 61.7vh; /* Giữ nguyên chiều cao */
+      height: 62.3vh; /* Giữ nguyên chiều cao */
   }
 }
 
 /* Khi chiều cao màn hình giữa 900px và 1079px */
 @media (min-height: 900px) and (max-height: 1079px) {
   .container {
-      height: 56.3vh; /* Điều chỉnh chiều cao nhỏ hơn */
+      height: 57.0vh; /* Điều chỉnh chiều cao nhỏ hơn */
   }
 }
 
@@ -34,6 +34,11 @@
 .mapContainer {
   width: 50%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .contactContainer {
@@ -57,4 +62,22 @@
 
 .iconContainer {
   margin-right: 2rem;
+}
+
+.loadingContainer, .errorContainer {
+  display: flex;
+  flex-direction: column; /* Căn giữa theo chiều dọc */
+  align-items: center; /* Căn giữa theo chiều ngang */
+  text-align: center; /* Căn giữa văn bản */
+  margin-top: 20px; /* Khoảng cách trên */
+}
+
+.loadingContainer i, .errorContainer i {
+  font-size: 2rem; /* Kích thước biểu tượng */
+  margin-bottom: 10px; /* Khoảng cách dưới biểu tượng */
+}
+
+.loadingContainer p, .errorContainer p {
+  margin: 0; /* Xóa khoảng cách mặc định của đoạn văn */
+  font-size: 1.2rem; /* Kích thước văn bản */
 }
