@@ -1,30 +1,45 @@
-.mentorListContainer {
-    display: flex;
-    gap: 20px;
+.mentor {
+  padding: 2rem !important;
 }
 
-.mentorList {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    flex: 1;
-    padding: 20px;
-    background-color: #1c1c1c; /* Nền tối */
-    border-radius: 8px;
+.mentorInfo {
+  margin-bottom: 2rem !important;
 }
 
-.mentorCard {
-    background-color: #2b2b2b; /* Màu tối hơn cho thẻ mentor */
-    color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 300px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s, box-shadow 0.3s;
+.mentorMoreInfo {
+  color: #939393
 }
 
-.mentorCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+.mentorName {
+  font-weight: 600 !important;
+}
+
+.mentorRate {
+
+}
+
+.mentorLocation {
+
+}
+
+.mentorChat {
+  color: #fff;
+  background-color: #2796CE;
+  border-color: #2796CE;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .5rem 1.5rem;
+  font-size: .875rem;
+  border-radius: 1rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.bg-primary-light {
+  background-color: #E1F1F9 !important;
 }
