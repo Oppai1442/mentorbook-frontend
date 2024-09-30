@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from './FAQs.module.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const FAQs = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
