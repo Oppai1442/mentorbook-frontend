@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
-import styles from "./Auth.module.css"; // Import CSS module
-import { useLocation } from "react-router-dom";
+import styles from "./Auth.module.css";
 import { loadSvgs } from "../../utils";
 
-import googleLogo from '../../assets/svg/google-logo.svg'
-import appleLogo from '../../assets/svg/apple-logo.svg'
-
-
 const Auth: React.FC = () => {
-  const svgs = loadSvgs();
-
-  console.log(svgs['google-logo'])
+  const googleLogo = loadSvgs('google-logo');
+  const appleLogo = loadSvgs('apple-logo');
 
   return (
     <section
@@ -82,7 +76,7 @@ const Auth: React.FC = () => {
           </a>
           <div className={`${styles['text-center']}`}>
             <h4
-              className={`${styles['mb-4']}`}
+              className={`${styles['mb-4']} ${styles['h4']}`}
               style={{ letterSpacing: "-.1rem" }}
               data-config-id="txt-48d7c5-1"
             >
@@ -99,12 +93,14 @@ const Auth: React.FC = () => {
                 className={`${styles['btn']} ${styles['mb-2']} ${styles['w-100']} ${styles['bg-dark']} ${styles['bg-opacity-50']}`}
                 href="https://static.shuffle.dev/components/preview/9021aece-69cd-400d-ab4c-cc5509f8f5ac/assets/public/#"
               >
-                <img
-                  className={`${styles['img-fluid']}`}
-                  src={svgs['google-logo']}
-                  alt=""
-                  data-config-id="img-48d7c5-7"
-                />
+                {googleLogo.status === 200 && googleLogo.data && (
+                  <img
+                    className={`${styles['img-fluid']}`}
+                    src={googleLogo.data}
+                    alt="Google Logo"
+                    data-config-id="img-48d7c5-7"
+                  />
+                )}
                 <span className={`${styles['ms-4']} ${styles['fw-medium']}`} data-config-id="txt-48d7c5-5">
                   Sign in with Google
                 </span>
@@ -113,12 +109,12 @@ const Auth: React.FC = () => {
                 className={`${styles['btn']} ${styles['w-100']} ${styles['bg-dark']} ${styles['bg-opacity-50']}`}
                 href="https://static.shuffle.dev/components/preview/9021aece-69cd-400d-ab4c-cc5509f8f5ac/assets/public/#"
               >
-                <img
+                {appleLogo.status === 200 && appleLogo.data && (<img
                   className={`${styles['img-fluid']}`}
-                  src={appleLogo}
+                  src={appleLogo.data}
                   alt=""
                   data-config-id="img-48d7c5-8"
-                />
+                />)}
                 <span className={`${styles['ms-4']} ${styles['fw-medium']}`} data-config-id="txt-48d7c5-6">
                   Sign in with Apple
                 </span>

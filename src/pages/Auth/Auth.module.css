@@ -165,29 +165,7 @@
   --bs-form-invalid-color: #ff1e1e;
   --bs-form-invalid-border-color: #ff1e1e;
 }
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-@media (prefers-reduced-motion: no-preference) {
-  :root {
-    scroll-behavior: smooth;
-  }
-}
-body {
-  margin: 0;
-  font-family: var(--bs-body-font-family);
-  font-size: var(--bs-body-font-size);
-  font-weight: var(--bs-body-font-weight);
-  line-height: var(--bs-body-line-height);
-  color: var(--bs-body-color);
-  text-align: var(--bs-body-text-align);
-  background-color: var(--bs-body-bg);
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-h4 {
+.h4 {
   margin-top: 0;
   margin-bottom: 0.5rem;
   font-family: "Clash Grotesk", ui-sans-serif, system-ui, -apple-system,
@@ -198,11 +176,11 @@ h4 {
   line-height: 1;
   color: var(--bs-heading-color);
 }
-h4 {
+.h4 {
   font-size: calc(1.425rem + 2.1vw);
 }
 @media (min-width: 1200px) {
-  h4 {
+  .h4 {
     font-size: 3rem;
   }
 }
@@ -713,13 +691,6 @@ button:not(:disabled),
   .pb-lg-32 {
     padding-bottom: 8rem !important;
   }
-} /*!
- * Shuffle CSS Extension for Bootstrap
- * Copyright 2023 The Shuffle Team
- */
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 .fw-medium {
   font-weight: 500;
