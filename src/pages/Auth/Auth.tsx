@@ -1,93 +1,217 @@
-import React, { useState, useEffect } from 'react';
-import styles from './Auth.module.css'; // Import CSS module
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import styles from "./Auth.module.css"; // Import CSS module
+import { useLocation } from "react-router-dom";
+import { loadSvgs } from "../../utils";
+
+import googleLogo from '../../assets/svg/google-logo.svg'
+import appleLogo from '../../assets/svg/apple-logo.svg'
+
 
 const Auth: React.FC = () => {
-  const location = useLocation()
+  const svgs = loadSvgs();
 
-  const [isRightPanelActive, setRightPanelActive] = useState(false);
-
-  const isLogin = location.state?.isLogin
-  
-  const handleSignUpClick = () => {
-    setRightPanelActive(true);
-  };
-
-  const handleSignInClick = () => {
-    setRightPanelActive(false);
-  };
-
-  useEffect(() => {
-    if (isLogin) {
-      setRightPanelActive(false);
-    } else {
-      setRightPanelActive(true);
-    }
-  }, [isLogin]);
-
+  console.log(svgs['google-logo'])
 
   return (
-    <div className={styles.body}>
-        <div className={styles.container + ' ' + (isRightPanelActive ? styles.rightPanelActive : '')} id="container">
-        <div className={styles.formContainer + ' ' + styles.signUpContainer}>
-            <form className={`${styles.form}`} action="#">
-            <h1 className={`${styles.h1}`}>Create Account </h1>
-            <div className={styles.socialContainer}>
-                <a href="#" className={`${styles.social} ${styles.a}`}><i className="fab fa-facebook-f"></i></a>
-                <a href="#" className={`${styles.social} ${styles.a}`}><i className="fab fa-google-plus-g"></i></a>
-                <a href="#" className={`${styles.social} ${styles.a}`}><i className="fab fa-linkedin-in"></i></a>
-            </div>
-            <span className={`${styles.span}`}>or use your email for registration</span>
-            <input className={`${styles.input}`} type="text" placeholder="Name" />
-            <input className={`${styles.input}`} type="email" placeholder="Email" />
-            <input className={`${styles.input}`} type="password" placeholder="Password" />
-            <button className={styles.button} type="button">Sign Up</button>
+    <section
+      data-section-id={1}
+      data-share=""
+      data-category="sign-in"
+      data-component-id="fed93509_01_awz"
+      className={`${styles['bg-black']} ${styles['position-relative']} ${styles['overflow-hidden']}`}
+    >
+      <div
+        className={`${styles['d-none']} ${styles['d-lg-block']} ${styles['position-absolute']} ${styles['top-0']} ${styles['end-0']} ${styles['col-6']} ${styles['h-100']} ${styles['bg-dark']} ${styles['bg-opacity-10']} ${styles['text-center']} ${styles['pt-52']} ${styles['pb-12']}`}
+        style={{
+          background:
+            "radial-gradient(72.2% 78.49% at 49.87% 50.1%,rgba(71,80,98,.26) 0,rgba(137,137,137,0) 100%)",
+        }}
+      >
+        <img
+          className={`${styles['d-block']} ${styles['mx-auto']} ${styles['mb-40']} ${styles['img-fluid']}`}
+          src="./Shuffle Editor_files/stats.png"
+          alt=""
+          data-config-id="img-48d7c5-1"
+        />
+        <span
+          className={`${styles['d-block']} ${styles['fs-9']} ${styles['text-secondary-light']} ${styles['mb-8']}`}
+          data-config-id="txt-48d7c5-3"
+        >
+          Trusted by
+        </span>
+        <div className={`${styles['d-flex']} ${styles['align-items-center']} ${styles['justify-content-center']} ${styles['gap-8']}`}>
+
+          <img
+            className={`${styles['img-fluid']}`}
+            src="./Shuffle Editor_files/netflix.svg"
+            alt=""
+            data-config-id="img-48d7c5-2"
+          />
+          <img
+            className={`${styles['img-fluid']}`}
+            src="./Shuffle Editor_files/allianz.svg"
+            alt=""
+            data-config-id="img-48d7c5-3"
+          />
+          <img
+            className={`${styles['img-fluid']}`}
+            src="./Shuffle Editor_files/spotify.svg"
+            alt=""
+            data-config-id="img-48d7c5-4"
+          />
+          <img
+            className={`${styles['img-fluid']}`}
+            src="./Shuffle Editor_files/uber.svg"
+            alt=""
+            data-config-id="img-48d7c5-5"
+          />
+        </div>
+      </div>
+      <div className={`${styles['container']} ${styles['position-relative']}`}>
+        <div className={`${styles['mw-md']} ${styles['mx-auto']} ${styles['mx-lg-0']} ${styles['pt-10']} ${styles['pb-20']} ${styles['pb-lg-32']}`}>
+          <a
+            className={`${styles['btn']} ${styles['mb-32']} ${styles['p-0']}`}
+            href="https://static.shuffle.dev/components/preview/9021aece-69cd-400d-ab4c-cc5509f8f5ac/assets/public/#"
+          >
+            <img
+              className={`${styles['img-fluid']}`}
+              src="./Shuffle Editor_files/logo.svg"
+              alt=""
+              data-config-id="img-48d7c5-6"
+            />
+          </a>
+          <div className={`${styles['text-center']}`}>
+            <h4
+              className={`${styles['mb-4']}`}
+              style={{ letterSpacing: "-.1rem" }}
+              data-config-id="txt-48d7c5-1"
+            >
+              Log in to your account
+            </h4>
+            <span
+              className={`${styles['d-block']} ${styles['text-secondary-light']} ${styles['mb-10']}`}
+              data-config-id="txt-48d7c5-4"
+            >
+              Good to have you back!
+            </span>
+            <form action="https://static.shuffle.dev/components/preview/9021aece-69cd-400d-ab4c-cc5509f8f5ac/assets/public/">
+              <a
+                className={`${styles['btn']} ${styles['mb-2']} ${styles['w-100']} ${styles['bg-dark']} ${styles['bg-opacity-50']}`}
+                href="https://static.shuffle.dev/components/preview/9021aece-69cd-400d-ab4c-cc5509f8f5ac/assets/public/#"
+              >
+                <img
+                  className={`${styles['img-fluid']}`}
+                  src={svgs['google-logo']}
+                  alt=""
+                  data-config-id="img-48d7c5-7"
+                />
+                <span className={`${styles['ms-4']} ${styles['fw-medium']}`} data-config-id="txt-48d7c5-5">
+                  Sign in with Google
+                </span>
+              </a>
+              <a
+                className={`${styles['btn']} ${styles['w-100']} ${styles['bg-dark']} ${styles['bg-opacity-50']}`}
+                href="https://static.shuffle.dev/components/preview/9021aece-69cd-400d-ab4c-cc5509f8f5ac/assets/public/#"
+              >
+                <img
+                  className={`${styles['img-fluid']}`}
+                  src={appleLogo}
+                  alt=""
+                  data-config-id="img-48d7c5-8"
+                />
+                <span className={`${styles['ms-4']} ${styles['fw-medium']}`} data-config-id="txt-48d7c5-6">
+                  Sign in with Apple
+                </span>
+              </a>
+              <div className={`${styles['d-flex']} ${styles['mt-8']} ${styles['mb-10']} ${styles['align-items-center']}`}>
+                <div className={`${styles['w-100']} ${styles['border-top']}`} />
+                <span
+                  className={`${styles['d-inline-block']} ${styles['flex-shrink-0']} ${styles['mx-5']} ${styles['fs-10']} ${styles['fw-medium']} ${styles['text-secondary-light']}`}
+                  data-config-id="txt-48d7c5-7"
+                >
+                  or sign in with email
+                </span>
+                <div className={`${styles['w-100']} ${styles['border-top']}`} />
+              </div>
+              <input
+                className={`${styles['form-control']} ${styles['bg-transparent']} ${styles['mb-6']}`}
+                type="email"
+                placeholder="Enter your email"
+                data-config-id="input-48d7c5-1"
+              />
+              <button
+                className={`${styles['btn']} ${styles['btn-primary']} ${styles['mb-6']} ${styles['w-100']} ${styles['fw-medium']}`}
+                type="submit"
+                data-config-id="txt-48d7c5-10"
+              >
+                Log in
+              </button>
+              <p className={`${styles['d-flex']} ${styles['align-items-center']} ${styles['justify-content-center']}`}>
+                <span
+                  className={`${styles['text-secondary-light']}`}
+                  data-config-id="txt-48d7c5-8"
+                >
+                  Dont have an account?
+                </span>
+                <a
+                  className={`${styles['btn']} ${styles['ms-1']} ${styles['p-0']} ${styles['text-decoration-underline']}`}
+                  href="https://static.shuffle.dev/components/preview/9021aece-69cd-400d-ab4c-cc5509f8f5ac/assets/public/#"
+                  data-config-id="txt-48d7c5-2"
+                >
+                  Sign up
+                </a>
+              </p>
             </form>
+          </div>
         </div>
-
-        <div className={styles.formContainer + ' ' + styles.signInContainer}>
-            <form className={`${styles.form}`} action="#">
-            <h1 className={`${styles.h1}`}>Sign in</h1>
-            <div className={styles.socialContainer}>
-                <a href="#" className={`${styles.social} ${styles.a}`}><i className="fab fa-facebook-f"></i></a>
-                <a href="#" className={`${styles.social} ${styles.a}`}><i className="fab fa-google-plus-g"></i></a>
-                <a href="#" className={`${styles.social} ${styles.a}`}><i className="fab fa-linkedin-in"></i></a>
-            </div>
-            <span className={`${styles.span}`}>or use your account</span>
-            <input className={`${styles.input}`} type="email" placeholder="Email" />
-            <input className={`${styles.input}`} type="password" placeholder="Password" />
-            <div className={`${styles.rememberContainer}`}>
-              <label className={`${styles.rememberLabel}`}>
-                <input type="checkbox" className={`${styles.rememberCheckBox}`} />
-                Remember Me
-              </label>
-            </div>
-
-            <button className={styles.button} type="button">Sign In</button>
-            <a href="#" className={`${styles.a}`}>Forgot your password?</a>
-            </form>
+      </div>
+      <div
+        className={`${styles['d-lg-none']} ${styles['bg-dark']} ${styles['bg-opacity-10']} ${styles['text-center']} ${styles['pt-24']} ${styles['pb-12']}`}
+        style={{
+          background:
+            "radial-gradient(72.2% 78.49% at 49.87% 50.1%,rgba(71,80,98,.26) 0,rgba(137,137,137,0) 100%)",
+        }}
+      >
+        <img
+          className={`${styles['d-block']} ${styles['mx-auto']} ${styles['mb-40']} ${styles['img-fluid']}`}
+          src="./Shuffle Editor_files/stats.png"
+          alt=""
+          data-config-id="img-48d7c5-9"
+        />
+        <span
+          className={`${styles['d-block']} ${styles['fs-9']} ${styles['text-secondary-light']} ${styles['mb-8']}`}
+          data-config-id="txt-48d7c5-9"
+        >
+          Trusted by
+        </span>
+        <div className={`${styles['d-flex']} ${styles['align-items-center']} ${styles['justify-content-center']} ${styles['gap-8']}`}>
+          <img
+            className={`${styles['img-fluid']}`}
+            src="./Shuffle Editor_files/netflix.svg"
+            alt=""
+            data-config-id="img-48d7c5-10"
+          />
+          <img
+            className={`${styles['img-fluid']}`}
+            src="./Shuffle Editor_files/allianz.svg"
+            alt=""
+            data-config-id="img-48d7c5-11"
+          />
+          <img
+            className={`${styles['img-fluid']}`}
+            src="./Shuffle Editor_files/spotify.svg"
+            alt=""
+            data-config-id="img-48d7c5-12"
+          />
+          <img
+            className={`${styles['img-fluid']}`}
+            src="./Shuffle Editor_files/uber.svg"
+            alt=""
+            data-config-id="img-48d7c5-13"
+          />
         </div>
-
-        <div className={styles.overlayContainer}>
-            <div className={styles.overlay}>
-            <div className={styles.overlayPanel + ' ' + styles.overlayLeft}>
-                <h1 className={`${styles.h1}`}>Welcome Back!</h1>
-                <p className={`${styles.p}`}>To keep connected with us please login with your personal info</p>
-                <button className={`${styles.ghost} ${styles.button}`} id="signIn" onClick={handleSignInClick}>
-                Sign In
-                </button>
-            </div>
-            <div className={styles.overlayPanel + ' ' + styles.overlayRight}>
-                <h1 className={`${styles.h1}`}>Hello, Friend!</h1>
-                <p className={`${styles.p}`}>Enter your personal details and start your journey with us</p>
-                <button className={`${styles.ghost} ${styles.button}`} id="signUp" onClick={handleSignUpClick}>
-                Sign Up
-                </button>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
+      </div>
+    </section>
   );
 };
 
