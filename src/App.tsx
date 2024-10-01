@@ -8,7 +8,6 @@ import Footer from './components/Footer';
 import { pageConfigs } from './config/pageConfig';
 import './styles/global.css'
 import './assets/fontawesome/css/all.css'
-import './assets/bootstrap/all.css'
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
