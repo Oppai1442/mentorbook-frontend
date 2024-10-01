@@ -1,20 +1,26 @@
-// src/utils/loadSvgs.ts
-const loadSvgs = () => {
-    const svgNames = ['google-logo', 'apple-logo']; // Danh sách tên SVG
-    const svgs: { [key: string]: string } = {};
+const svgCache: { [key: string]: string | null } = {};
 
-    svgNames.forEach(name => {
-        try {
-            const svgPath = require(`../assets/svg/${name}.svg`).default; // Import trực tiếp
-            console.log(`Loaded SVG: ${name} => ${svgPath}`); // Debug log
-            svgs[name] = svgPath;
-        } catch (error) {
-            console.error(`Error loading SVG: ${name}`, error);
-            svgs[name] = "null"; // Hoặc có thể gán một giá trị mặc định
+const loadSvgs = (svgName: string) => {
+    let svgPath: string | null = null;
+    let status: number;
+
+    try {
+        if (svgCache[svgName]) {
+            svgPath = svgCache[svgName]
+        } else {
+            svgPath = require(`../assets/svg/${svgName}.svg`);
+            svgCache[svgName] = svgPath
         }
-    });
+        status = 200;
+    } catch (error) {
+        console.error('Error loading SVG:', error);
+        status = 404;
+    }
 
-    return svgs;
+    return {
+        data: svgPath,
+        status: status,
+    };
 };
 
 export default loadSvgs;
