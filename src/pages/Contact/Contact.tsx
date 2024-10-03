@@ -58,7 +58,7 @@ const Contact: React.FC = () => {
           >
             <i className="fa-thin fa-phone"></i>
           </span>
-          <span className="text-white" data-config-id="auto-txt-3-2">
+          <span className="text-white">
             +84 3668 6xxxx
           </span>
         </div>
@@ -69,7 +69,7 @@ const Contact: React.FC = () => {
           >
             <i className="fa-light fa-envelope"></i>
           </span>
-          <span className="text-white" data-config-id="auto-txt-3-2">
+          <span className="text-white">
             support@oppai.com
           </span>
         </div>
@@ -80,7 +80,7 @@ const Contact: React.FC = () => {
           >
             <i className="fa-thin fa-location-dot"></i>
           </span>
-          <span className="text-white" data-config-id="auto-txt-3-2">
+          <span className="text-white">
             88 Phước Thiện, P, Thủ Đức, Hồ Chí Minh
           </span>
         </div>

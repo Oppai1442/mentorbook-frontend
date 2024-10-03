@@ -138,17 +138,15 @@ const MentorList: React.FC = () => {
                   style={{ width: 64, height: 64 }}
                   src={mentor.image}
                   alt="avatar"
-                  data-config-id="image1"
                 />
-                <h6 className={`${styles.mentorName}`} data-config-id="name1">
+                <h6 className={`${styles.mentorName}`}>
                   {mentor.name}
                 </h6>
-                <p className="mb-3" data-config-id="job1">
+                <p className="mb-3">
                   {mentor.skill}
                 </p>
                 <span
                   className={`badge mb-4 text-primary ${styles["bg-primary-light"]} ${styles.mentorRate}`}
-                  data-config-id="label1"
                 >
                   <i
                     className="fa-solid fa-star"
@@ -167,7 +165,7 @@ const MentorList: React.FC = () => {
                     style={{ color: "#FFD43B" }}
                   />
                 </span>
-                <p data-config-id="desc1">
+                <p>
                   {" "}
                   I distinguish three main text objectives could be merely to
                   inform people. A second could be persuade people. You want
@@ -179,11 +177,11 @@ const MentorList: React.FC = () => {
               >
                 <div className="d-flex align-items-center">
                   <i className="fa-light fa-compass me-3"></i>
-                  <p className="mb-0" data-config-id="header1-1">
+                  <p className="mb-0">
                     Location
                   </p>
                 </div>
-                <p className="mb-0" data-config-id="value1-1">
+                <p className="mb-0">
                   {mentor.location}
                 </p>
               </div>
@@ -198,7 +196,6 @@ const MentorList: React.FC = () => {
                     viewBox="0 0 16 16"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    data-config-id="auto-svg-3-6"
                   >
                     <path
                       d="M2 3H14V12.4444C14 12.5918 13.9473 12.7331 13.8536 12.8373C13.7598 12.9415 13.6326 13 13.5 13H2.5C2.36739 13 2.24021 12.9415 2.14645 12.8373C2.05268 12.7331 2 12.5918 2 12.4444V3Z"
@@ -215,11 +212,11 @@ const MentorList: React.FC = () => {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  <p className="mb-0" data-config-id="header1-2">
+                  <p className="mb-0">
                     Email address
                   </p>
                 </div>
-                <p className="mb-0" data-config-id="value1-2">
+                <p className="mb-0">
                   {mentor.email}
                 </p>
               </div>
@@ -232,7 +229,6 @@ const MentorList: React.FC = () => {
                     viewBox="0 0 16 16"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    data-config-id="auto-svg-4-6"
                   >
                     <path
                       d="M13.5 5H2.5C2.22386 5 2 5.22386 2 5.5V13.5C2 13.7761 2.22386 14 2.5 14H13.5C13.7761 14 14 13.7761 14 13.5V5.5C14 5.22386 13.7761 5 13.5 5Z"
@@ -256,11 +252,11 @@ const MentorList: React.FC = () => {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  <p className="mb-0" data-config-id="header1-3">
+                  <p className="mb-0">
                     Company
                   </p>
                 </div>
-                <p className="mb-0" data-config-id="value1-3">
+                <p className="mb-0">
                   Nintendo
                 </p>
               </div>
@@ -275,7 +271,6 @@ const MentorList: React.FC = () => {
                   viewBox="0 0 17 16"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  data-config-id="auto-svg-5-6"
                 >
                   <g clipPath="url(#clip0)">
                     <path
@@ -311,7 +306,7 @@ const MentorList: React.FC = () => {
                     </clipPath>
                   </defs>
                 </svg>
-                <span data-config-id="primary-action">Message</span>
+                <span>Message</span>
               </a>
             </div>
           </div>

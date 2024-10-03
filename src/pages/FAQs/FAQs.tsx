@@ -66,10 +66,6 @@ const FAQs = () => {
                         className={`accordion-button collapsed bg-transparent ${styles['.accordion-button']}`}
                         type="button"
                         onClick={() => toggleAccordion(index)}
-                        data-bs-toggle="collapse"
-                        data-bs-target={`#collapse${index}`}
-                        aria-expanded={activeIndex === index}
-                        aria-controls={`collapse${index}`}
                       >
                         <div className="d-flex align-items-center">
                           <div className="me-4 me-md-8">
@@ -94,7 +90,6 @@ const FAQs = () => {
                       id={`collapse${index}`}
                       className={`accordion-collapse collapse ${activeIndex === index ? 'show' : ''}`}
                       aria-labelledby={`heading${index}`}
-                      data-bs-parent="#faqAccordion"
                     >
                       <div className="accordion-body pb-8">
                         <div className="ms-md-6 ms-xl-20 ps-6 ps-md-12 py-2 mw-md mw-xl-2xl border-start">

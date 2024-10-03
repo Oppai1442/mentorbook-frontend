@@ -13,10 +13,6 @@ const Auth: React.FC = () => {
  //
   return (
     <section
-      data-section-id={1}
-      data-share=""
-      data-category="sign-in"
-      data-component-id="fed93509_01_awz"
       className={`${styles["bg-black"]} ${styles["position-relative"]} ${styles["overflow-hidden"]}`}
     >
       <div
@@ -30,11 +26,9 @@ const Auth: React.FC = () => {
           className={`${styles["d-block"]} ${styles["mx-auto"]} ${styles["mb-40"]} ${styles["img-fluid"]} ${styles["img"]}`}
           src="./Shuffle Editor_files/stats.png"
           alt=""
-          data-config-id="img-48d7c5-1"
         />
         <span
           className={`${styles["d-block"]} ${styles["fs-9"]} ${styles["text-secondary-light"]} ${styles["mb-8"]}`}
-          data-config-id="txt-48d7c5-3"
         >
           Trusted by
         </span>
@@ -46,7 +40,6 @@ const Auth: React.FC = () => {
               className={`${styles["img-fluid"]} ${styles["img"]}`}
               src={netflixLogo.data}
               alt=""
-              data-config-id="img-48d7c5-2"
             />
           )}
           {allianzLogo.status === 200 && allianzLogo.data && (
@@ -54,7 +47,6 @@ const Auth: React.FC = () => {
               className={`${styles["img-fluid"]} ${styles["img"]}`}
               src={allianzLogo.data}
               alt=""
-              data-config-id="img-48d7c5-3"
             />
           )}
           {spotifyLogo.status === 200 && spotifyLogo.data && (
@@ -62,7 +54,6 @@ const Auth: React.FC = () => {
               className={`${styles["img-fluid"]} ${styles["img"]}`}
               src={spotifyLogo.data}
               alt=""
-              data-config-id="img-48d7c5-4"
             />
           )}
           {uberLogo.status === 200 && uberLogo.data && (
@@ -70,7 +61,6 @@ const Auth: React.FC = () => {
               className={`${styles["img-fluid"]} ${styles["img"]}`}
               src={uberLogo.data}
               alt=""
-              data-config-id="img-48d7c5-5"
             />
           )}
         </div>
@@ -88,7 +78,6 @@ const Auth: React.FC = () => {
                 className={`${styles["img-fluid"]} ${styles["img"]}`}
                 src={websiteLogo.data}
                 alt=""
-                data-config-id="img-48d7c5-6"
               />
             )}
           </a>
@@ -96,13 +85,11 @@ const Auth: React.FC = () => {
             <h4
               className={`${styles["mb-4"]} ${styles["h4"]}`}
               style={{ letterSpacing: "-.1rem" }}
-              data-config-id="txt-48d7c5-1"
             >
               Log in to your account
             </h4>
             <span
               className={`${styles["d-block"]} ${styles["text-secondary-light"]} ${styles["mb-10"]}`}
-              data-config-id="txt-48d7c5-4"
             >
               Good to have you back!
             </span>
@@ -116,12 +103,10 @@ const Auth: React.FC = () => {
                     className={`${styles["img-fluid"]} ${styles["img"]}`}
                     src={googleLogo.data}
                     alt="Google Logo"
-                    data-config-id="img-48d7c5-7"
                   />
                 )}  
                 <span
                   className={`${styles["ms-4"]} ${styles["fw-medium"]}`}
-                  data-config-id="txt-48d7c5-5"
                 >
                   Sign in with Google
                 </span>
@@ -135,12 +120,10 @@ const Auth: React.FC = () => {
                     className={`${styles["img-fluid"]} ${styles["img"]}`}
                     src={appleLogo.data}
                     alt=""
-                    data-config-id="img-48d7c5-8"
                   />
                 )}
                 <span
                   className={`${styles["ms-4"]} ${styles["fw-medium"]}`}
-                  data-config-id="txt-48d7c5-6"
                 >
                   Sign in with Apple
                 </span>
@@ -151,7 +134,6 @@ const Auth: React.FC = () => {
                 <div className={`${styles["w-100"]} ${styles["border-top"]}`} />
                 <span
                   className={`${styles["d-inline-block"]} ${styles["flex-shrink-0"]} ${styles["mx-5"]} ${styles["fs-10"]} ${styles["fw-medium"]} ${styles["text-secondary-light"]}`}
-                  data-config-id="txt-48d7c5-7"
                 >
                   or sign in with email
                 </span>
@@ -161,12 +143,10 @@ const Auth: React.FC = () => {
                 className={`${styles["form-control"]} ${styles["bg-transparent"]} ${styles["mb-6"]}  ${styles["input"]}`}
                 type="email"
                 placeholder="Enter your email"
-                data-config-id="input-48d7c5-1"
               />
               <button
                 className={`${styles["btn"]} ${styles["btn-primary"]} ${styles["mb-6"]} ${styles["w-100"]} ${styles["fw-medium"]} ${styles["button"]}`}
                 type="submit"
-                data-config-id="txt-48d7c5-10"
               >
                 Log in
               </button>
@@ -175,14 +155,12 @@ const Auth: React.FC = () => {
               >
                 <span
                   className={`${styles["text-secondary-light"]}`}
-                  data-config-id="txt-48d7c5-8"
                 >
                   Dont have an account?
                 </span>
                 <a
                   className={`${styles["a"]} ${styles["btn"]} ${styles["ms-1"]} ${styles["p-0"]} ${styles["text-decoration-underline"]}`}
                   href="https://static.shuffle.dev/components/preview/9021aece-69cd-400d-ab4c-cc5509f8f5ac/assets/public/#"
-                  data-config-id="txt-48d7c5-2"
                 >
                   Sign up
                 </a>
@@ -202,11 +180,9 @@ const Auth: React.FC = () => {
           className={`${styles["d-block"]} ${styles["mx-auto"]} ${styles["mb-40"]} ${styles["img-fluid"]} ${styles["img"]}`}
           src="./Shuffle Editor_files/stats.png"
           alt=""
-          data-config-id="img-48d7c5-9"
         />
         <span
           className={`${styles["d-block"]} ${styles["fs-9"]} ${styles["text-secondary-light"]} ${styles["mb-8"]}`}
-          data-config-id="txt-48d7c5-9"
         >
           Trusted by
         </span>
@@ -218,7 +194,6 @@ const Auth: React.FC = () => {
               className={`${styles["img-fluid"]} ${styles["img"]}`}
               src={netflixLogo.data}
               alt=""
-              data-config-id="img-48d7c5-10"
             />
           )}
           {allianzLogo.status === 200 && allianzLogo.data && (
@@ -226,7 +201,6 @@ const Auth: React.FC = () => {
               className={`${styles["img-fluid"]} ${styles["img"]}`}
               src={allianzLogo.data}
               alt=""
-              data-config-id="img-48d7c5-11"
             />
           )}
           {spotifyLogo.status === 200 && spotifyLogo.data && (
@@ -234,7 +208,6 @@ const Auth: React.FC = () => {
               className={`${styles["img-fluid"]} ${styles["img"]}`}
               src={spotifyLogo.data}
               alt=""
-              data-config-id="img-48d7c5-12"
             />
           )}
           {uberLogo.status === 200 && uberLogo.data && (
@@ -242,7 +215,6 @@ const Auth: React.FC = () => {
               className={`${styles["img-fluid"]} ${styles["img"]}`}
               src={uberLogo.data}
               alt=""
-              data-config-id="img-48d7c5-13"
             />
           )}
         </div>
