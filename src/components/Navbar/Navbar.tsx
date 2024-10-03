@@ -1,122 +1,107 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/logo.png';
-import styles from './Navbar.module.css';
+import React from "react";
+import { useNavigate, Link } from "react-router-dom";
+import styles from "./Navbar.module.css";
+import { loadSvgs } from "../../utils";
 
 const Navbar: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const websiteLogo = loadSvgs("website-logo");
+
+  const pathList = {
+    home: '/#',
+    mentors: '/mentors',
+    about: '/about',
+    contact: '/contact',
+    login: '/auth',
+    signup: '/auth',
+  }
 
   const handleLoginRedirect = () => {
-    navigate('/auth', {state: {isLogin: true}})
-  }
+    navigate("/auth", { state: { isLogin: true } });
+  };
 
   const handleSignUpRedirect = () => {
-    navigate('/auth', {state: {isLogin: false}})
-  }
+    navigate("/auth", { state: { isLogin: false } });
+  };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div className="container">
-        {/* Brand/Logo */}
-        <a className="navbar-brand d-flex align-items-center p-0" href="/">
-          <img
-              src={logo}
-              alt="Logo"
-              className={`img-fluid w-50 d-inline-block `}
-          />
-      </a>
-        {/* Hamburger Menu for Mobile */}
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon" />
-        </button>
-        {/* Navbar Links */}
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="/">
-                Home
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/mentors">
-                Mentors
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/about">
-                About
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/contact">
-                Contact
-              </a>
-            </li>
-            {/* Dropdown for logged-in users */}
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                id="userDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
+    <nav
+        className={`${styles["navbar"]} ${styles["navbar-expand-lg"]} ${styles["navbar-dark"]} ${styles["bg-black"]}`}
+      >
+        <div className={`${styles["container"]}`}>
+          <Link
+            className={`${styles['a']} ${styles["navbar-brand"]}`}
+            to={pathList['home']}
+          >
+            {websiteLogo.status === 200 && websiteLogo.data && (
+              <img
+                className={`${styles["img-fluid"]} ${styles['img']}`}
+                src={websiteLogo.data}
+                alt=""
+              />
+            )}
+          </Link>
+          <div
+            className={`${styles["collapse"]} ${styles["navbar-collapse"]}`}
+          >
+            <ul
+              className={`${styles['ul']} ${styles["navbar-nav"]} ${styles["ms-auto"]}`}
+            >
+              <li className={`${styles["nav-item"]}`}>
+                <Link
+                  className={`${styles['a']} ${styles["nav-link"]}`}
+                  aria-current="page"
+                  to={pathList['home']}
+                >
+                  Home
+                </Link>
+              </li>
+              <li className={`${styles["nav-item"]}`}>
+                <Link
+                  className={`${styles['a']} ${styles["nav-link"]}`}
+                  aria-current="page"
+                  to={pathList['mentors']}
+                >
+                  Mentors
+                </Link>
+              </li>
+              <li className={`${styles["nav-item"]}`}>
+                <Link
+                  className={`${styles['a']} ${styles["nav-link"]}`}
+                  aria-current="page"
+                  to={pathList['contact']}
+                >
+                  Contact
+                </Link>
+              </li>
+              <li className={`${styles["nav-item"]}`}>
+                <Link
+                  className={`${styles['a']} ${styles["nav-link"]}`}
+                  aria-current="page"
+                  to={pathList['about']}
+                >
+                  About us
+                </Link>
+              </li>
+            </ul>
+            <div className={`${styles["ms-14"]}`} >
+              <Link
+                className={`${styles['a']} ${styles["btn"]} ${styles["me-4"]} ${styles["btn-outline-light"]}`}
+                to={pathList['login']}
               >
-                Profile
-              </a>
-              <ul
-                className="dropdown-menu dropdown-menu-dark"
-                aria-labelledby="userDropdown"
+                Sign In
+              </Link>
+              <Link
+                className={`${styles['a']} ${styles["btn"]} ${styles["me-4"]} ${styles["btn-outline-light"]}`}
+                to={pathList['login']}
               >
-                <li>
-                  <a className="dropdown-item" href="/profile">
-                    My Profile
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="/bookings">
-                    My Bookings
-                  </a>
-                </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
-                <li>
-                  <a className="dropdown-item" href="/logout">
-                    Logout
-                  </a>
-                </li>
-              </ul>
-            </li>
-            {/* Login/Register Buttons for non-logged-in users */}
-            <li className="nav-item">
-              <a
-                className="nav-link btn btn-outline-light ms-lg-3"
-                onClick={handleLoginRedirect}
-              >
-                Login
-              </a>
-            </li>
-            <li className="nav-item">
-              <a
-                className="nav-link btn btn-outline-light ms-lg-2"
-                onClick={handleSignUpRedirect}
-              >
-                Register
-              </a>
-            </li>
-          </ul>
+                Sign Up
+              </Link>
+            </div>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
   );
 };
 
