@@ -8,33 +8,49 @@ interface AuthProps {
   onClose: () => void;
 }
 
-const Auth: React.FC<AuthProps> = ({ mode, onClose }) => {
+const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
   const googleLogo = loadSvgs("google-logo");
   const appleLogo = loadSvgs("apple-logo");
   const websiteLogo = loadSvgs("website-logo");
 
   const popupRef = useRef<HTMLDivElement | null>(null);
 
+  const [mode, setMode] = useState<"signIn" | "signUp">(
+    initialMode || "signIn"
+  );
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  
+
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prevState) => !prevState);
   };
 
-  const isSignIn = () => mode === 'signIn';
+  const isSignIn = () => mode === "signIn";
 
-  const handleClickOutside = useCallback((event: MouseEvent) => {
-    if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-      onClose();
-    }
-  }, [onClose]);
-  
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    },
+    [onClose]
+  );
+
+  const handleSwitchMode = () => {
+    setMode((prevMode) => (prevMode === "signIn" ? "signUp" : "signIn"));
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [handleClickOutside]);
+  useEffect(() => {
+    setMode(initialMode || "signIn");
+  }, [initialMode]);
 
   //
   return (
@@ -69,9 +85,14 @@ const Auth: React.FC<AuthProps> = ({ mode, onClose }) => {
               className={`${styles["mb-10"]}`}
               style={{ letterSpacing: "-0.1rem" }}
             >
-              {isSignIn() ? ("Log in to your account") : ("Register new account")}
+              {isSignIn() ? "Log in to your account" : "Register new account"}
             </h5>
             <form action="">
+              {!isSignIn() && (<input
+                className={`${styles["form-control"]} ${styles["bg-transparent"]} ${styles["mb-4"]}`}
+                type="email"
+                placeholder="Full name"
+              />)}
               <input
                 className={`${styles["form-control"]} ${styles["bg-transparent"]} ${styles["mb-4"]}`}
                 type="email"
@@ -99,7 +120,7 @@ const Auth: React.FC<AuthProps> = ({ mode, onClose }) => {
                 className={`${styles["btn"]} ${styles["btn-primary"]} ${styles["mb-6"]} ${styles["w-100"]} ${styles["fw-medium"]}`}
                 type="submit"
               >
-              {isSignIn() ? ("Sign In") : ("Sign Up")}
+                {isSignIn() ? "Sign In" : "Sign Up"}
               </button>
               <Link
                 className={`${styles["btn"]} ${styles["fs-9"]} ${styles["ms-1"]} ${styles["p-0"]}  ${styles["text-secondary-light"]}`}
@@ -114,7 +135,7 @@ const Auth: React.FC<AuthProps> = ({ mode, onClose }) => {
                 <span
                   className={`${styles["d-inline-block"]} ${styles["flex-shrink-0"]} ${styles["mx-5"]} ${styles["fs-10"]} ${styles["fw-medium"]} ${styles["text-secondary-light"]}`}
                 >
-                  or {isSignIn() ? ("sign in") : ("sign up")} with email
+                  or {isSignIn() ? "sign in" : "sign up"} with email
                 </span>
                 <div className={`${styles["w-100"]} ${styles["border-top"]}`} />
               </div>
@@ -130,7 +151,7 @@ const Auth: React.FC<AuthProps> = ({ mode, onClose }) => {
                   />
                 )}
                 <span className={`${styles["ms-4"]} ${styles["fw-medium"]}`}>
-                {isSignIn() ? ("Sign in") : ("Sign up")} with Google
+                  {isSignIn() ? "Sign in" : "Sign up"} with Google
                 </span>
               </Link>
               <Link
@@ -145,10 +166,27 @@ const Auth: React.FC<AuthProps> = ({ mode, onClose }) => {
                   />
                 )}
                 <span className={`${styles["ms-4"]} ${styles["fw-medium"]}`}>
-                {isSignIn() ? ("Sign in") : ("Sign up")} with Apple
+                  {isSignIn() ? "Sign in" : "Sign up"} with Apple
                 </span>
               </Link>
             </form>
+            <div className={`${styles["text-center"]} ${styles["mt-4"]}`}>
+              {isSignIn() ? (
+                <p>
+                  Don't have an account?{" "}
+                  <Link to="#" onClick={handleSwitchMode}>
+                    Sign Up
+                  </Link>
+                </p>
+              ) : (
+                <p>
+                  Already have an account?{" "}
+                  <Link to="#" onClick={handleSwitchMode}>
+                    Sign In
+                  </Link>
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
