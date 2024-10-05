@@ -6,6 +6,8 @@ import Navbar from './components/Navbar';
 import ChatBubble from './components/ChatBubble';
 import Footer from './components/Footer';
 import { pageConfigs } from './config/pageConfig';
+
+import styles from './styles/App.module.css';
 import './styles/global.css'
 import './assets/fontawesome/css/fontawesome.all.css'
 
@@ -17,7 +19,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <>
       {config.showNav && <Navbar />}
-      <main>{children}</main>
+      <main className={`${styles['mainContainer']}`}>{children}</main>
       {<ChatBubble/>}
       {config.showFooter && <Footer />}
     </>
