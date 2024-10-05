@@ -1,11 +1,13 @@
 // App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { pageConfigs } from './config/pageConfig';
+
+
 import routes from './routes';
 import Navbar from './components/Navbar';
 import ChatBubble from './components/ChatBubble';
 import Footer from './components/Footer';
-import { pageConfigs } from './config/pageConfig';
 
 import styles from './styles/App.module.css';
 import './styles/global.css'
