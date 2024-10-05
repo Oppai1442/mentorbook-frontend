@@ -235,14 +235,14 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
             {isSignIn() ? (
               <p className={`${styles["p"]}`}>
                 Don't have an account?{" "}
-                <Link to="#" onClick={handleSwitchMode}>
+                <Link to="#" onClick={handleSwitchMode} className={`${styles["a"]}`}>
                   Sign Up
                 </Link>
               </p>
             ) : (
               <p className={`${styles["p"]}`}>
                 Already have an account?{" "}
-                <Link to="#" onClick={handleSwitchMode}>
+                <Link to="#" onClick={handleSwitchMode} className={`${styles["a"]}`}>
                   Sign In
                 </Link>
               </p>
