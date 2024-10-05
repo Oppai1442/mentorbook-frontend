@@ -135,7 +135,7 @@ const Footer: React.FC = () => {
             <div className={`${styles["col-md-6"]} ${styles["col-xl-4"]}`}>
               <div className={`${styles["mw-sm"]} ${styles["ms-lg-auto"]}`}>
                 <Link
-                  className={`${styles["a"]} ${styles["btn"]} ${styles["d-flex"]} ${styles["w-100"]} ${styles["mb-4"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
+                  className={`${styles["a"]} ${styles["btn"]} ${styles["btn-link"]} ${styles["d-flex"]} ${styles["w-100"]} ${styles["mb-4"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
                   to="#"
                 >
                   {twitterLogo.status === 200 && twitterLogo.data && (
@@ -152,7 +152,7 @@ const Footer: React.FC = () => {
                   </span>
                 </Link>
                 <Link
-                  className={`${styles["a"]} ${styles["btn"]} ${styles["d-flex"]} ${styles["w-100"]} ${styles["mb-4"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
+                  className={`${styles["a"]} ${styles["btn"]} ${styles["btn-link"]} ${styles["d-flex"]} ${styles["w-100"]} ${styles["mb-4"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
                   to="#"
                 >
                   {discordLogo.status === 200 && discordLogo.data && (
@@ -169,7 +169,7 @@ const Footer: React.FC = () => {
                   </span>
                 </Link>
                 <Link
-                  className={`${styles["a"]} ${styles["btn"]} ${styles["d-flex"]} ${styles["w-100"]} ${styles["mb-4"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
+                  className={`${styles["a"]} ${styles["btn"]} ${styles["btn-link"]} ${styles["d-flex"]} ${styles["w-100"]} ${styles["mb-4"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
                   to="#"
                 >
                   {telegramLogo.status === 200 && telegramLogo.data && (
