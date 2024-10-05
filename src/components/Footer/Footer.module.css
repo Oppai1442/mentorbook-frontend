@@ -6,7 +6,7 @@
 :root {
   --bs-body-color-hbwxji: #fff;
   --bs-secondary-bg-7j7gpz: #d1d1d1;
-  --bs-link-hover-color-tlyhq0: #a3cc00;
+  --bs-link-hover-color-tlyhq0: #585858;
   --bs-border-width-qahyzg: 1px;
 }
 /* *,
@@ -18,7 +18,7 @@
   :root {
     --bs-body-color-hbwxji: #fff;
     --bs-secondary-bg-7j7gpz: #d1d1d1;
-    --bs-link-hover-color-tlyhq0: #a3cc00;
+    --bs-link-hover-color-tlyhq0: #585858;
     --bs-border-width-qahyzg: 1px;
   }
 }
@@ -132,12 +132,7 @@
     max-width: 1280px;
   }
 }
-:root {
-  --bs-body-color-hbwxji: #fff;
-  --bs-secondary-bg-7j7gpz: #d1d1d1;
-  --bs-link-hover-color-tlyhq0: #a3cc00;
-  --bs-border-width-qahyzg: 1px;
-}
+
 .row {
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;
@@ -327,7 +322,7 @@
   opacity: var(--bs-btn-disabled-opacity);
 }
 .btn-link {
-  --bs-link-color: #ccff00;
+  --bs-link-color: #585858;
   --bs-btn-font-weight: 400;
   --bs-btn-color: var(--bs-link-color);
   --bs-btn-bg: transparent;
@@ -523,4 +518,8 @@
   .mw-xl-none {
     max-width: none;
   }
+}
+
+.followButton:hover {
+    text-decoration: underline;
 }
