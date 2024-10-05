@@ -9,11 +9,11 @@
   --bs-border-width-lofvek: 1px;
   --bs-border-radius-xxl-ijwqky: 2rem;
 }
-*,
+/* *,
 *::before,
 *::after {
   box-sizing: border-box;
-}
+} */
 @media (prefers-reduced-motion: no-preference) {
   :root {
     --bs-body-bg-r508el: #fff;

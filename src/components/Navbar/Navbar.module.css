@@ -30,11 +30,11 @@
   --bs-breakpoint-xl: 1200px;
   --bs-breakpoint-xxl: 1400px;
 }
-*,
+/* *,
 ::after,
 ::before {
   box-sizing: border-box;
-}
+} */
 @media (prefers-reduced-motion: no-preference) {
   :root {
     scroll-behavior: smooth;

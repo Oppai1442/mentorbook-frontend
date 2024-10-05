@@ -9,11 +9,11 @@
   --bs-link-hover-color-tlyhq0: #a3cc00;
   --bs-border-width-qahyzg: 1px;
 }
-*,
+/* *,
 *::before,
 *::after {
   box-sizing: border-box;
-}
+} */
 @media (prefers-reduced-motion: no-preference) {
   :root {
     --bs-body-color-hbwxji: #fff;
