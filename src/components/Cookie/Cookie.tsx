@@ -45,33 +45,33 @@ const CookieConsent: React.FC = () => {
             <button
               type="button"
               onClick={handleClose}
-              className={`${styles["position-absolute"]} ${styles["top-0"]} ${styles["end-0"]} ${styles["me-6"]} ${styles["mt-6"]} ${styles["btn"]} ${styles["p-0"]}`}
+              className={`${styles["button"]} ${styles["position-absolute"]} ${styles["top-0"]} ${styles["end-0"]} ${styles["me-6"]} ${styles["mt-6"]} ${styles["btn"]} ${styles["p-0"]}`}
             >
               <i className="fa-thin fa-x"></i>
             </button>
             <div className={`${styles["container"]} ${styles["position-relative"]}`}>
               <div className={`${styles["row"]} ${styles["align-items-center"]}`}>
-                <h3 className={`${styles["mb-2"]} ${styles["fs-6"]} ${styles["fw-medium"]}`}>
+                <h3 className={`${styles["h3"]} ${styles["mb-2"]} ${styles["fs-6"]} ${styles["fw-medium"]}`}>
                   Cookie Consent
                 </h3>
-                <p className={`${styles["text-light"]} ${styles["mb-8"]}`}>
+                <p className={`${styles["p"]} ${styles["text-light"]} ${styles["mb-8"]}`}>
                   We use cookies to ensure that we give you the best experience on
                   our website. If you continue to use this site we will assume that
                   you are happy with it.
                 </p>
                 <div className={`${styles["d-flex"]} ${styles["flex-column"]} ${styles["flex-sm-row"]} ${styles["gap-4"]}`}>
-                  <a
-                    className={`${styles["btn"]} ${styles["btn-primary"]} ${styles["fw-medium"]}`}
+                  <button
+                    className={`${styles["button"]} ${styles["btn"]} ${styles["btn-primary"]} ${styles["fw-medium"]}`}
                     onClick={handleAcceptAll}
                   >
                     Allow
-                  </a>
-                  <a
-                    className={`${styles["btn"]} ${styles["btn-outline-light"]} ${styles["fw-medium"]}`}
+                  </button>
+                  <button
+                    className={`${styles["button"]} ${styles["btn"]} ${styles["btn-outline-light"]} ${styles["fw-medium"]}`}
                     onClick={handleDeclineAll}
                   >
                     Decline
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
