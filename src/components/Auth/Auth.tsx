@@ -20,7 +20,6 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
   );
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
-  // State cho các trường nhập liệu
   const [fullName, setFullName] = useState<string>("");
   const [birthDate, setBirthDate] = useState<string>("");
   const [address, setAddress] = useState<string>("");
@@ -170,12 +169,21 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
               {emailError && (
                 <div className={`${styles["text-danger"]}`}>{emailError}</div>
               )}
-              <input
-                className={`${styles["form-control"]} ${styles["bg-transparent"]} ${styles["mb-6"]}`}
-                type={isPasswordVisible ? "text" : "password"}
-                placeholder="Password"
-                required
-              />
+
+              <div className={`${styles["position-relative"]}`}>
+                <input
+                  className={`${styles["form-control"]} ${styles["bg-transparent"]} ${styles["mb-6"]}`}
+                  type={!isPasswordVisible ? "password" : "text"}
+                  placeholder="Password"
+                />
+                <button
+                  className={`${styles["position-absolute"]} ${styles["top-50"]} ${styles["end-0"]} ${styles["me-8"]} ${styles["translate-middle-y"]} ${styles["btn"]} ${styles["p-0"]}`}
+                  onClick={togglePasswordVisibility}
+                  type="button"
+                >
+                  <i className={`fa-thin ${!isPasswordVisible ? "fa-eye-slash" : "fa-eye"}`} style={{ color: "#ffffff" }} />
+                </button>
+              </div>
             </div>
             <button
               className={`${styles["btn"]} ${styles["btn-primary"]} ${styles["mb-6"]} ${styles["w-100"]} ${styles["fw-medium"]}`}
@@ -235,14 +243,22 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
             {isSignIn() ? (
               <p className={`${styles["p"]}`}>
                 Don't have an account?{" "}
-                <Link to="#" onClick={handleSwitchMode} className={`${styles["a"]}`}>
+                <Link
+                  to="#"
+                  onClick={handleSwitchMode}
+                  className={`${styles["a"]}`}
+                >
                   Sign Up
                 </Link>
               </p>
             ) : (
               <p className={`${styles["p"]}`}>
                 Already have an account?{" "}
-                <Link to="#" onClick={handleSwitchMode} className={`${styles["a"]}`}>
+                <Link
+                  to="#"
+                  onClick={handleSwitchMode}
+                  className={`${styles["a"]}`}
+                >
                   Sign In
                 </Link>
               </p>
