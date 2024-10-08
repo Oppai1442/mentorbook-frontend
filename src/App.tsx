@@ -22,8 +22,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <>
       {config.showNav && <Navbar /> } 
       <main className={`${styles['mainContainer']}`}>{children}</main>
-      {<CookieConsent/>}
-      {<ChatBubble/>}
+      {config.showCookie && <CookieConsent/>}
+      {config.showChatBubble && <ChatBubble/>}
       {config.showFooter && <Footer />}
     </>
   );
