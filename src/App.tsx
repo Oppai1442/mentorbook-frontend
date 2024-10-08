@@ -3,7 +3,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { pageConfigs } from './config/pageConfig';
 
-
 import routes from './routes';
 import Navbar from './components/Navbar';
 import ChatBubble from './components/ChatBubble';
@@ -20,7 +19,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <>
-      {config.showNav && <Navbar />}
+      {config.showNav && <Navbar /> } 
       <main className={`${styles['mainContainer']}`}>{children}</main>
       {<ChatBubble/>}
       {config.showFooter && <Footer />}
