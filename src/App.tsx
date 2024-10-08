@@ -7,6 +7,7 @@ import routes from './routes';
 import Navbar from './components/Navbar';
 import ChatBubble from './components/ChatBubble';
 import Footer from './components/Footer';
+import CookieConsent from './components/Cookie';
 
 import styles from './styles/App.module.css';
 import './styles/global.css'
@@ -21,6 +22,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <>
       {config.showNav && <Navbar /> } 
       <main className={`${styles['mainContainer']}`}>{children}</main>
+      {<CookieConsent/>}
       {<ChatBubble/>}
       {config.showFooter && <Footer />}
     </>
