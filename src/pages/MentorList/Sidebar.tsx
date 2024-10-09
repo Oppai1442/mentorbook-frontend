@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
     return (
         <div className={styles.sidebar}>
             <h4>Filter Mentors</h4>
-            
+
             <div className={styles.filterSection}>
                 <label className={`${styles.label}`} htmlFor="mentorName">Mentor Name</label>
                 <input
@@ -31,7 +31,7 @@ const Sidebar: React.FC = () => {
                     onChange={(e) => setMentorName(e.target.value)}
                 />
             </div>
-            
+
             <div className={styles.filterSection}>
                 <label className={`${styles.label}`}>Industry</label>
                 <select
@@ -47,7 +47,7 @@ const Sidebar: React.FC = () => {
                     ))}
                 </select>
             </div>
-            
+
             <div className={styles.filterSection}>
                 <label className={`${styles.label}`}>Minimum Rating</label>
                 <select
@@ -63,7 +63,7 @@ const Sidebar: React.FC = () => {
                     ))}
                 </select>
             </div>
-            
+
             <div className={styles.filterSection}>
                 <label className={`${styles.label}`} htmlFor="minReviews">Minimum Reviews</label>
                 <input

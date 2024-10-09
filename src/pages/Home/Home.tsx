@@ -5,7 +5,7 @@ import styles from "./Home.module.css";
 const Home: React.FC = () => {
   return (
     <>
-       {/* Find the right mentor */}
+      {/* Find the right mentor */}
       <section
         className="hero bg-light text-dark py-5"
         style={{
@@ -150,7 +150,7 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Ready to find your mentor */}
       <section
         className="call-to-action text-light text-center py-5"

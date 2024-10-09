@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./NotFound.module.css";
-import {loadSvgs} from '../../utils'
+import { loadSvgs } from '../../utils'
 
 const NotFound: React.FC = () => {
     const navigate = useNavigate();

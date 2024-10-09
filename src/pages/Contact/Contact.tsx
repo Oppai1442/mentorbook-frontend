@@ -35,8 +35,13 @@ const Contact: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.mapContainer}>
-        {loading && <LoadingError type="loading" message="Loading map"/>}
-        {error && <LoadingError type="error" message="The map could not be loaded due to a server error."/>}
+        {loading && <LoadingError type="loading" message="Loading map" />}
+        {error && (
+          <LoadingError
+            type="error"
+            message="The map could not be loaded due to a server error."
+          />
+        )}
         {data && data.url && (
           <iframe
             src={data.url}
@@ -58,9 +63,7 @@ const Contact: React.FC = () => {
           >
             <i className="fa-thin fa-phone"></i>
           </span>
-          <span className="text-white">
-            +84 3668 6xxxx
-          </span>
+          <span className="text-white">+84 3668 6xxxx</span>
         </div>
         <div className={`d-sm-flex align-items-center ${styles.contactInfo}`}>
           <span
@@ -69,9 +72,7 @@ const Contact: React.FC = () => {
           >
             <i className="fa-light fa-envelope"></i>
           </span>
-          <span className="text-white">
-            support@oppai.com
-          </span>
+          <span className="text-white">support@oppai.com</span>
         </div>
         <div className={`d-sm-flex align-items-center ${styles.contactInfo}`}>
           <span
