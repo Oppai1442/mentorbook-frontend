@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Auth.module.css";
-import { loadSvgs } from "../../utils";
+import {loadSvgs} from "../../utils";
 
 interface AuthProps {
   mode: "signIn" | "signUp" | null;
@@ -9,9 +9,22 @@ interface AuthProps {
 }
 
 const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
-  const googleLogo = loadSvgs("google-logo");
-  const appleLogo = loadSvgs("apple-logo");
-  const websiteLogo = loadSvgs("website-logo");
+  const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
+
+  useEffect(() => {
+      const svgPaths = {
+          googleLogo: () => import('../../assets/svg/google-logo.svg'),
+          appleLogo: () => import('../../assets/svg/apple-logo.svg'),
+          websiteLogo: () => import('../../assets/svg/website-logo.svg'),
+      };
+
+      const loadAndSetSvgs = async () => {
+          const svgMap = await loadSvgs(svgPaths);
+          setSvgData(svgMap);
+      };
+
+      loadAndSetSvgs();
+  }, []);
 
   const popupRef = useRef<HTMLDivElement | null>(null);
 
@@ -106,10 +119,10 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
             className={`${styles["btn"]} ${styles["mb-8"]} ${styles["p-0"]}`}
             to="#"
           >
-            {websiteLogo.status === 200 && websiteLogo.data && (
+            {svgData['websiteLogo'] && (
               <img
                 className={`${styles["img"]} ${styles["img-fluid"]}`}
-                src={websiteLogo.data}
+                src={svgData['websiteLogo']}
                 alt=""
               />
             )}
@@ -212,10 +225,10 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
               className={`${styles["btn"]} ${styles["mb-2"]} ${styles["w-100"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
               to="#"
             >
-              {googleLogo.status === 200 && googleLogo.data && (
+              {svgData['googleLogo'] && (
                 <img
                   className={`${styles["img"]} ${styles["img-fluid"]}`}
-                  src={googleLogo.data}
+                  src={svgData['googleLogo']}
                   alt=""
                 />
               )}
@@ -227,10 +240,10 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
               className={`${styles["btn"]} ${styles["w-100"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
               to="#"
             >
-              {appleLogo.status === 200 && appleLogo.data && (
+              {svgData['appleLogo'] && (
                 <img
                   className={`${styles["img"]} ${styles["img-fluid"]}`}
-                  src={appleLogo.data}
+                  src={svgData['appleLogo']}
                   alt=""
                 />
               )}

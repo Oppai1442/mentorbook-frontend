@@ -1,14 +1,27 @@
 // src/components/Footer/Footer.tsx
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { loadSvgs } from "../../utils";
 import styles from "./Footer.module.css";
 
 const Footer: React.FC = () => {
-  const websiteLogo = loadSvgs("website-logo");
-  const twitterLogo = loadSvgs("twitter-logo");
-  const discordLogo = loadSvgs("discord-logo");
-  const telegramLogo = loadSvgs("telegram-logo");
+  const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
+
+  useEffect(() => {
+    const svgPaths = {
+        twitterLogo: () => import('../../assets/svg/twitter-logo.svg'),
+        discordLogo: () => import('../../assets/svg/discord-logo.svg'),
+        telegramLogo: () => import('../../assets/svg/telegram-logo.svg'),
+        websiteLogo: () => import('../../assets/svg/website-logo.svg'),
+    };
+
+    const loadAndSetSvgs = async () => {
+        const svgMap = await loadSvgs(svgPaths);
+        setSvgData(svgMap);
+    };
+
+    loadAndSetSvgs();
+}, []);
 
   return (
     <section
@@ -23,10 +36,10 @@ const Footer: React.FC = () => {
               className={`${styles["col-xl-3"]} ${styles["mb-12"]} ${styles["mb-xl-0"]}`}
             >
               <div className={`${styles["mw-xs"]}`}>
-                {websiteLogo.status === 200 && websiteLogo.data && (
+                {svgData['websiteLogo'] && (
                   <img
                     className={`${styles["img"]} ${styles["img-fluid"]} ${styles["mb-7"]}`}
-                    src={websiteLogo.data}
+                    src={svgData['websiteLogo']}
                     alt=""
                   />
                 )}
@@ -138,10 +151,10 @@ const Footer: React.FC = () => {
                   className={`${styles["a"]} ${styles["btn"]} ${styles["btn-link"]} ${styles["d-flex"]} ${styles["w-100"]} ${styles["mb-4"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
                   to="#"
                 >
-                  {twitterLogo.status === 200 && twitterLogo.data && (
+                  {svgData['twitterLogo'] && (
                     <img
                       className={`${styles["img"]} ${styles["img-fluid"]} ${styles["w-8"]}`}
-                      src={twitterLogo.data}
+                      src={svgData['twitterLogo']}
                       alt=""
                     />
                   )}
@@ -155,10 +168,10 @@ const Footer: React.FC = () => {
                   className={`${styles["a"]} ${styles["btn"]} ${styles["btn-link"]} ${styles["d-flex"]} ${styles["w-100"]} ${styles["mb-4"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
                   to="#"
                 >
-                  {discordLogo.status === 200 && discordLogo.data && (
+                  {svgData['discordLogo'] && (
                     <img
                       className={`${styles["img"]} ${styles["img-fluid"]} ${styles["w-8"]}`}
-                      src={discordLogo.data}
+                      src={svgData['discordLogo']}
                       alt=""
                     />
                   )}
@@ -172,10 +185,10 @@ const Footer: React.FC = () => {
                   className={`${styles["a"]} ${styles["btn"]} ${styles["btn-link"]} ${styles["d-flex"]} ${styles["w-100"]} ${styles["mb-4"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
                   to="#"
                 >
-                  {telegramLogo.status === 200 && telegramLogo.data && (
+                  {svgData['telegramLogo'] && (
                     <img
                       className={`${styles["img"]} ${styles["img-fluid"]} ${styles["w-8"]}`}
-                      src={telegramLogo.data}
+                      src={svgData['telegramLogo']}
                       alt=""
                     />
                   )}

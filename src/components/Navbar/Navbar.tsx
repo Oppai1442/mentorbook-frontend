@@ -1,11 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { loadSvgs } from "../../utils";
 import { Auth } from "../Auth";
 
 const Navbar: React.FC = () => {
-  const websiteLogo = loadSvgs("website-logo");
+
+  const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
+
+  useEffect(() => {
+      const svgPaths = {
+          websiteLogo: () => import('../../assets/svg/website-logo.svg'),
+      };
+
+      const loadAndSetSvgs = async () => {
+          const svgMap = await loadSvgs(svgPaths);
+          setSvgData(svgMap);
+      };
+
+      loadAndSetSvgs();
+  }, []);
 
   const pathList = {
     home: "/#",
@@ -38,10 +52,10 @@ const Navbar: React.FC = () => {
           className={`${styles["a"]} ${styles["navbar-brand"]}`}
           to={pathList["home"]}
         >
-          {websiteLogo.status === 200 && websiteLogo.data && (
+          {svgData['websiteLogo'] && (
             <img
               className={`${styles["img-fluid"]} ${styles["img"]}`}
-              src={websiteLogo.data}
+              src={svgData['websiteLogo']}
               alt=""
             />
           )}
