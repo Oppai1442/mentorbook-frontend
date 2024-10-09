@@ -2,7 +2,7 @@ type LoadSvgResult = {
     [key: string]: { status: number; data: string | null };
 };
 
-const loadSvg = async (svgPaths: { [key: string]: () => Promise<any> }) => {
+const loadSvgs = async (svgPaths: { [key: string]: () => Promise<any> }) => {
     const promises = Object.keys(svgPaths).map(async (key) => {
         try {
             const { default: svg } = await svgPaths[key]();
@@ -21,6 +21,6 @@ const loadSvg = async (svgPaths: { [key: string]: () => Promise<any> }) => {
     }, {} as { [key: string]: string | null });
 };
 
-export default loadSvg;
+export default loadSvgs;
 
 
