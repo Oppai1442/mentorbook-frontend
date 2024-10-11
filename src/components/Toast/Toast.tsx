@@ -42,8 +42,7 @@ const Toast: React.FC<ToastProps> = ({ mode, message, timeout }) => {
 
   return (
     <div
-      className={`${styles["position-fixed"]} ${styles["bottom-0"]} ${styles["start-50"]} ${styles["translate-middle-x"]} ${styles["p-3"]}`}
-      style={{ zIndex: 1000 }}
+      className={`${styles["toastContainer"]} ${styles["position-fixed"]} ${styles["bottom-0"]} ${styles["start-50"]} ${styles["translate-middle-x"]} ${styles["p-3"]}`}
     >
       <div className={`d-flex align-items-center justify-content-center`}>
         <div

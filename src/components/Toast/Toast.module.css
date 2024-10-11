@@ -38,10 +38,10 @@ body {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-button:focus:not(:focus-visible) {
+.button:focus:not(:focus-visible) {
   outline: 0;
 }
-button:not(:disabled),
+.button:not(:disabled),
 [type="button"]:not(:disabled),
 [type="reset"]:not(:disabled),
 [type="submit"]:not(:disabled) {
@@ -286,10 +286,6 @@ button:not(:disabled),
  * Shuffle CSS Extension for Bootstrap
  * Copyright 2023 The Shuffle Team
  */
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 .alert {
   border-top-width: var(--bs-border-width-77msx0);
   border-right-width: var(--bs-border-width-77msx0);
@@ -323,4 +319,8 @@ body {
   --bs-alert-bg: var(--bs-danger-bg-subtle);
   --bs-alert-border-color: var(--bs-danger-border-subtle);
   --bs-alert-link-color: var(--bs-danger-text-emphasis-i68vv8);
+}
+
+.toastContainer {
+  z-index: 9999999;
 }
