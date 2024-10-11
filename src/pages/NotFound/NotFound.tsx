@@ -1,110 +1,71 @@
 // NotFound.tsx
 
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import styles from "./NotFound.module.css";
-import { loadSvgs } from '../../utils'
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import styles from './NotFound.module.css';
 
 const NotFound: React.FC = () => {
     const navigate = useNavigate();
-    const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
-
-    useEffect(() => {
-        const svgPaths = {
-            background: () => import('../../assets/bg/notfound/background.svg'),
-        };
-
-        const loadAndSetSvgs = async () => {
-            const svgMap = await loadSvgs(svgPaths);
-            setSvgData(svgMap);
-        };
-
-        loadAndSetSvgs();
-    }, []);
+    const location = useLocation();
 
     const handleGoBack = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
-        navigate("/");
+        navigate('/');
     };
 
     return (
-        <section
-            className={`${styles["position-relative"]} ${styles["pt-16"]} ${styles["pb-64"]} ${styles["bg-black"]} ${styles["overflow-hidden"]}`}
-        >
-            {svgData['background'] && (<img
-                className={`${styles["position-absolute"]} ${styles["top-0"]} ${styles["start-50"]} ${styles["translate-middle-x"]} ${styles["h-100"]}`}
-                src={svgData['background']}
-                alt=""
-            />)}
-            <div className={`${styles["container"]}`}>
-                <div
-                    className={`${styles["position-relative"]}`}
-                    style={{ zIndex: 50 }}
-                >
-                    <div className={`${styles["text-center"]}`}>
-                        <a
-                            className={`${styles["d-inline-block"]} ${styles["mb-60"]}`}
-                            href="#"
-                        >
-                            <img src="gradia-assets/logos/gradia-name-white.svg" alt="" />
-                        </a>
-                    </div>
-                    <div className={`${styles["mb-24"]} ${styles["text-center"]}`}>
-                        <img
-                            className={`${styles["img-fluid"]}`}
-                            src="gradia-assets/elements/http-codes/404.png"
-                            alt=""
-                        />
-                    </div>
-                    <div className={`${styles["mw-2xl"]} ${styles["mx-auto"]}`}>
-                        <div
-                            className={`${styles["row"]} ${styles["align-items-end"]} ${styles["g-4"]}`}
-                        >
-                            <div className={`${styles["col-12"]} ${styles["col-md-6"]}`}>
-                                <h2
-                                    className={`${styles["fs-12"]} ${styles["fw-semibold"]} ${styles["lh-sm"]} ${styles["text-white"]} ${styles["mb-0"]}`}
-                                >
-                                    Something went wrong!
-                                </h2>
-                            </div>
-                            <div className={`${styles["col-12"]} ${styles["col-md-6"]}`}>
-                                <div
-                                    className={`${styles["d-flex"]} ${styles["align-items-center"]}`}
-                                >
-                                    <a
-                                        className={`${styles["d-flex"]} ${styles["align-items-center"]} ${styles["text-white"]}`}
-                                        href="#"
-                                    >
-                                        <svg
-                                            className={`${styles["me-3"]}`}
-                                            width={19}
-                                            height={19}
-                                            viewBox="0 0 19 19"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M8 14.75L2.75 9.5M2.75 9.5L8 4.25M2.75 9.5L16.25 9.5"
-                                                stroke="currentColor"
-                                                strokeWidth="1.5"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            />
-                                        </svg>
-                                        <h3
-                                            className={`${styles["fs-20"]} ${styles["fw-semibold"]} ${styles["text-white"]} ${styles["text-uppercase"]} ${styles["mb-0"]}`}
-                                            style={{ letterSpacing: 1 }}
-                                        >
-                                            Go back to Homepage
-                                        </h3>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+        <div className={styles['background']}>
+            <div className={styles['ground']}></div>
+            <div className={styles['container']}>
+                <div className={styles['left-section']}>
+                    <div className={styles['inner-content']}>
+                        <h1 className={styles['heading']}>404</h1>
+                        <p className={styles['subheading']}>Looks like the page <strong>{location.pathname}</strong> is no longer here. <a onClick={handleGoBack}>Back to home</a></p>
                     </div>
                 </div>
+                <div className={styles['right-section']}>
+                    <svg className={styles['svgimg']} xmlns="http://www.w3.org/2000/svg" viewBox="51.5 -15.288 385 505.565">
+                        <g className={styles['bench-legs']}>
+                            <path d="M202.778,391.666h11.111v98.611h-11.111V391.666z M370.833,390.277h11.111v100h-11.111V390.277z M183.333,456.944h11.111 v33.333h-11.111V456.944z M393.056,456.944h11.111v33.333h-11.111V456.944z" />
+                        </g>
+                        <g className={styles['top-bench']}>
+                        <path d="M396.527,397.917c0,1.534-1.243,2.777-2.777,2.777H190.972c-1.534,0-2.778-1.243-2.778-2.777v-8.333
+                        c0-1.535,1.244-2.778,2.778-2.778H393.75c1.534,0,2.777,1.243,2.777,2.778V397.917z M400.694,414.583
+                        c0,1.534-1.243,2.778-2.777,2.778H188.194c-1.534,0-2.778-1.244-2.778-2.778v-8.333c0-1.534,1.244-2.777,2.778-2.777h209.723
+                        c1.534,0,2.777,1.243,2.777,2.777V414.583z M403.473,431.25c0,1.534-1.244,2.777-2.778,2.777H184.028
+                        c-1.534,0-2.778-1.243-2.778-2.777v-8.333c0-1.534,1.244-2.778,2.778-2.778h216.667c1.534,0,2.778,1.244,2.778,2.778V431.25z"
+                        />
+                        </g>
+                        <g className={styles['bottom-bench']}>
+                        <path d="M417.361,459.027c0,0.769-1.244,1.39-2.778,1.39H170.139c-1.533,0-2.777-0.621-2.777-1.39v-4.86
+                        c0-0.769,1.244-0.694,2.777-0.694h244.444c1.534,0,2.778-0.074,2.778,0.694V459.027z" />
+                        <path d="M185.417,443.75H400c0,0,18.143,9.721,17.361,10.417l-250-0.696C167.303,451.65,185.417,443.75,185.417,443.75z" />
+                        </g>
+                        <g id="lamp">
+                        <path className={styles['lamp-details']} d="M125.694,421.997c0,1.257-0.73,3.697-1.633,3.697H113.44c-0.903,0-1.633-2.44-1.633-3.697V84.917
+                        c0-1.257,0.73-2.278,1.633-2.278h10.621c0.903,0,1.633,1.02,1.633,2.278V421.997z"
+                        />
+                        <path className={styles['lamp-accent']} d="M128.472,93.75c0,1.534-1.244,2.778-2.778,2.778h-13.889c-1.534,0-2.778-1.244-2.778-2.778V79.861
+                        c0-1.534,1.244-2.778,2.778-2.778h13.889c1.534,0,2.778,1.244,2.778,2.778V93.75z" />
+                        
+                        <circle className={styles['lamp-light']} cx="119.676" cy="44.22" r="40.51" />
+                        <path className={styles['lamp-details']} d="M149.306,71.528c0,3.242-13.37,13.889-29.861,13.889S89.583,75.232,89.583,71.528c0-4.166,13.369-13.889,29.861-13.889
+                        S149.306,67.362,149.306,71.528z"/>
+                        <radialGradient id="SVGID_1_" cx="119.676" cy="44.22" r="65" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+                            <stop offset="50%" stopColor="#EDEDED" stopOpacity="0.5">
+                                <animate attributeName="stop-opacity" values="0.0; 0.5; 0.0" dur="5000ms" repeatCount="indefinite" />
+                            </stop>
+                            <stop offset="100%" stopColor="#EDEDED" stopOpacity="0" />
+                        </radialGradient>
+                        <circle className={styles['lamp-light__glow']} fill="url(#SVGID_1_)" cx="119.676" cy="44.22" r="65"/>
+                        <path className={styles['lamp-bottom']} d="M135.417,487.781c0,1.378-1.244,2.496-2.778,2.496H106.25c-1.534,0-2.778-1.118-2.778-2.496v-74.869
+                        c0-1.378,1.244-2.495,2.778-2.495h26.389c1.534,0,2.778,1.117,2.778,2.495V487.781z" />
+                        </g>
+                    </svg>
+                </div>
             </div>
-        </section>
+        </div>
     );
 };
 
