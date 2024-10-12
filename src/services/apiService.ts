@@ -1,96 +1,50 @@
-const BASE_URL = 'https://api.example.com'; // URL của API
+const apiRequest = async <T>(url: string, method: string, data?: any, timeout = 5000): Promise<T> => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-interface RequestOptions extends RequestInit {
-  headers?: {
-    [key: string]: string;
-  };
-}
-
-// Hàm dùng để gọi API GET
-export const getRequest = async <T>(endpoint: string, options?: RequestOptions): Promise<T> => {
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    method: 'GET',
+  const response = await fetch(url, {
+    method,
     headers: {
-      'Content-Type': 'application/json',
-      ...(options?.headers || {}),
+      "Content-Type": "application/json",
     },
-    ...options,
+    body: data ? JSON.stringify(data) : null,
+    signal: controller.signal,
   });
 
-  if (!response.ok) {
-    throw new Error(`Error: ${response.status}`);
+  clearTimeout(timeoutId);
+
+  let responseData;
+  try {
+    responseData = await response.json();
+  } catch (e) {
+    responseData = null;
   }
 
-  const data: T = await response.json();
-  return data;
-};
-
-// Hàm dùng để gọi API POST
-export const postRequest = async <T>(
-  endpoint: string,
-  body: any,
-  options?: RequestOptions
-): Promise<T> => {
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options?.headers || {}),
-    },
-    body: JSON.stringify(body),
-    ...options,
-  });
-
   if (!response.ok) {
-    throw new Error(`Error: ${response.status}`);
+    throw new Error(responseData?.message || `HTTP error! Status: ${response.status}`);
   }
 
-  const data: T = await response.json();
-  return data;
+  return responseData;
 };
 
-// Hàm dùng để gọi API PUT
-export const putRequest = async <T>(
-  endpoint: string,
-  body: any,
-  options?: RequestOptions
-): Promise<T> => {
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options?.headers || {}),
-    },
-    body: JSON.stringify(body),
-    ...options,
-  });
 
-  if (!response.ok) {
-    throw new Error(`Error: ${response.status}`);
-  }
-
-  const data: T = await response.json();
-  return data;
+// GET request
+export const getData = <T>(url: string) => {
+  return apiRequest<T>(url, "GET");
 };
 
-// Hàm dùng để gọi API DELETE
-export const deleteRequest = async <T>(
-  endpoint: string,
-  options?: RequestOptions
-): Promise<T> => {
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options?.headers || {}),
-    },
-    ...options,
-  });
-
-  if (!response.ok) {
-    throw new Error(`Error: ${response.status}`);
-  }
-
-  const data: T = await response.json();
-  return data;
+// POST request
+export const postData = <T>(url: string, data: any) => {
+  return apiRequest<T>(url, "POST", data);
 };
+
+// PUT request
+export const putData = <T>(url: string, data: any) => {
+  return apiRequest<T>(url, "PUT", data);
+};
+
+// DELETE request
+export const deleteData = <T>(url: string) => {
+  return apiRequest<T>(url, "DELETE");
+};
+
