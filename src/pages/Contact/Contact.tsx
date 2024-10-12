@@ -1,36 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, {} from "react";
 import styles from "./Contact.module.css";
 import useFetch from "../../hooks/useFetch";
 import { getGeocode } from "../../services/mapService";
 import { LoadingError } from "../../components/LoadingError";
 
 const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-    subject: "",
-  });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Xử lý gửi dữ liệu ở đây
-    console.log(formData);
-  };
-
   const { data, loading, error } = useFetch(getGeocode);
-
-  console.log(error);
 
   return (
     <div className={styles.container}>
