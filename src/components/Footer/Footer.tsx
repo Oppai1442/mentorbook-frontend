@@ -212,13 +212,13 @@ const Footer: React.FC = () => {
             <div>
               <Link
                 className={`${styles["a"]} ${styles["btn"]} ${styles["btn-link"]} ${styles["me-14"]} ${styles["p-0"]} ${styles["fs-9"]} ${styles["fw-medium"]} ${styles["text-secondary-light"]}`}
-                to="#"
+                to="/ToS"
               >
                 Terms of Use
               </Link>
               <Link
                 className={`${styles["a"]} ${styles["btn"]} ${styles["btn-link"]} ${styles["p-0"]} ${styles["fs-9"]} ${styles["fw-medium"]} ${styles["text-secondary-light"]}`}
-                to="#"
+                to="/Policy"
               >
                 Privacy Policy
               </Link>
