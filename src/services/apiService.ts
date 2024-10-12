@@ -1,8 +1,12 @@
+const BASE_URL = process.env.REACT_APP_API_URL;
+
 const apiRequest = async <T>(url: string, method: string, data?: any, timeout = 5000): Promise<T> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-  const response = await fetch(url, {
+  const fullUrl = url.startsWith("http") ? url : `${BASE_URL}${url}`;
+
+  const response = await fetch(fullUrl, {
     method,
     headers: {
       "Content-Type": "application/json",
@@ -21,7 +25,9 @@ const apiRequest = async <T>(url: string, method: string, data?: any, timeout = 
   }
 
   if (!response.ok) {
-    throw new Error(responseData?.message || `HTTP error! Status: ${response.status}`);
+    const error = new Error(responseData || `HTTP error! Status: ${response.status}`);
+    (error as any).status = response.status;
+    throw error;
   }
 
   return responseData;
