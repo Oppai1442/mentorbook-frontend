@@ -3,23 +3,39 @@ import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { loadSvgs } from "../../utils";
 import { Auth } from "../Auth";
+import { Toast } from "../Toast";
 
 const Navbar: React.FC = () => {
 
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Login state
+  const [username, setUsername] = useState<string | null>(null); // User's name
+  const [showDropdown, setShowDropdown] = useState(false); // Dropdown state
 
   useEffect(() => {
-      const svgPaths = {
-          websiteLogo: () => import('../../assets/svg/website-logo.svg'),
-      };
+    // SVG loading logic
+    const svgPaths = {
+      websiteLogo: () => import('../../assets/svg/website-logo.svg'),
+    };
 
-      const loadAndSetSvgs = async () => {
-          const svgMap = await loadSvgs(svgPaths);
-          setSvgData(svgMap);
-      };
+    const loadAndSetSvgs = async () => {
+      const svgMap = await loadSvgs(svgPaths);
+      setSvgData(svgMap);
+    };
 
-      loadAndSetSvgs();
+    loadAndSetSvgs();
+
+    // For demo purposes, let's assume login details are set like this
+    const loggedUser = localStorage.getItem("username");
+    if (loggedUser) {
+      setIsLoggedIn(true);
+      setUsername(loggedUser);
+    }
   }, []);
+
+  const handleLoginSuccess = (message: string) => {
+    <Toast mode="notify" message={message}/>
+  };
 
   const pathList = {
     home: "/#",
@@ -43,84 +59,128 @@ const Navbar: React.FC = () => {
     setShowAuth(true);
   };
 
+  const handleLogOut = () => {
+    setIsLoggedIn(false);
+    setUsername(null);
+    localStorage.removeItem("username"); // Clear the user's login data
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
   return (
-    <nav
-      className={`${styles["navbar"]} ${styles["navbar-expand-lg"]} ${styles["navbar-dark"]} ${styles["bg-black"]}`}
-    >
-      <div className={`${styles["container"]}`}>
-        <Link
-          className={`${styles["a"]} ${styles["navbar-brand"]}`}
-          to={pathList["home"]}
-        >
-          {svgData['websiteLogo'] && (
-            <img
-              className={`${styles["img-fluid"]} ${styles["img"]}`}
-              src={svgData['websiteLogo']}
-              alt=""
-            />
-          )}
-        </Link>
-        <div className={`${styles["collapse"]} ${styles["navbar-collapse"]}`}>
-          <ul
-            className={`${styles["ul"]} ${styles["navbar-nav"]} ${styles["ms-auto"]}`}
+    <>
+      <nav
+        className={`${styles["navbar"]} ${styles["navbar-expand-lg"]} ${styles["navbar-dark"]} ${styles["bg-black"]}`}
+      >
+        <div className={`${styles["container"]}`}>
+          <Link
+            className={`${styles["a"]} ${styles["navbar-brand"]}`}
+            to={pathList["home"]}
           >
-            <li className={`${styles["nav-item"]}`}>
-              <Link
-                className={`${styles["a"]} ${styles["nav-link"]}`}
-                aria-current="page"
-                to={pathList["home"]}
-              >
-                Home
-              </Link>
-            </li>
-            <li className={`${styles["nav-item"]}`}>
-              <Link
-                className={`${styles["a"]} ${styles["nav-link"]}`}
-                aria-current="page"
-                to={pathList["mentors"]}
-              >
-                Mentors
-              </Link>
-            </li>
-            <li className={`${styles["nav-item"]}`}>
-              <Link
-                className={`${styles["a"]} ${styles["nav-link"]}`}
-                aria-current="page"
-                to={pathList["contact"]}
-              >
-                Contact
-              </Link>
-            </li>
-            <li className={`${styles["nav-item"]}`}>
-              <Link
-                className={`${styles["a"]} ${styles["nav-link"]}`}
-                aria-current="page"
-                to={pathList["about"]}
-              >
-                About us
-              </Link>
-            </li>
-          </ul>
-          <div className={`${styles["ms-14"]}`}>
-            <button
-              className={`${styles["a"]} ${styles["btn"]} ${styles["me-4"]} ${styles["btn-outline-light"]}`}
-              onClick={handleSignIn}
+            {svgData['websiteLogo'] && (
+              <img
+                className={`${styles["img-fluid"]} ${styles["img"]}`}
+                src={svgData['websiteLogo']}
+                alt=""
+              />
+            )}
+          </Link>
+          <div className={`${styles["collapse"]} ${styles["navbar-collapse"]}`}>
+            <ul
+              className={`${styles["ul"]} ${styles["navbar-nav"]} ${styles["ms-auto"]}`}
             >
-              Sign In
-            </button>
-            <button
-              className={`${styles["a"]} ${styles["btn"]} ${styles["me-4"]} ${styles["btn-outline-light"]}`}
-              onClick={handleSignUp}
-            >
-              Sign Up
-            </button>
+              <li className={`${styles["nav-item"]}`}>
+                <Link
+                  className={`${styles["a"]} ${styles["nav-link"]}`}
+                  aria-current="page"
+                  to={pathList["home"]}
+                >
+                  Home
+                </Link>
+              </li>
+              <li className={`${styles["nav-item"]}`}>
+                <Link
+                  className={`${styles["a"]} ${styles["nav-link"]}`}
+                  aria-current="page"
+                  to={pathList["mentors"]}
+                >
+                  Mentors
+                </Link>
+              </li>
+              <li className={`${styles["nav-item"]}`}>
+                <Link
+                  className={`${styles["a"]} ${styles["nav-link"]}`}
+                  aria-current="page"
+                  to={pathList["contact"]}
+                >
+                  Contact
+                </Link>
+              </li>
+              <li className={`${styles["nav-item"]}`}>
+                <Link
+                  className={`${styles["a"]} ${styles["nav-link"]}`}
+                  aria-current="page"
+                  to={pathList["about"]}
+                >
+                  About us
+                </Link>
+              </li>
+            </ul>
+            <div className={`${styles["ms-14"]}`}>
+              {isLoggedIn ? (
+                <div className={`${styles["nav-item"]} ${styles["dropdown"]}`}>
+                  <div
+                    onClick={toggleDropdown}
+                    className={`${styles["nav-link"]} ${styles["d-flex"]} ${styles["align-items-center"]} ${styles["user-info"]}`}
+                  >
+                    <img
+                      src="path/to/avatar.jpg"
+                      alt="User Avatar"
+                      className={`${styles["avatar"]} ${styles["me-2"]}`}
+                    />
+                    <span>{username}</span>
+                    <i className={`${styles["ms-2"]} fas fa-chevron-down`}></i>
+                  </div>
+                  {showDropdown && (
+                    <div className={`${styles["dropdown-menu"]} ${styles["show"]}`}>
+                      <Link className={`${styles["dropdown-item"]}`} to="/profile">
+                        Profile
+                      </Link>
+                      <Link className={`${styles["dropdown-item"]}`} to="/settings">
+                        Settings
+                      </Link>
+                      <button className={`${styles["dropdown-item"]}`} onClick={handleLogOut}>
+                        Log out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <button
+                    className={`${styles["a"]} ${styles["btn"]} ${styles["me-4"]} ${styles["btn-outline-light"]}`}
+                    onClick={handleSignIn}
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    className={`${styles["a"]} ${styles["btn"]} ${styles["me-4"]} ${styles["btn-outline-light"]}`}
+                    onClick={handleSignUp}
+                  >
+                    Sign Up
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      {showAuth && (
-        <Auth mode={authMode} onClose={() => setShowAuth(false)} />
-      )}
-    </nav>
+        {showAuth && (
+          <Auth mode={authMode} onClose={() => setShowAuth(false)} onLoginSuccess={handleLoginSuccess}/>
+        )}
+      </nav>
+    </>
   );
 };
 
