@@ -1,37 +1,23 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Auth.module.css";
-import {loadSvgs} from "../../utils";
+import { loadSvgs } from "../../utils";
+import { postData } from "../../services/apiService";
+import { Fade } from "react-bootstrap";
 
 interface AuthProps {
   mode: "signIn" | "signUp" | null;
   onClose: () => void;
+  onLogin: (mode: "notify" | "success" | "failed", message: string) => void;
 }
 
-const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
+const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose, onLogin }) => {
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
-
-  useEffect(() => {
-      const svgPaths = {
-          googleLogo: () => import('../../assets/svg/google-logo.svg'),
-          appleLogo: () => import('../../assets/svg/apple-logo.svg'),
-          websiteLogo: () => import('../../assets/svg/website-logo.svg'),
-      };
-
-      const loadAndSetSvgs = async () => {
-          const svgMap = await loadSvgs(svgPaths);
-          setSvgData(svgMap);
-      };
-
-      loadAndSetSvgs();
-  }, []);
-
   const popupRef = useRef<HTMLDivElement | null>(null);
 
-  const [mode, setMode] = useState<"signIn" | "signUp">(
-    initialMode || "signIn"
-  );
+  const [mode, setMode] = useState<"signIn" | "signUp">(initialMode || "signIn");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const [isHandling, setHandling] = useState<boolean>(false);
 
   const [fullName, setFullName] = useState<string>("");
   const [birthDate, setBirthDate] = useState<string>("");
@@ -39,7 +25,9 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
+  // Callback and Event Handlers
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prevState) => !prevState);
   };
@@ -48,10 +36,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
 
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
-      if (
-        popupRef.current &&
-        !popupRef.current.contains(event.target as Node)
-      ) {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
         onClose();
       }
     },
@@ -61,6 +46,47 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
   const handleSwitchMode = () => {
     setMode((prevMode) => (prevMode === "signIn" ? "signUp" : "signIn"));
   };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (mode === "signUp" && !validateEmail(email)) {
+      setEmailError("Invalid email format");
+      return;
+    } else {
+      setEmailError("");
+    }
+
+    if (isSignIn()) {
+      onLogin("notify", "Signing in");
+      try {
+        const response = await postData("/user/login", { email, password });
+        onLogin("success", "Login successful");
+      } catch (error: any) {
+        if (error.status === 401) {
+          onLogin("failed", "Login failed. Please ensure your details are correct");
+        }
+      }
+    } else {
+      console.log("Submitting:", { fullName, birthDate, address, phoneNumber, email });
+    }
+  };
+
+  // Effect Hooks
+  useEffect(() => {
+    const svgPaths = {
+      googleLogo: () => import('../../assets/svg/google-logo.svg'),
+      appleLogo: () => import('../../assets/svg/apple-logo.svg'),
+      websiteLogo: () => import('../../assets/svg/website-logo.svg'),
+    };
+
+    const loadAndSetSvgs = async () => {
+      const svgMap = await loadSvgs(svgPaths);
+      setSvgData(svgMap);
+    };
+
+    loadAndSetSvgs();
+  }, []);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -73,30 +99,10 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
     setMode(initialMode || "signIn");
   }, [initialMode]);
 
+  // Helper Functions
   const validateEmail = (email: string) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
-  };
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    // Kiểm tra định dạng email
-    if (!validateEmail(email)) {
-      setEmailError("Invalid email format");
-      return;
-    } else {
-      setEmailError("");
-    }
-
-    // Xử lý đăng ký tại đây...
-    console.log("Submitting:", {
-      fullName,
-      birthDate,
-      address,
-      phoneNumber,
-      email,
-    });
   };
 
   return (
@@ -137,7 +143,8 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
             {!isSignIn() && (
               <div className={styles["sign-up-grid"]}>
                 <input
-                  className={`${styles["input"]} ${styles["form-control"]} ${styles["bg-transparent"]}`}
+                  disabled={isHandling}
+                  className={`${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]}`}
                   type="text"
                   placeholder="Full name"
                   value={fullName}
@@ -145,7 +152,8 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
                   required
                 />
                 <input
-                  className={`${styles["input"]} ${styles["form-control"]} ${styles["bg-transparent"]}`}
+                  disabled={isHandling}
+                  className={`${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]}`}
                   type="date"
                   placeholder="Birth date"
                   value={birthDate}
@@ -153,7 +161,8 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
                   required
                 />
                 <input
-                  className={`${styles["input"]} ${styles["form-control"]} ${styles["bg-transparent"]}`}
+                  disabled={isHandling}
+                  className={`${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]}`}
                   type="text"
                   placeholder="Address"
                   value={address}
@@ -161,7 +170,8 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
                   required
                 />
                 <input
-                  className={`${styles["input"]} ${styles["form-control"]} ${styles["bg-transparent"]}`}
+                  disabled={isHandling}
+                  className={`${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]}`}
                   type="tel"
                   placeholder="Phone number"
                   value={phoneNumber}
@@ -172,7 +182,8 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
             )}
             <div className={styles["email-password-container"]}>
               <input
-                className={`${styles["input"]} ${styles["form-control"]} ${styles["bg-transparent"]} ${styles["mb-4"]}`}
+                disabled={isHandling}
+                className={`${isHandling ? "disabled" : ""} ${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]} ${styles["mb-4"]}`}
                 type="email"
                 placeholder="Enter your email"
                 value={email}
@@ -185,12 +196,15 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
 
               <div className={`${styles["position-relative"]}`}>
                 <input
-                  className={`${styles["form-control"]} ${styles["bg-transparent"]} ${styles["mb-6"]}`}
+                  disabled={isHandling}
+                  className={`${styles["bg-transparent"]} ${styles["form-control"]} ${styles["mb-6"]}`}
                   type={!isPasswordVisible ? "password" : "text"}
                   placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
-                  className={`${styles["position-absolute"]} ${styles["top-50"]} ${styles["end-0"]} ${styles["me-8"]} ${styles["translate-middle-y"]} ${styles["btn"]} ${styles["p-0"]}`}
+                  className={`${styles["button"]} ${styles["position-absolute"]} ${styles["top-50"]} ${styles["end-0"]} ${styles["me-8"]} ${styles["translate-middle-y"]} ${styles["btn"]} ${styles["p-0"]}`}
                   onClick={togglePasswordVisibility}
                   type="button"
                 >
@@ -199,13 +213,14 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
               </div>
             </div>
             <button
-              className={`${styles["btn"]} ${styles["btn-primary"]} ${styles["mb-6"]} ${styles["w-100"]} ${styles["fw-medium"]}`}
+              disabled={isHandling}
+              className={`${styles["button"]} ${styles["btn"]} ${styles["btn-primary"]} ${styles["mb-6"]} ${styles["w-100"]} ${styles["fw-medium"]}`}
               type="submit"
             >
               {isSignIn() ? "Sign In" : "Sign Up"}
             </button>
             <Link
-              className={`${styles["btn"]} ${styles["fs-9"]} ${styles["ms-1"]} ${styles["p-0"]}  ${styles["text-secondary-light"]}`}
+              className={`${isHandling ? "disabled" : ""} ${styles["btn"]} ${styles["fs-9"]} ${styles["ms-1"]} ${styles["p-0"]}  ${styles["text-secondary-light"]}`}
               to="#"
             >
               Forgot password?
@@ -222,7 +237,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
               <div className={`${styles["w-100"]} ${styles["border-top"]}`} />
             </div>
             <Link
-              className={`${styles["btn"]} ${styles["mb-2"]} ${styles["w-100"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
+              className={`${isHandling ? "disabled" : ""} ${styles["btn"]} ${styles["mb-2"]} ${styles["w-100"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
               to="#"
             >
               {svgData['googleLogo'] && (
@@ -237,7 +252,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
               </span>
             </Link>
             <Link
-              className={`${styles["btn"]} ${styles["w-100"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
+              className={`${isHandling ? "disabled" : ""} ${styles["btn"]} ${styles["w-100"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
               to="#"
             >
               {svgData['appleLogo'] && (
@@ -252,7 +267,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
               </span>
             </Link>
           </form>
-          <div className={`${styles["text-center"]} ${styles["mt-4"]}`}>
+          <div className={`${isHandling ? "disabled" : ""} ${styles["text-center"]} ${styles["mt-4"]}`}>
             {isSignIn() ? (
               <p className={`${styles["p"]}`}>
                 Don't have an account?{" "}
