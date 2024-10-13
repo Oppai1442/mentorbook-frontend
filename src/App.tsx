@@ -2,14 +2,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { pageConfigs } from './config/pageConfig';
+import { ToastProvider } from './components/Toast/ToastContext';
 
 import routes from './routes';
 import Navbar from './components/Navbar';
 import ChatBubble from './components/ChatBubble';
 import Footer from './components/Footer';
 import CookieConsent from './components/Cookie';
-
-import { ToastProvider } from './components/Toast/ToastContext';
 
 import styles from './styles/App.module.css';
 import './styles/global.css'
@@ -34,7 +33,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 const App: React.FC = () => {
-
   return (
     <Router>
       <Layout>
