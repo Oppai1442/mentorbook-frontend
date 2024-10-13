@@ -172,7 +172,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
         {showAuth && (
-          <Auth mode={authMode} onClose={() => setShowAuth(false)} onLogin={handleLoginSuccess} />
+          <Auth mode={authMode} onClose={() => setShowAuth(false)} />
         )}
       </nav>
     </>
