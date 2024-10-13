@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import styles from "./Auth.module.css";
 import { loadSvgs } from "../../utils";
 import { postData } from "../../services/apiService";
-import ToastManager, { ToastManagerHandle } from "../Toast/ToastManager";
 
 interface AuthProps {
   mode: "signIn" | "signUp" | null;
@@ -13,7 +12,6 @@ interface AuthProps {
 const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
   const popupRef = useRef<HTMLDivElement | null>(null);
-  const toastRef = useRef<ToastManagerHandle>(null);
 
   const [mode, setMode] = useState<"signIn" | "signUp">(initialMode || "signIn");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -58,11 +56,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
     }
 
     if (isSignIn()) {
-      if (toastRef.current) {
-        toastRef.current.addToast("success", "IDOL", 3000);
-      } else {
-        console.error("ToastManager ref is not available.");
-      }
+      
       try {
         const response = await postData("/user/login", { email, password });
       } catch (error: any) {
@@ -298,7 +292,6 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
           </div>
         </div>
       </div>
-      <ToastManager ref={toastRef} />
     </>
   );
 };
