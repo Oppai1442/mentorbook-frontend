@@ -26,7 +26,6 @@ const ToastManager = forwardRef((props, ref: Ref<ToastManagerHandle>) => {
       setToasts((prevToasts) => [...prevToasts, newToast]);
 
       setTimeout(() => {
-        // Xóa Toast sau khi đã ẩn dần
         setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== newToast.id));
       }, timeout);
     },
