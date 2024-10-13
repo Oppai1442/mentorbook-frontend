@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { loadSvgs } from "../../utils";
 import { Auth } from "../Auth";
 import { Toast } from "../Toast";
+import ToastManager, {ToastManagerHandle} from "../Toast/ToastManager";
 
 const Navbar: React.FC = () => {
 
+
+  const toastRef = useRef<ToastManagerHandle>(null);
+  const [toast, setToast] = useState<{ mode: "notify" | "success" | "failed" | null; message?: string } | null>(null);
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Login state
   const [username, setUsername] = useState<string | null>(null); // User's name
@@ -33,9 +37,18 @@ const Navbar: React.FC = () => {
     }
   }, []);
 
-  const handleLoginSuccess = (message: string) => {
-    <Toast mode="notify" message={message}/>
+  const showToast = (mode: any, message: string) => {
+    setToast({ mode, message });
   };
+
+  const handleLoginSuccess = (mode: any, message: string) => {
+  if (toastRef.current) {
+    toastRef.current.addToast(mode, message, 3000);
+  } else {
+    console.error("ToastManager ref is not available.");
+  }
+};
+
 
   const pathList = {
     home: "/#",
@@ -69,6 +82,7 @@ const Navbar: React.FC = () => {
     setShowDropdown(!showDropdown);
   };
 
+  
   return (
     <>
       <nav
@@ -177,9 +191,10 @@ const Navbar: React.FC = () => {
           </div>
         </div>
         {showAuth && (
-          <Auth mode={authMode} onClose={() => setShowAuth(false)} onLoginSuccess={handleLoginSuccess}/>
+          <Auth mode={authMode} onClose={() => setShowAuth(false)} onLogin={handleLoginSuccess}/>
         )}
       </nav>
+      <ToastManager ref={toastRef} />
     </>
   );
 };
