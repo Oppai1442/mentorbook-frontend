@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Toast.module.css'; // CSS Module file
-import 'bootstrap/dist/css/bootstrap.min.css';
+import styles from './Toast.module.css';
 
 type ToastProps = {
   mode: 'success' | 'danger' | 'warning' | 'info';
@@ -23,7 +22,7 @@ const Toast: React.FC<ToastProps> = ({ mode, message, timeout }) => {
 
   return (
     <div
-      className={`toast ${styles.toastCustom} ${visible ? 'show' : 'hide'} bg-${mode}`}
+      className={`${styles['toast']} ${styles['toastCustom']} ${visible ? styles['show'] : styles['hide']} bg-${mode}`}
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
