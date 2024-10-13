@@ -1,76 +1,34 @@
-import React, { useEffect, useState } from "react";
-import styles from "./Toast.module.css";
+import React, { useState, useEffect } from 'react';
+import styles from './Toast.module.css'; // CSS Module file
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-interface ToastProps {
-  mode: "notify" | "success" | "failed" | null;
-  message?: string;
-  timeout?: number | null;
-}
+type ToastProps = {
+  mode: 'success' | 'danger' | 'warning' | 'info';
+  message: string;
+  timeout: number;
+};
 
 const Toast: React.FC<ToastProps> = ({ mode, message, timeout }) => {
-  const [isVisible, setIsVisible] = useState(true);
-
-  let toastClass = "";
-  let icon = null;
-
-  switch (mode) {
-    case "notify":
-      toastClass = `${styles["alert-warning"]}`;
-      icon = <i className="fa-thin fa-circle-exclamation fa-beat-fade fa-2xl"></i>;
-      break;
-    case "success":
-      toastClass = `${styles["alert-success"]} ${styles["bg-success"]}`;
-      icon = <i className="fa-thin fa-circle-check fa-fade fa-2xl"></i>;
-      break;
-    case "failed":
-      toastClass = `${styles["alert-danger"]}`;
-      icon = <i className="fa-thin fa-circle-xmark fa-fade fa-2xl"></i>;
-      break;
-  }
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    if (!timeout) return;
-
     const timer = setTimeout(() => {
-      setIsVisible(false);
+      setVisible(false);
     }, timeout);
 
     return () => clearTimeout(timer);
   }, [timeout]);
 
-  if (mode === null) return null;
+  if (!visible) return null;
 
   return (
     <div
-      className={`${styles["toastContainer"]} ${styles["position-fixed"]} ${styles["bottom-0"]} ${styles["start-50"]} ${styles["translate-middle-x"]} ${styles["p-3"]}`}
+      className={`toast ${styles.toastCustom} ${visible ? 'show' : 'hide'} bg-${mode}`}
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
     >
-      <div className={`d-flex align-items-center justify-content-center`}>
-        <div
-          className={`${styles["alert"]} ${toastClass} ${styles["px-8"]} ${
-            styles["border-0"]
-          } ${styles["alert-container"]} ${
-            !isVisible ? styles["alert-hidden"] : ""
-          }`}
-          role="alert"
-        >
-          <div
-            className={`${styles["d-flex"]} ${styles["align-items-center"]}`}
-          >
-            <div className={`${styles["flex-shrink-0"]} ${styles["pe-6"]}`}>
-              {icon}
-            </div>
-            <div
-              className={`${styles["py-2"]} ${styles["ps-5"]} ${styles["border-start"]} ${styles["border-dark-light"]} ${styles["border-opacity-10"]}`}
-            >
-              <span
-                className={`${styles["d-inline-block"]} ${styles["fw-semibold"]}`}
-              >
-                {message}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div className="toast-body">{message}</div>
     </div>
   );
 };
