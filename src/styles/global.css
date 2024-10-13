@@ -1,7 +1,16 @@
+* {
+    user-select: none !important;
+}
+
 a {
     text-decoration: none !important;
 }
 
 a:hover {
     text-decoration: underline !important;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
