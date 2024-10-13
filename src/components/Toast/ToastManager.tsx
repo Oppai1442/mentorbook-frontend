@@ -15,7 +15,6 @@ export type ToastManagerHandle = {
 const ToastManager = forwardRef((props, ref: Ref<ToastManagerHandle>) => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
-  // Sử dụng useImperativeHandle để expose các method ra ngoài
   useImperativeHandle(ref, () => ({
     addToast: (mode: ToastItem['mode'], message: string, timeout: number) => {
       const newToast: ToastItem = {
@@ -27,6 +26,7 @@ const ToastManager = forwardRef((props, ref: Ref<ToastManagerHandle>) => {
       setToasts((prevToasts) => [...prevToasts, newToast]);
 
       setTimeout(() => {
+        // Xóa Toast sau khi đã ẩn dần
         setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== newToast.id));
       }, timeout);
     },
