@@ -32670,3 +32670,24 @@
 .toastCustom {
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
+
+.toastCustom {
+    border-radius: 8px; /* Make the toast rounded */
+    overflow: hidden; /* Ensure that child elements (like progress bar) are clipped to match the border-radius */
+  }
+  
+  .progress-bar {
+    background-color: #28a745; /* Example color, change as needed */
+    border-radius: 0; /* Remove the default radius of Bootstrap */
+  }
+  
+  .progress-bar-start {
+    border-top-left-radius: 8px; /* Match the toast border-radius */
+    border-bottom-left-radius: 8px; /* Match the toast border-radius */
+  }
+  
+  .progress-bar-end {
+    border-top-right-radius: 8px; /* For when the bar is 100% full */
+    border-bottom-right-radius: 8px; /* For when the bar is 100% full */
+  }
+  

@@ -9,14 +9,14 @@ type ToastItem = {
 };
 
 export type ToastManagerHandle = {
-  addToast: (mode: ToastItem['mode'], message: string, timeout: number) => void;
+  addToast: (mode: ToastItem['mode'], message: string, timeout?: number) => void;
 };
 
 const ToastManager = forwardRef((props, ref: Ref<ToastManagerHandle>) => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
   useImperativeHandle(ref, () => ({
-    addToast: (mode: ToastItem['mode'], message: string, timeout: number) => {
+    addToast: (mode: ToastItem['mode'], message: string, timeout: number = 3000) => {
       const newToast: ToastItem = {
         id: Date.now(),
         mode,
