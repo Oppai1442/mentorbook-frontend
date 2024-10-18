@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { pageConfigs } from './config/pageConfig';
-import { ToastProvider } from './components/Toast/ToastContext';
+import { ToastProvider } from './context/ToastContext';
 
 import routes from './routes';
 import Navbar from './components/Navbar';
@@ -13,6 +13,7 @@ import CookieConsent from './components/Cookie';
 import styles from './styles/App.module.css';
 import './styles/global.css'
 import './assets/fontawesome/css/fontawesome.all.css'
+import { AuthProvider } from './context/AuthContext';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -22,11 +23,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <>
       <ToastProvider>
-        {config.showNav && <Navbar />}
-        <main className={`${styles['mainContainer']}`}>{children}</main>
-        {config.showCookie && <CookieConsent />}
-        {config.showChatBubble && <ChatBubble />}
-        {config.showFooter && <Footer />}
+      <AuthProvider>
+          {config.showNav && <Navbar />}
+          <main className={`${styles['mainContainer']}`}>{children}</main>
+          {config.showCookie && <CookieConsent />}
+          {config.showChatBubble && <ChatBubble />}
+          {config.showFooter && <Footer />}
+      </AuthProvider>
       </ToastProvider>
     </>
   );
