@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useRef, useEffect, useState } from 'react';
-import ToastManager, { ToastManagerHandle } from './ToastManager';
+import ToastManager, { ToastManagerHandle } from '../components/Toast/ToastManager';
 
 type Props = React.PropsWithChildren<{}>;
 
