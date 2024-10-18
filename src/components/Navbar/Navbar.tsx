@@ -3,15 +3,16 @@ import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { loadSvgs } from "../../utils";
 import { Auth } from "../Auth";
+import { useAuth } from "../../context";
 
 const Navbar: React.FC = () => {
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Login state
   const [username, setUsername] = useState<string | null>(null); // User's name
   const [showDropdown, setShowDropdown] = useState(false); // Dropdown state
 
+  const {isLoggedIn} = useAuth(); //
+
   useEffect(() => {
-    // SVG loading logic
     const svgPaths = {
       websiteLogo: () => import('../../assets/svg/website-logo.svg'),
     };
@@ -22,14 +23,11 @@ const Navbar: React.FC = () => {
     };
 
     loadAndSetSvgs();
-
-    // For demo purposes, let's assume login details are set like this
-    const loggedUser = localStorage.getItem("username");
-    if (loggedUser) {
-      setIsLoggedIn(true);
-      setUsername(loggedUser);
-    }
   }, []);
+
+  useEffect(() => {
+    console.log('NAVBAR: LOGGED');
+  }, [isLoggedIn]);
 
   const pathList = {
     home: "/#",
@@ -54,7 +52,6 @@ const Navbar: React.FC = () => {
   };
 
   const handleLogOut = () => {
-    setIsLoggedIn(false);
     setUsername(null);
     localStorage.removeItem("username"); // Clear the user's login data
   };
