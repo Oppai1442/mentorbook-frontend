@@ -32,7 +32,7 @@ const ToastManager = forwardRef((props, ref: Ref<ToastManagerHandle>) => {
   }));
 
   return (
-    <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 1050 }}>
+    <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 99999 }}>
       {toasts.map((toast) => (
         <Toast key={toast.id} mode={toast.mode} message={toast.message} timeout={toast.timeout} />
       ))}
