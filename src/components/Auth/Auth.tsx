@@ -1,21 +1,29 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect, useCallback, useContext } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Auth.module.css";
 import { loadSvgs } from "../../utils";
 import { postData } from "../../services/apiService";
+import { useToast } from "../../context";
+import { useAuth } from "../../context";
 
 interface AuthProps {
   mode: "signIn" | "signUp" | null;
   onClose: () => void;
 }
+interface LoginResponse {
+  data: { token: string; user: any; };
+}
+
 
 const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
   const popupRef = useRef<HTMLDivElement | null>(null);
+  const { addToast } = useToast();
+  const { setUser, isLoggedIn } = useAuth();
 
   const [mode, setMode] = useState<"signIn" | "signUp">(initialMode || "signIn");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const [isHandling, setHandling] = useState<boolean>(false);
+  const [isHandling] = useState<boolean>(false);
 
   const [fullName, setFullName] = useState<string>("");
   const [birthDate, setBirthDate] = useState<string>("");
@@ -56,11 +64,24 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
     }
 
     if (isSignIn()) {
-      
       try {
-        const response = await postData("/user/login", { email, password });
+        const response = await postData<LoginResponse>("/user/login", { email, password });
+        const { token, user } = response.data;
+
+        localStorage.setItem("accountToken", token);
+        setUser(user);
+
+        if (isLoggedIn) {
+          console.log("LOGGED IN");
+        }
+
+        addToast("success", "Login successful!");
       } catch (error: any) {
-        if (error.status === 401) {
+        switch (error.status) {
+          case 401:
+            break;
+          case 200:
+            break;
         }
       }
     } else {
