@@ -25,10 +25,6 @@ const Navbar: React.FC = () => {
     loadAndSetSvgs();
   }, []);
 
-  useEffect(() => {
-    console.log('NAVBAR: LOGGED');
-  }, [isLoggedIn]);
-
   const pathList = {
     home: "/#",
     mentors: "/mentors",
