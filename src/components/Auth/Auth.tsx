@@ -1,29 +1,25 @@
-import React, { useRef, useState, useEffect, useCallback, useContext } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Auth.module.css";
 import { loadSvgs } from "../../utils";
 import { postData } from "../../services/apiService";
-import { useToast } from "../../context";
-import { useAuth } from "../../context";
+import { useToast, useAuth } from "../../context";
+import { LoginResponse } from "../../types";
 
 interface AuthProps {
   mode: "signIn" | "signUp" | null;
   onClose: () => void;
 }
-interface LoginResponse {
-  data: { token: string; user: any; };
-}
-
 
 const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
   const popupRef = useRef<HTMLDivElement | null>(null);
   const { addToast } = useToast();
-  const { setUser, isLoggedIn } = useAuth();
+  const { setUser } = useAuth();
 
   const [mode, setMode] = useState<"signIn" | "signUp">(initialMode || "signIn");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const [isHandling] = useState<boolean>(false);
+  const [isHandling, setIsHandling] = useState<boolean>(false);
 
   const [fullName, setFullName] = useState<string>("");
   const [birthDate, setBirthDate] = useState<string>("");
@@ -33,7 +29,6 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
   const [emailError, setEmailError] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  // Callback and Event Handlers
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prevState) => !prevState);
   };
@@ -55,6 +50,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setIsHandling(true);
 
     if (mode === "signUp" && !validateEmail(email)) {
       setEmailError("Invalid email format");
@@ -71,9 +67,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
         localStorage.setItem("accountToken", token);
         setUser(user);
 
-        if (isLoggedIn) {
-          console.log("LOGGED IN");
-        }
+        onClose();
 
         addToast("success", "Login successful!");
       } catch (error: any) {
@@ -87,6 +81,8 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
     } else {
       console.log("Submitting:", { fullName, birthDate, address, phoneNumber, email });
     }
+
+    setIsHandling(false);
   };
 
   // Effect Hooks
