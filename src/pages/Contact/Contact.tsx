@@ -1,11 +1,29 @@
-import React, {} from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Contact.module.css";
-import useFetch from "../../hooks/useFetch";
 import { getGeocode } from "../../services/mapService";
 import { LoadingError } from "../../components/LoadingError";
 
 const Contact: React.FC = () => {
-  const { data, loading, error } = useFetch(getGeocode);
+  const [geocodeData, setGeocodeData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchGeocode = async () => {
+
+      const response = await getGeocode();
+      
+      if (response.statusCode === 200) {
+        setGeocodeData(response.data?.url);
+      } else {
+        setError(`Error code ${response.statusCode}: ${response.message}`);
+      }
+
+      setLoading(false);
+    };
+
+    fetchGeocode();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -17,17 +35,15 @@ const Contact: React.FC = () => {
             message="The map could not be loaded due to a server error."
           />
         )}
-        {data && data.url && (
-          <iframe
-            src={data.url}
+        {geocodeData && (<iframe
+            src={geocodeData}
             width="100%"
             height="100%"
             style={{ border: 0 }}
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-          />
-        )}
+          />)}
       </div>
       <div className={styles.contactContainer}>
         <h1>Contact Us</h1>
