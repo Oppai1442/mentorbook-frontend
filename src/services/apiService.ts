@@ -56,7 +56,7 @@ const apiRequest = async <T>(request: ApiRequest): Promise<ApiResponse<T>> => {
       throw error;
     }
 
-    result.data = responseData.data || responseData;
+    result.data = responseData?.data || responseData;
     result.isSuccess = true;
 
   } catch (error: unknown) {
