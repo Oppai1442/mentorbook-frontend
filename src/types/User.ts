@@ -2,6 +2,6 @@ export default interface User {
     id: number;
     fullName: string;
     email: string;
-    avatar: string;
+    avatarUrl: string;
     role: string;
 }
