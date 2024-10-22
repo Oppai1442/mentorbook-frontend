@@ -18,18 +18,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const fetchUser = async () => {
       const accountToken = localStorage.getItem('accountToken');
-      
+
       if (accountToken) {
         const response = await postData<LoginResponse>("/user/login-token", {token: accountToken});
-        const { token, user } = response.data;
+        
+        if (response.isSuccess && response.data)  {
+          const { token, user } = response.data;
 
-        localStorage.setItem('accountToken', token);
-        console.log(response);
+          localStorage.setItem('accountToken', token);
+        }
       }
     };
 
     fetchUser();
   }, []);
+
 
   return (
     <AuthContext.Provider value={{ user, isLoggedIn, setUser }}>
