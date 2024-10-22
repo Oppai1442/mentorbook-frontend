@@ -29,6 +29,8 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
   const [emailError, setEmailError] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const [rememberMe, setRememberMe] = useState(false);
+
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prevState) => !prevState);
   };
@@ -43,6 +45,10 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
     },
     [onClose]
   );
+
+  const handleCheckboxChange = () => {
+    setRememberMe(!rememberMe);
+  };
 
   const handleSwitchMode = () => {
     setMode((prevMode) => (prevMode === "signIn" ? "signUp" : "signIn"));
@@ -62,14 +68,16 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
     if (isSignIn()) {
       try {
         const response = await postData<LoginResponse>("/user/login", { email, password });
-        const { token, user } = response.data;
+        if (response.isSuccess && response.data) {
+          const { token, user } = response.data;
 
-        localStorage.setItem("accountToken", token);
-        setUser(user);
+          localStorage.setItem("accountToken", token);
+          setUser(user);
 
-        onClose();
+          onClose();
 
-        addToast("success", "Login successful!");
+          addToast("success", "Login successful!");
+        }
       } catch (error: any) {
         switch (error.status) {
           case 401:
@@ -84,6 +92,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
 
     setIsHandling(false);
   };
+
 
   // Effect Hooks
   useEffect(() => {
@@ -233,6 +242,16 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
               >
                 {isSignIn() ? "Sign In" : "Sign Up"}
               </button>
+              <div className={`${styles['form-check']}`}>
+                <input
+                  type="checkbox"
+                  className={`${styles['form-check-input']}`}
+                  id="rememberMe"
+                  checked={rememberMe}
+                  onChange={handleCheckboxChange}
+                />
+                <label className={`${styles['form-check-label']}`} htmlFor="rememberMe">Remember me</label>
+              </div>
               <Link
                 className={`${isHandling ? "disabled" : ""} ${styles["btn"]} ${styles["fs-9"]} ${styles["ms-1"]} ${styles["p-0"]}  ${styles["text-secondary-light"]}`}
                 to="#"
