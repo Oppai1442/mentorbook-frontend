@@ -37,7 +37,7 @@ const CookieConsent: React.FC = () => {
     <>
       {isVisible && (
         <section
-          className={`${styles["position-fixed"]} ${styles["bottom-0"]} ${styles["start-0"]} ${styles["p-4"]}`}
+          className={`${styles["position-fixed"]} ${styles["bottom-0"]} ${styles["start-0"]} ${styles["p-4"]} ${styles["z-3"]}`}
         >
           <div
             className={`${styles["position-relative"]} ${styles["mw-md"]} ${styles["py-4"]} ${styles["ps-4"]} ${styles["pe-8"]} ${styles["bg-black"]} ${styles["rounded-5"]}`}

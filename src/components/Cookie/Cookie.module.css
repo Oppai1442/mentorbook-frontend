@@ -503,6 +503,10 @@
   font-size: 1.25rem !important;
 }
 
+.z-3 {
+  z-index: 3 !important
+}
+
 .fw-medium {
   font-weight: 500 !important;
 }
