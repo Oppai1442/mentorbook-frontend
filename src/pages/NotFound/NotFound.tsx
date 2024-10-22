@@ -1,17 +1,11 @@
 // NotFound.tsx
 
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import styles from './NotFound.module.css';
 
 const NotFound: React.FC = () => {
-    const navigate = useNavigate();
     const location = useLocation();
-
-    const handleGoBack = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        navigate('/');
-    };
 
     return (
         <div className={styles['background']}>
@@ -20,7 +14,9 @@ const NotFound: React.FC = () => {
                 <div className={styles['left-section']}>
                     <div className={styles['inner-content']}>
                         <h1 className={styles['heading']}>404</h1>
-                        <p className={styles['subheading']}>Looks like the page <strong>{location.pathname}</strong> is no longer here. <a onClick={handleGoBack}>Back to home</a></p>
+                        <p className={styles['subheading']}>Looks like the page <strong>{location.pathname}</strong> is no longer here. 
+                            <Link to="/"> Back to home</Link>
+                        </p>
                     </div>
                 </div>
                 <div className={styles['right-section']}>
