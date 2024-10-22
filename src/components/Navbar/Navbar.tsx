@@ -7,10 +7,9 @@ import { useAuth } from "../../context";
 
 const Navbar: React.FC = () => {
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
-  const [username, setUsername] = useState<string | null>(null); // User's name
   const [showDropdown, setShowDropdown] = useState(false); // Dropdown state
 
-  const {isLoggedIn} = useAuth(); //
+  const { isLoggedIn, user } = useAuth(); //
 
   useEffect(() => {
     const svgPaths = {
@@ -48,12 +47,20 @@ const Navbar: React.FC = () => {
   };
 
   const handleLogOut = () => {
-    setUsername(null);
     localStorage.removeItem("username"); // Clear the user's login data
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+
   const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
+    setIsOpen((prev) => !prev);
+  };
+
+  const handleItemClick = (action: string) => {
+    if (action === 'logout') {
+      handleLogOut();
+    }
+    setIsOpen(false); // Đóng dropdown sau khi click
   };
 
 
@@ -118,32 +125,42 @@ const Navbar: React.FC = () => {
             </ul>
             <div className={`${styles["ms-14"]}`}>
               {isLoggedIn ? (
-                <div className={`${styles["nav-item"]} ${styles["dropdown"]}`}>
-                  <div
-                    onClick={toggleDropdown}
-                    className={`${styles["nav-link"]} ${styles["d-flex"]} ${styles["align-items-center"]} ${styles["user-info"]}`}
-                  >
-                    <img
-                      src="path/to/avatar.jpg"
-                      alt="User Avatar"
-                      className={`${styles["avatar"]} ${styles["me-2"]}`}
-                    />
-                    <span>{username}</span>
-                    <i className={`${styles["ms-2"]} fas fa-chevron-down`}></i>
+                <div className={`${styles["d-flex"]} ${styles["align-items-center"]}`}>
+                  <img
+                    src={user?.avatarUrl}
+                    alt="Avatar"
+                    className={`${styles["rounded-circle"]} ${styles["me-2"]}`}
+                    style={{ width: '40px', height: '40px' }}
+                  />
+                  <span className={`${styles["me-2"]} ${styles["username"]}`}>{user?.fullName}</span>
+                  <div className={`${styles["dropdown"]}`}>
+                    <button
+                      className={`${styles["btn"]} ${styles["btn-secondary"]}`}
+                      type="button"
+                      onClick={toggleDropdown}
+                      aria-expanded={isOpen}
+                    >
+                      {!isOpen ? (<i className={`fa-light fa-caret-down ${styles["dropdown-arrow"]}`}></i>) :  (<i className={`fa-light fa-caret-up ${styles["dropdown-arrow"]}`}></i>)}
+                    </button>
+                    {isOpen && (<ul className={`${styles["dropdown-menu"]}`}>
+
+                      <li>
+                        <a className={`${styles["dropdown-item"]}`} href="#action1">
+                          Action 1
+                        </a>
+                      </li>
+                      <li>
+                        <a className={`${styles["dropdown-item"]}`} href="#action2">
+                          Action 2
+                        </a>
+                      </li>
+                      <li>
+                        <a className={`${styles["dropdown-item"]}`} href="#action3">
+                          Action 3
+                        </a>
+                      </li>
+                    </ul>)}
                   </div>
-                  {showDropdown && (
-                    <div className={`${styles["dropdown-menu"]} ${styles["show"]}`}>
-                      <Link className={`${styles["dropdown-item"]}`} to="/profile">
-                        Profile
-                      </Link>
-                      <Link className={`${styles["dropdown-item"]}`} to="/settings">
-                        Settings
-                      </Link>
-                      <button className={`${styles["dropdown-item"]}`} onClick={handleLogOut}>
-                        Log out
-                      </button>
-                    </div>
-                  )}
                 </div>
               ) : (
                 <>
