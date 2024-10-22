@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { loadSvgs } from "../../utils";
@@ -7,9 +7,12 @@ import { useAuth } from "../../context";
 
 const Navbar: React.FC = () => {
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
-  const [showDropdown, setShowDropdown] = useState(false); // Dropdown state
+  const { isLoggedIn, user, logOut } = useAuth(); 
+  const dropdownRef = useRef<HTMLUListElement | null>(null);
 
-  const { isLoggedIn, user } = useAuth(); //
+  const [showAuth, setShowAuth] = useState(false);
+  const [authMode, setAuthMode] = useState<'signIn' | 'signUp' | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const svgPaths = {
@@ -24,6 +27,22 @@ const Navbar: React.FC = () => {
     loadAndSetSvgs();
   }, []);
 
+
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    const target = event.target as Node;
+    
+    if (dropdownRef.current && !dropdownRef.current.contains(target)) {
+      setIsOpen(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]);
+
   const pathList = {
     home: "/#",
     mentors: "/mentors",
@@ -33,8 +52,6 @@ const Navbar: React.FC = () => {
     signup: "/auth",
   };
 
-  const [showAuth, setShowAuth] = useState(false);
-  const [authMode, setAuthMode] = useState<'signIn' | 'signUp' | null>(null);
 
   const handleSignIn = () => {
     setAuthMode('signIn');
@@ -46,21 +63,19 @@ const Navbar: React.FC = () => {
     setShowAuth(true);
   };
 
-  const handleLogOut = () => {
-    localStorage.removeItem("username"); // Clear the user's login data
-  };
-
-  const [isOpen, setIsOpen] = useState(false);
-
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
-  const handleItemClick = (action: string) => {
-    if (action === 'logout') {
-      handleLogOut();
+  const handleItemClick = (action?: string) => {
+    switch (action) {
+      case 'logout':
+          logOut();
+          break;
+      default:
+        break;
     }
-    setIsOpen(false); // Đóng dropdown sau khi click
+    setIsOpen(false);
   };
 
 
@@ -142,22 +157,23 @@ const Navbar: React.FC = () => {
                     >
                       {!isOpen ? (<i className={`fa-light fa-caret-down ${styles["dropdown-arrow"]}`}></i>) :  (<i className={`fa-light fa-caret-up ${styles["dropdown-arrow"]}`}></i>)}
                     </button>
-                    {isOpen && (<ul className={`${styles["dropdown-menu"]}`}>
+                    {isOpen && (<ul ref={dropdownRef} className={`${styles["dropdown-menu"]}`}>
 
                       <li>
-                        <a className={`${styles["dropdown-item"]}`} href="#action1">
-                          Action 1
-                        </a>
+                        <Link className={`${styles["dropdown-item"]}`} to="/user/profile" onClick={() => handleItemClick()}>
+
+                          Log out
+                        </Link>
                       </li>
                       <li>
-                        <a className={`${styles["dropdown-item"]}`} href="#action2">
-                          Action 2
-                        </a>
+                        <Link className={`${styles["dropdown-item"]}`} to="/user/setting" onClick={() => handleItemClick()}>
+                          Log out
+                        </Link>
                       </li>
                       <li>
-                        <a className={`${styles["dropdown-item"]}`} href="#action3">
-                          Action 3
-                        </a>
+                        <button className={`${styles["dropdown-item"]}`} type="button" onClick={() => handleItemClick("logout")}>
+                          Log out
+                        </button>
                       </li>
                     </ul>)}
                   </div>
