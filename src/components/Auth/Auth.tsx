@@ -70,7 +70,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
         const response = await postData<LoginResponse>("/user/login", { email, password });
         if (response.isSuccess && response.data) {
           const { token, user } = response.data;
-
+          
           localStorage.setItem("accountToken", token);
           setUser(user);
 
