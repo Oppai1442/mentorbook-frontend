@@ -88,36 +88,20 @@ const apiRequest = async <T>(request: ApiRequest): Promise<ApiResponse<T>> => {
 
 // GET request
 export const getData = <T>(url: string) => {
-  try {
-    return apiRequest<T>({ url, method: "GET" });
-  } catch (error: any) {
-    throw error;
-  }
+  return apiRequest<T>({ url, method: "GET" });
 };
 
 // POST request
 export const postData = <T>(url: string, data: any) => {
-  try {
-    return apiRequest<T>({ url, method: "POST", data });
-  } catch (error: any) {
-    throw error;
-  }
+  return apiRequest<T>({ url, method: "POST", data });
 };
 
 // PUT request
 export const putData = <T>(url: string, data: any) => {
-  try {
-    return apiRequest<T>({ url, method: "PUT", data });
-  } catch (error: any) {
-    throw error;
-  }
+  return apiRequest<T>({ url, method: "PUT", data });
 };
 
 // DELETE request
 export const deleteData = <T>(url: string) => {
-  try {
-    return apiRequest<T>({ url, method: "DELETE" });
-  } catch (error: any) {
-    throw error;
-  }
+  return apiRequest<T>({ url, method: "DELETE" });
 };
