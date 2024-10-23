@@ -1,17 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { loadSvgs } from "../../utils";
-import { Auth } from "../Auth";
 import { useAuth } from "../../context";
 import styles from "./Navbar.module.css";
 
 const Navbar: React.FC = () => {
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
-  const { isLoggedIn, user, logOut } = useAuth();
+  const { isLoggedIn, user, logOut, renderAuth, showAuthModal } = useAuth();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const [showAuth, setShowAuth] = useState(false);
-  const [authMode, setAuthMode] = useState<"signIn" | "signUp" | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -52,13 +49,11 @@ const Navbar: React.FC = () => {
   };
 
   const handleSignIn = () => {
-    setAuthMode("signIn");
-    setShowAuth(true);
+    showAuthModal("signIn");
   };
 
   const handleSignUp = () => {
-    setAuthMode("signUp");
-    setShowAuth(true);
+    showAuthModal("signUp");
   };
 
   const toggleDropdown = () => {
@@ -168,7 +163,7 @@ const Navbar: React.FC = () => {
                         <li>
                           <Link
                             className={`${styles["dropdown-item"]}`}
-                            to="/user/profile"
+                            to="/user/account/profile"
                             onClick={() => handleItemClick()}
                           >
                             <i className="fa-light fa-user" />
@@ -218,9 +213,7 @@ const Navbar: React.FC = () => {
             </div>
           </div>
         </div>
-        {showAuth && (
-          <Auth mode={authMode} onClose={() => setShowAuth(false)} />
-        )}
+        {renderAuth()}
       </nav>
     </>
   );
