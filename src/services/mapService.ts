@@ -4,7 +4,6 @@ interface GeoCode {
   url: string;
 }
 
-
 const getGeocode = async (): Promise<string | undefined> => {
   try {
     const response = await getData<GeoCode>(`/api/maps/geocode`);
