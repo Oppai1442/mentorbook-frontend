@@ -3,22 +3,27 @@ const BASE_URL = process.env.REACT_APP_API_URL;
 type ApiResponse<T> = {
   data: T | null;
   message: string | null;
-  isSuccess: boolean;
+  ok: boolean;
   statusCode: number;
+  statusText: string | null;
+  headers: Headers;
+  url: string | null;
+  redirected: boolean;
+  type: string | null;
 };
 
 interface ApiRequest {
   url: string;
-  method: "GET" | "POST" | "PUT" | "DELETE"; 
+  method: "GET" | "POST" | "PUT" | "DELETE";
   data?: Record<string, any>;
   header?: { [key: string]: string }
   timeout?: number;
 }
 
 const apiRequest = async <T>(request: ApiRequest): Promise<ApiResponse<T>> => {
-  const { url, method, data, 
-    header = { "Content-Type": "application/json" }, 
-    timeout = 5000 
+  const { url, method, data,
+    header = { "Content-Type": "application/json" },
+    timeout = 5000
   } = request;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -29,8 +34,13 @@ const apiRequest = async <T>(request: ApiRequest): Promise<ApiResponse<T>> => {
   let result: ApiResponse<T> = {
     data: null,
     message: null,
-    isSuccess: false,
+    ok: false,
     statusCode: 0,
+    statusText: null,
+    headers: new Headers(),
+    url: null,
+    redirected: false,
+    type: null,
   };
 
   try {
@@ -42,7 +52,6 @@ const apiRequest = async <T>(request: ApiRequest): Promise<ApiResponse<T>> => {
     });
 
     clearTimeout(timeoutId);
-    result.statusCode = response.status;
 
     try {
       responseData = await response.json();
@@ -51,21 +60,27 @@ const apiRequest = async <T>(request: ApiRequest): Promise<ApiResponse<T>> => {
     }
 
     if (!response.ok) {
-      const error = new Error(responseData?.message || `HTTP error! Status: ${response.status}`);
-      (error as any).status = response.status;
+      const error = new Error(responseData?.error || `HTTP error! Status: ${response.status}`);
+      (error as any).response = response;
       throw error;
     }
-
-    result.data = responseData?.data || responseData;
-    result.isSuccess = true;
-
-  } catch (error: unknown) {
-    clearTimeout(timeoutId);
-    if (error instanceof Error) {
-      result.message = error.message;
-    } else {
-      result.message = "An unknown error occurred";
+    
+    result = {
+      data: responseData?.data || responseData,
+      message: null,
+      ok: response.ok,
+      statusCode: response.status,
+      statusText: response.statusText,
+      headers: response.headers,
+      url: response.url,
+      redirected: response.redirected,
+      type: response.type,
     }
+
+
+  } catch (error: any) {
+    clearTimeout(timeoutId);
+    throw error;
   }
 
   return result;
@@ -73,20 +88,36 @@ const apiRequest = async <T>(request: ApiRequest): Promise<ApiResponse<T>> => {
 
 // GET request
 export const getData = <T>(url: string) => {
-  return apiRequest<T>({ url, method: "GET" });
+  try {
+    return apiRequest<T>({ url, method: "GET" });
+  } catch (error: any) {
+    throw error;
+  }
 };
 
 // POST request
 export const postData = <T>(url: string, data: any) => {
-  return apiRequest<T>({ url, method: "POST", data });
+  try {
+    return apiRequest<T>({ url, method: "POST", data });
+  } catch (error: any) {
+    throw error;
+  }
 };
 
 // PUT request
 export const putData = <T>(url: string, data: any) => {
-  return apiRequest<T>({ url, method: "PUT", data });
+  try {
+    return apiRequest<T>({ url, method: "PUT", data });
+  } catch (error: any) {
+    throw error;
+  }
 };
 
 // DELETE request
 export const deleteData = <T>(url: string) => {
-  return apiRequest<T>({ url, method: "DELETE" });
+  try {
+    return apiRequest<T>({ url, method: "DELETE" });
+  } catch (error: any) {
+    throw error;
+  }
 };
