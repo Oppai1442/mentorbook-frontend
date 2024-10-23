@@ -68,22 +68,30 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
     if (isSignIn()) {
       try {
         const response = await postData<LoginResponse>("/user/login", { email, password });
-        if (response.isSuccess && response.data) {
+
+        if (response.data) {
           const { token, user } = response.data;
-          
-          localStorage.setItem("accountToken", token);
+
           setUser(user);
+          localStorage.setItem("accountToken", token);
 
           onClose();
 
           addToast("success", "Login successful!");
         }
       } catch (error: any) {
-        switch (error.status) {
-          case 401:
-            break;
-          case 200:
-            break;
+        if (error.response) {
+          const response = error.response;
+
+          switch (response.status) {
+            case 401:
+              addToast("warning", "Invalid email or password");
+              break;
+            default:
+              console.error('An error occurred:', response.status);
+          }
+        } else {
+          console.error('Network error or no response:', error);
         }
       }
     } else {
