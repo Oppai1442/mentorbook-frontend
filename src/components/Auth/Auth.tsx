@@ -2,9 +2,8 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Auth.module.css";
 import { loadSvgs } from "../../utils";
-import { postData } from "../../services/apiService";
 import { useToast, useAuth } from "../../context";
-import { LoginResponse } from "../../types";
+import { signIn, signUp } from "../../services";
 
 interface AuthProps {
   mode: "signIn" | "signUp" | null;
@@ -60,45 +59,59 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
 
     if (mode === "signUp" && !validateEmail(email)) {
       setEmailError("Invalid email format");
+      setIsHandling(false);
       return;
     } else {
       setEmailError("");
     }
 
-    if (isSignIn()) {
-      try {
-        const response = await postData<LoginResponse>("/user/login", { email, password });
+    try {
+      const response = isSignIn()
+        ? await signIn({
+          email: email,
+          password: password
+        })
+        : await signUp({
+          email: email,
+          password: password,
+          fullName: fullName,
+          birthDate: birthDate,
+          address: address,
+          phoneNumber: phoneNumber
+        });
 
-        if (response.data) {
-          const { token, user } = response.data;
+      if (response) {
+        const { token, user } = response;
 
-          setUser(user);
-          localStorage.setItem("accountToken", token);
+        setUser(user);
+        localStorage.setItem("accountToken", token);
+        onClose();
+        addToast("success", isSignIn() ? "Login successful!" : "Sign Up successful!");
+      }
+    } catch (error: any) {
+      handleError(error);
+    } finally {
+      setIsHandling(false);
+    }
+  };
 
-          onClose();
+  const handleError = (error: any) => {
+    if (error.response) {
+      const response = error.response;
 
-          addToast("success", "Login successful!");
-        }
-      } catch (error: any) {
-        if (error.response) {
-          const response = error.response;
-
-          switch (response.status) {
-            case 401:
-              addToast("warning", "Invalid email or password");
-              break;
-            default:
-              console.error('An error occurred:', response.status);
-          }
-        } else {
-          console.error('Network error or no response:', error);
-        }
+      switch (response.status) {
+        case 401:
+          addToast("warning", "Invalid email or password");
+          break;
+        case 409:
+          addToast("warning", error.message);
+          break;
+        default:
+          console.error('An error occurred:', response.status);
       }
     } else {
-      console.log("Submitting:", { fullName, birthDate, address, phoneNumber, email });
+      console.error('Network error or no response:', error);
     }
-
-    setIsHandling(false);
   };
 
 
