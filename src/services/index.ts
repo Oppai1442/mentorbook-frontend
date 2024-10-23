@@ -1,2 +1,2 @@
 export { default as getGeocode } from './mapService';
-export { default as fetchUserFromToken } from './authService';
+export { fetchUserFromToken, signIn, signUp } from './authService';
