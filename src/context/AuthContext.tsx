@@ -1,7 +1,7 @@
 import React, { createContext, useState, ReactNode, useContext, useEffect } from "react";
-import { postData } from "../services/apiService";
-import { LoginResponse, User } from "../types";
+import { User } from "../types";
 import { Auth } from "../components/Auth";
+import { fetchUserFromToken } from "../services";
 
 interface AuthContextType {
   user: User | null;
@@ -25,12 +25,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const fetchUser = async () => {
       const accountToken = localStorage.getItem('accountToken');
       if (accountToken) {
-        const response = await postData<LoginResponse>("/user/login-token", { token: accountToken });
-
-        if (response.isSuccess && response.data) {
-          const { token, user } = response.data;
-          setUser(user);
-          localStorage.setItem('accountToken', token);
+        try {
+          const user = await fetchUserFromToken(accountToken);
+          if (user) {
+            setUser(user);
+          }
+        } catch (error: any) {
+          if (error.response) {
+            const response = error.response;
+    
+            switch (response.status) {
+              case 401:
+                localStorage.removeItem('accountToken');
+                break;
+              default:
+                console.error('An error occurred:', response.status);
+            }
+          } else {
+            console.error('Network error or no response:', error);
+          }
         }
       }
     };
