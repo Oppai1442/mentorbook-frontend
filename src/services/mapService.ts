@@ -1,16 +1,17 @@
 import { getData } from "./apiService";
 
-const BASE_URL = process.env.REACT_APP_API_URL + '/api/maps';
-interface geoCode {
-  url : string;
+interface GeoCode {
+  url: string;
 }
 
-export const getGeocode = async () => {
+
+const getGeocode = async (): Promise<string | undefined> => {
   try {
-    const response = await getData<geoCode>(`${BASE_URL}/geocode`);
-    
-    return response;
+    const response = await getData<GeoCode>(`/api/maps/geocode`);
+    return response.data?.url;
   } catch (error) {
-    throw new Error('Error fetching geocode');
+    throw error;
   }
 };
+
+export default getGeocode;

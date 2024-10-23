@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Contact.module.css";
-import { getGeocode } from "../../services/mapService";
 import { LoadingError } from "../../components/LoadingError";
+import { getGeocode } from "../../services";
 
 const Contact: React.FC = () => {
   const [geocodeData, setGeocodeData] = useState<any>(null);
@@ -10,20 +10,26 @@ const Contact: React.FC = () => {
 
   useEffect(() => {
     const fetchGeocode = async () => {
-
-      const response = await getGeocode();
-      
-      if (response.statusCode === 200) {
-        setGeocodeData(response.data?.url);
-      } else {
-        setError(`Error code ${response.statusCode}: ${response.message}`);
+      try {
+        const url = await getGeocode();
+        setGeocodeData(url);
+      } catch (error: any) {
+        handleError(error);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
     fetchGeocode();
   }, []);
+
+  const handleError = (error: any) => {
+    if (error.response) {
+      setError(`An error occurred: ${error.response.status}`);
+    } else {
+      setError(`Network error or no response: ${error}`);
+    }
+  };
 
   return (
     <div className={styles.container}>
