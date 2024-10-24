@@ -1,36 +1,27 @@
 .container {
   display: flex;
-  height: 62.3vh; /* Chiều cao mặc định */
+  height: 62.3vh;
 }
-
-/* Khi chiều cao màn hình lớn hơn 1080px */
 @media (min-height: 1080px) {
   .container {
-      height: 62.3vh; /* Giữ nguyên chiều cao */
+    height: 62.3vh;
   }
 }
-
-/* Khi chiều cao màn hình giữa 900px và 1079px */
 @media (min-height: 900px) and (max-height: 1079px) {
   .container {
-      height: 57.0vh; /* Điều chỉnh chiều cao nhỏ hơn */
+    height: 57vh;
   }
 }
-
-/* Khi chiều cao màn hình nhỏ hơn 900px */
 @media (max-height: 899px) {
   .container {
-      height: 60vh; /* Tăng chiều cao cho màn hình nhỏ */
+    height: 60vh;
   }
 }
-
-/* Khi chiều cao màn hình rất nhỏ (như trên di động) */
 @media (max-height: 600px) {
   .container {
-      height: 70vh; /* Tăng chiều cao hơn nữa */
+    height: 70vh;
   }
 }
-
 .mapContainer {
   width: 50%;
   height: 100%;
@@ -39,45 +30,42 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  position: relative;
 }
-
 .contactContainer {
   width: 50%;
   padding: 20px;
   background-color: #1e1e1e;
-  color: white;
+  color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-
 .contactInfo {
   margin-bottom: 3rem !important;
 }
-
 .icon {
   margin-right: 10px;
   color: #007bff;
 }
-
 .iconContainer {
   margin-right: 2rem;
 }
-
-.loadingContainer, .errorContainer {
+.loadingContainer,
+.errorContainer {
   display: flex;
-  flex-direction: column; /* Căn giữa theo chiều dọc */
-  align-items: center; /* Căn giữa theo chiều ngang */
-  text-align: center; /* Căn giữa văn bản */
-  margin-top: 20px; /* Khoảng cách trên */
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 20px;
 }
-
-.loadingContainer i, .errorContainer i {
-  font-size: 2rem; /* Kích thước biểu tượng */
-  margin-bottom: 10px; /* Khoảng cách dưới biểu tượng */
+.loadingContainer i,
+.errorContainer i {
+  font-size: 2rem;
+  margin-bottom: 10px;
 }
-
-.loadingContainer p, .errorContainer p {
-  margin: 0; /* Xóa khoảng cách mặc định của đoạn văn */
-  font-size: 1.2rem; /* Kích thước văn bản */
+.loadingContainer p,
+.errorContainer p {
+  margin: 0;
+  font-size: 1.2rem;
 }
