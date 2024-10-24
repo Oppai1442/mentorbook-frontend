@@ -14,7 +14,7 @@ const LoadingError: React.FC<Mode> = ({ type, message, style }) => {
                 className={type === 'loading' ? "fa-regular fa-spinner-third fa-spin" : "fa-regular fa-triangle-exclamation"}
                 style={style}
             ></i>
-            <p>{message}</p>
+            <p style={style}>{message}</p>
         </div>
     );
 };
