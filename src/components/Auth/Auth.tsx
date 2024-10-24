@@ -4,6 +4,7 @@ import styles from "./Auth.module.css";
 import { loadSvgs } from "../../utils";
 import { useToast, useAuth } from "../../context";
 import { signIn, signUp } from "../../services";
+import { LoadingError } from "../../components/LoadingError";
 
 interface AuthProps {
   mode: "signIn" | "signUp" | null;
@@ -67,17 +68,14 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
 
     try {
       const response = isSignIn()
-        ? await signIn({
-          email: email,
-          password: password
-        })
+        ? await signIn({ email, password })
         : await signUp({
-          email: email,
-          password: password,
-          fullName: fullName,
-          birthDate: birthDate,
-          address: address,
-          phoneNumber: phoneNumber
+          email,
+          password,
+          fullName,
+          birthDate,
+          address,
+          phoneNumber,
         });
 
       if (response) {
@@ -153,10 +151,12 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
       <div
         className={`${styles["popup"]} ${styles["d-flex"]} ${styles["justify-content-center"]} ${styles["align-items-center"]}`}
       >
-        <div
-          ref={popupRef}
-          className={`${styles["position-relative"]} ${styles["mw-lg"]} ${styles["mx-auto"]} ${styles["px-8"]} ${styles["pt-10"]} ${styles["pb-8"]} ${styles["rounded-5"]} ${styles["bg-black"]}`}
+        <div ref={popupRef}
+          className={`${styles['auth-container']} ${styles["position-relative"]} ${styles["mw-lg"]} ${styles["mx-auto"]} ${styles["px-8"]} ${styles["pt-10"]} ${styles["pb-8"]} ${styles["rounded-5"]} ${styles["bg-black"]}`}
         >
+          {isHandling && (
+            <LoadingError type="loading" message="Please wait..." style={{color: '#fff'}}/>
+          )}
           <button
             type="button"
             onClick={onClose}
@@ -164,7 +164,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
           >
             <i className="fa-thin fa-x"></i>
           </button>
-          <div className={`${styles["text-center"]}`}>
+          <div className={`${isHandling ? "disabled" : ""} ${styles["text-center"]}`}>
             <Link
               className={`${styles["btn"]} ${styles["mb-8"]} ${styles["p-0"]}`}
               to="#"
@@ -185,9 +185,8 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
             </h5>
             <form onSubmit={handleSubmit} className={styles["form-grid"]}>
               {!isSignIn() && (
-                <div className={styles["sign-up-grid"]}>
+                <div className={`${isHandling ? "disabled" : ""} ${styles["sign-up-grid"]}`}>
                   <input
-                    disabled={isHandling}
                     className={`${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]}`}
                     type="text"
                     placeholder="Full name"
@@ -196,7 +195,6 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
                     required
                   />
                   <input
-                    disabled={isHandling}
                     className={`${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]}`}
                     type="date"
                     placeholder="Birth date"
@@ -205,7 +203,6 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
                     required
                   />
                   <input
-                    disabled={isHandling}
                     className={`${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]}`}
                     type="text"
                     placeholder="Address"
@@ -214,7 +211,6 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
                     required
                   />
                   <input
-                    disabled={isHandling}
                     className={`${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]}`}
                     type="tel"
                     placeholder="Phone number"
@@ -224,10 +220,9 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
                   />
                 </div>
               )}
-              <div className={styles["email-password-container"]}>
+              <div className={`${isHandling ? "disabled" : ""} ${styles["email-password-container"]}`}>
                 <input
-                  disabled={isHandling}
-                  className={`${isHandling ? "disabled" : ""} ${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]} ${styles["mb-4"]}`}
+                  className={`${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]} ${styles["mb-4"]}`}
                   type="email"
                   placeholder="Enter your email"
                   value={email}
@@ -240,8 +235,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
 
                 <div className={`${styles["position-relative"]}`}>
                   <input
-                    disabled={isHandling}
-                    className={`${styles["bg-transparent"]} ${styles["form-control"]} ${styles["mb-6"]}`}
+                    className={`${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]} ${styles["mb-6"]}`}
                     type={!isPasswordVisible ? "password" : "text"}
                     placeholder="Password"
                     value={password}
@@ -263,22 +257,22 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
               >
                 {isSignIn() ? "Sign In" : "Sign Up"}
               </button>
-              <div className={`${styles['form-check']}`}>
+              {isSignIn() && (<div className={`${isHandling ? "disabled" : ""} ${styles['form-check']} ${styles['form-control-plaintext']}`}>
                 <input
                   type="checkbox"
-                  className={`${styles['form-check-input']}`}
+                  className={`${styles['form-check-input']} ${styles['me-2']}`}
                   id="rememberMe"
                   checked={rememberMe}
                   onChange={handleCheckboxChange}
                 />
-                <label className={`${styles['form-check-label']}`} htmlFor="rememberMe">Remember me</label>
-              </div>
-              <Link
+                <label className={`${styles['form-check-label']} ${styles['text-white']}`} htmlFor="rememberMe">Remember me</label>
+              </div>)}
+              {isSignIn() && (<Link
                 className={`${isHandling ? "disabled" : ""} ${styles["btn"]} ${styles["fs-9"]} ${styles["ms-1"]} ${styles["p-0"]}  ${styles["text-secondary-light"]}`}
                 to="#"
               >
                 Forgot password?
-              </Link>
+              </Link>)}
               <div
                 className={`${styles["d-flex"]} ${styles["mt-8"]} ${styles["mb-10"]} ${styles["align-items-center"]}`}
               >
