@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './Toast.module.css';
 
 type ToastProps = {
-  mode: 'success' | 'danger' | 'warning' | 'info';
+  mode: 'success' | 'danger' | 'warning' | 'info' | 'dark' | 'light' | 'primary' | 'secondary' | 'neutral';
   message: string;
   timeout?: number;
 };
@@ -12,7 +12,6 @@ const Toast: React.FC<ToastProps> = ({ mode, message, timeout = 3000}) => {
   const [progress, setProgress] = useState(100);
 
   useEffect(() => {
-    // Progress bar countdown
     const startTime = Date.now();
     const interval = setInterval(() => {
       const elapsedTime = Date.now() - startTime;
@@ -39,17 +38,28 @@ const Toast: React.FC<ToastProps> = ({ mode, message, timeout = 3000}) => {
 
   return (
     <div
-      className={`${styles['toast']} ${styles['toastCustom']} bg-${mode} ${visible ? styles['show'] : styles['hide']}`}
+      className={`${styles['toastCustom']} ${styles['bg-' + mode]} ${
+        visible ? styles['show'] : styles['hide']
+      }`}
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
       onClick={() => setVisible(false)}
+      style={{ transition: 'transform 0.5s ease-in-out, opacity 0.5s ease-in-out' }}
     >
-      <div className="toast-body">{message}</div>
-
+      <div className={`${styles['toast-body']}`}>
+        {message}
+      </div>
+  
       <div className="progress" style={{ height: '4px' }}>
         <div
-          className={`${styles["progress-bar"]} ${progress === 100 ? styles["progress-bar-end"] : progress < 100 && progress > 0 ? styles["progress-bar-start"] : ''}`}
+          className={`${styles["progress-bar"]} ${
+            progress === 100
+              ? styles["progress-bar-end"]
+              : progress < 100 && progress > 0
+              ? styles["progress-bar-start"]
+              : ''
+          }`}
           role="progressbar"
           style={{ width: `${progress}%`, transition: 'width 0.1s linear' }}
           aria-valuenow={progress}
@@ -59,6 +69,7 @@ const Toast: React.FC<ToastProps> = ({ mode, message, timeout = 3000}) => {
       </div>
     </div>
   );
+  
 };
 
 export default Toast;

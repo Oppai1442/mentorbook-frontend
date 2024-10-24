@@ -3,7 +3,7 @@ import Toast from './Toast';
 
 type ToastItem = {
   id: number;
-  mode: 'success' | 'danger' | 'warning' | 'info';
+  mode: 'success' | 'danger' | 'warning' | 'info' | 'dark' | 'light' | 'primary' | 'secondary' | 'neutral';
   message: string;
   timeout: number;
 };
