@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
 }, []);
 
   return (
-    <section
+    <footer
       className={`${styles["py-12"]} ${styles["bg-black"]} ${styles["position-relative"]} ${styles["overflow-hidden"]}`}
     >
       <div className={`${styles["container"]}`}>
@@ -226,7 +226,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </div>
-    </section>
+    </footer>
   );
 };
 
