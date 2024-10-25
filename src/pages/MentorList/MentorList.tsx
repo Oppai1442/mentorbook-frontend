@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./MentorList.module.css";
-import MultiRangeSlider from "../../components/multiRangerSlider/multiRangerSlider";
 import { loadSvgs } from "../../utils";
+import { MultiRangeSlider } from "../../components/multiRangerSlider";
 
 const mentorsx = [
   {
