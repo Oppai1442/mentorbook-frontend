@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
 
   useEffect(() => {
     const svgPaths = {
-        twitterLogo: () => import('../../assets/svg/twitter-logo.svg'),
+        twitterLogo: () => import('../../assets/svg/twitter-logo-30.svg'),
         discordLogo: () => import('../../assets/svg/discord-logo.svg'),
         telegramLogo: () => import('../../assets/svg/telegram-logo.svg'),
         websiteLogo: () => import('../../assets/svg/website-logo.svg'),
