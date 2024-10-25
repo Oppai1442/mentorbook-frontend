@@ -98,22 +98,39 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
       const response = error.response;
 
       switch (response.status) {
-        case 401:
-          addToast("warning", "Invalid email or password");
+        case 200: // Successful sign-in
+          addToast("success", "Sign-in successful! Welcome back.");
           break;
-        case 409:
-          addToast("warning", error.message);
+        case 201: // Successful sign-up
+          addToast("success", "Account created successfully! Welcome to the platform.");
           break;
-        default:
+        case 400: // Bad request (e.g., invalid input format)
+          addToast("warning", "Please check your input and try again.");
+          break;
+        case 401: // Unauthorized (e.g., incorrect credentials)
+          addToast("danger", "Incorrect email or password.");
+          break;
+        case 403: // Forbidden (e.g., account blocked)
+          addToast("danger", "Your account is restricted. Please contact support.");
+          break;
+        case 409: // Conflict (e.g., email already in use for sign-up)
+          addToast("warning", "An account with this email already exists.");
+          break;
+        case 500: // Internal server error
+          addToast("danger", "An error occurred on the server. Please try again later.");
+          break;
+        default: // Unhandled errors
+          addToast("neutral", "An unexpected error occurred. Please try again.");
           console.error('An error occurred:', response.status);
+          break;
       }
+
     } else {
+      addToast("dark", "Network error: Unable to connect. Please check your internet connection.");
       console.error('Network error or no response:', error);
     }
   };
 
-
-  // Effect Hooks
   useEffect(() => {
     const svgPaths = {
       googleLogo: () => import('../../assets/svg/google-logo.svg'),
@@ -155,7 +172,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
           className={`${styles['auth-container']} ${styles["position-relative"]} ${styles["mw-lg"]} ${styles["mx-auto"]} ${styles["px-8"]} ${styles["pt-10"]} ${styles["pb-8"]} ${styles["rounded-5"]} ${styles["bg-black"]}`}
         >
           {isHandling && (
-            <LoadingError type="loading" message="Please wait..." style={{color: '#fff'}}/>
+            <LoadingError type="loading" message="Please wait..." style={{ color: '#fff' }} />
           )}
           <button
             type="button"
