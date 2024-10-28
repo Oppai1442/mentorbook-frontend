@@ -2,12 +2,19 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import styles from "./multiRangeSlider.module.css";
 
+interface CurrentValues {
+  min?: number;
+  max?: number;
+}
+
 const MultiRangeSlider: React.FC<{
   min: number;
   max: number;
+  current?: CurrentValues;
   showInput?: boolean;
+  showButton?: boolean;
   onChange: (values: { min: number; max: number }) => void;
-}> = ({ min, max, onChange, showInput = false }) => {
+}> = ({ min, max, current, onChange, showInput = false, showButton = false }) => {
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
   const [minError, setMinError] = useState<string | null>(null);
@@ -16,6 +23,17 @@ const MultiRangeSlider: React.FC<{
   const maxValRef = useRef(max);
   const range = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    if (current) {
+      if (current.min !== undefined && current.min > min && current.min < max) {
+        setMinVal(current.min);
+      }
+      if (current.max !== undefined && current.max > min && current.max < max) {
+        setMaxVal(current.max);
+      }
+    }
+  }, [current, min, max]);
+
   const getPercent = useCallback(
     (value: number) => Math.round(((value - min) / (max - min)) * 100),
     [min, max]
@@ -23,7 +41,7 @@ const MultiRangeSlider: React.FC<{
 
   useEffect(() => {
     const minPercent = getPercent(minVal);
-    const maxPercent = getPercent(maxValRef.current);
+    const maxPercent = getPercent(maxVal);
 
     if (range.current) {
       range.current.style.left = `${minPercent}%`;
@@ -32,7 +50,7 @@ const MultiRangeSlider: React.FC<{
   }, [minVal, getPercent]);
 
   useEffect(() => {
-    const minPercent = getPercent(minValRef.current);
+    const minPercent = getPercent(minVal);
     const maxPercent = getPercent(maxVal);
 
     if (range.current) {
@@ -40,9 +58,12 @@ const MultiRangeSlider: React.FC<{
     }
   }, [maxVal, getPercent]);
 
+  // Trigger onChange only if showButton is false (immediate update)
   useEffect(() => {
-    onChange({ min: minVal, max: maxVal });
-  }, [minVal, maxVal, onChange]);
+    if (!showButton) {
+      onChange({ min: minVal, max: maxVal });
+    }
+  }, [minVal, maxVal, onChange, showButton]);
 
   const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
@@ -64,6 +85,11 @@ const MultiRangeSlider: React.FC<{
       setMaxVal(value);
       maxValRef.current = value;
     }
+  };
+
+  // Button click handler to trigger onChange if showButton is true
+  const handleButtonClick = () => {
+    onChange({ min: minVal, max: maxVal });
   };
 
   return (
@@ -103,7 +129,7 @@ const MultiRangeSlider: React.FC<{
                 type="number"
                 value={minVal}
                 onChange={handleMinInputChange}
-                className={`form-control w-50 ${styles['input--wide']}`}
+                className={`form-control ${styles['input--wide']}`}
               />
               {minError && <small className={styles['error-message']}>{minError}</small>}
             </div>
@@ -113,11 +139,16 @@ const MultiRangeSlider: React.FC<{
                 type="number"
                 value={maxVal}
                 onChange={handleMaxInputChange}
-                className={`form-control w-50 ${styles['input--wide']}`}
+                className={`form-control ${styles['input--wide']}`}
               />
-              {maxError && <small className={styles['error-message']}>{maxError}</small>}
+              {maxError && <div className={styles['error-message']}>{maxError}</div>}
             </div>
           </div>
+        )}
+        {showButton && (
+          <button className={`btn btn-primary ${styles['update-button']}`} onClick={handleButtonClick}>
+            Update
+          </button>
         )}
       </div>
     </div>
@@ -127,7 +158,12 @@ const MultiRangeSlider: React.FC<{
 MultiRangeSlider.propTypes = {
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired
+  current: PropTypes.shape({
+    min: PropTypes.number.isRequired,
+    max: PropTypes.number.isRequired,
+  }),
+  onChange: PropTypes.func.isRequired,
+  showButton: PropTypes.bool
 };
 
 export default MultiRangeSlider;

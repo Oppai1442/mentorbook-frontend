@@ -3,10 +3,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  /* Xóa hoặc sửa đổi position: absolute */
   z-index: 10;
 }
 
@@ -101,11 +98,24 @@
 }
 
 .input--wide {
-  min-width: 80px;
+  max-width: 5rem;
+  min-width: 5rem;
   padding: 0.25rem;
   font-size: 1rem;
   text-align: center;
 }
+
+/* Hide increment/decrement arrows */
+.input--wide[type="number"]::-webkit-inner-spin-button,
+.input--wide[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input--wide[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
 
 /* For Chrome browsers */
 .thumb::-webkit-slider-thumb {
@@ -150,10 +160,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 60px; /* Adjust this to fit your layout */
 }
 
 .error-message {
   color: #d9534f;
   font-size: 0.75rem;
   margin-top: 0.25rem;
+  height: 16px; /* Add a fixed height */
+}
+
+.update-button {
+  margin-top: 1rem; /* Thêm khoảng cách phía trên */
+  width: 100%; /* Chiều rộng đầy đủ */
 }
