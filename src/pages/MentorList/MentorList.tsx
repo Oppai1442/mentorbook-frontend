@@ -1,234 +1,218 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from "./MentorList.module.css";
 import { loadSvgs } from "../../utils";
 import { MultiRangeSlider } from "../../components/multiRangerSlider";
+import { getAllMentors, getAllSkills } from "../../services";
+import { mentorResponse, SkillResponse } from "../../types/Response";
+import { Pagination } from "../../components/Pagination";
+import { mentor } from "../../types/User";
+import ProfilePopup from "./ProfilePopup";
+import { LoadingError } from "../../components/LoadingError";
 
-const mentorsx = [
-  {
-    name: "John Doe",
-    rating: 4.8,
-    price: 50,
-    available: true,
-    skill: "JavaScript",
-    image: "/john.jpg",
-    experienceYears: 5,
-    email: "john.doe@example.com",
-    location: "Brooklyn, NY",
-    avatar: "https://images.unsplash.com/photo-1566576912307-ffbc957001f4?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=128&w=128",
-    background: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&h=400&q=80",
-    description: "Experienced JavaScript developer with a passion for teaching.",
-    facebook: "https://facebook.com/johndoe",
-    twitter: "https://twitter.com/johndoe",
-    linkedin: "https://linkedin.com/in/johndoe"
-  },
-  {
-    name: "Jane Smith",
-    rating: 4.9,
-    price: 75,
-    available: false,
-    skill: "Python",
-    image: "/jane.jpg",
-    experienceYears: 7,
-    email: "jane.smith@example.com",
-    location: "Palo Alto, CA",
-    avatar: "https://images.unsplash.com/photo-1566576912307-ffbc957001f4?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=128&w=128",
-    background: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&h=400&q=80",
-    description: "Expert in Python with extensive experience in data science.",
-    facebook: "https://facebook.com/janesmith",
-    twitter: "https://twitter.com/janesmith",
-    linkedin: "https://linkedin.com/in/janesmith"
-  },
-  {
-    name: "Mike Johnson",
-    rating: 4.5,
-    price: 40,
-    available: true,
-    skill: "Java",
-    image: "/mike.jpg",
-    experienceYears: 4,
-    email: "mike.johnson@example.com",
-    location: "Round Rock, TX",
-    avatar: "https://images.unsplash.com/photo-1566576912307-ffbc957001f4?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=128&w=128",
-    background: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&h=400&q=80",
-    description: "Passionate Java developer with a focus on backend systems.",
-    facebook: "https://facebook.com/mikejohnson",
-    twitter: "https://twitter.com/mikejohnson",
-    linkedin: "https://linkedin.com/in/mikejohnson"
-  },
-  {
-    name: "Emily Davis",
-    rating: 4.7,
-    price: 60,
-    available: true,
-    skill: "React",
-    image: "/emily.jpg",
-    experienceYears: 6,
-    email: "emily.davis@example.com",
-    location: "Santa Monica, CA",
-    avatar: "https://images.unsplash.com/photo-1566576912307-ffbc957001f4?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=128&w=128",
-    background: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&h=400&q=80",
-    description: "Frontend developer specializing in React and user experience.",
-    facebook: "https://facebook.com/emilydavis",
-    twitter: "https://twitter.com/emilydavis",
-    linkedin: "https://linkedin.com/in/emilydavis"
-  },
-  {
-    name: "Alice Brown",
-    rating: 4.6,
-    price: 55,
-    available: true,
-    skill: "Node.js",
-    image: "/alice.jpg",
-    experienceYears: 3,
-    email: "alice.brown@example.com",
-    location: "Bellevue, WA",
-    avatar: "https://images.unsplash.com/photo-1566576912307-ffbc957001f4?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=128&w=128",
-    background: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&h=400&q=80",
-    description: "Node.js developer with a knack for building scalable applications.",
-    facebook: "https://facebook.com/alicebrown",
-    twitter: "https://twitter.com/alicebrown",
-    linkedin: "https://linkedin.com/in/alicebrown"
-  },
-  {
-    name: "Robert Wilson",
-    rating: 4.4,
-    price: 45,
-    available: false,
-    skill: "C#",
-    image: "/robert.jpg",
-    experienceYears: 8,
-    email: "robert.wilson@example.com",
-    location: "Schaumburg, IL",
-    avatar: "https://images.unsplash.com/photo-1566576912307-ffbc957001f4?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=128&w=128",
-    background: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&h=400&q=80",
-    description: "C# developer with a focus on enterprise solutions.",
-    facebook: "https://facebook.com/robertwilson",
-    twitter: "https://twitter.com/robertwilson",
-    linkedin: "https://linkedin.com/in/robertwilson"
-  },
-  {
-    name: "Sophia Turner",
-    rating: 4.7,
-    price: 70,
-    available: true,
-    skill: "Ruby on Rails",
-    image: "/sophia.jpg",
-    experienceYears: 5,
-    email: "sophia.turner@example.com",
-    location: "Fort Lauderdale, FL",
-    avatar: "https://images.unsplash.com/photo-1566576912307-ffbc957001f4?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=128&w=128",
-    background: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&h=400&q=80",
-    description: "Ruby on Rails expert with a passion for agile methodologies.",
-    facebook: "https://facebook.com/sophiaturner",
-    twitter: "https://twitter.com/sophiaturner",
-    linkedin: "https://linkedin.com/in/sophiaturner"
-  },
-  {
-    name: "Daniel Lee",
-    rating: 4.5,
-    price: 65,
-    available: true,
-    skill: "Go",
-    image: "/daniel.jpg",
-    experienceYears: 4,
-    email: "daniel.lee@example.com",
-    location: "Cambridge, MA",
-    avatar: "https://images.unsplash.com/photo-1566576912307-ffbc957001f4?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=128&w=128",
-    background: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&h=400&q=80",
-    description: "Go developer with a strong background in cloud technologies.",
-    facebook: "https://facebook.com/daniellee",
-    twitter: "https://twitter.com/daniellee",
-    linkedin: "https://linkedin.com/in/daniellee"
-  },
-  {
-    name: "Olivia Martinez",
-    rating: 4.8,
-    price: 80,
-    available: true,
-    skill: "Swift",
-    image: "/olivia.jpg",
-    experienceYears: 6,
-    email: "olivia.martinez@example.com",
-    location: "Boulder, CO",
-    avatar: "https://images.unsplash.com/photo-1566576912307-ffbc957001f4?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=128&w=128",
-    background: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&h=400&q=80",
-    description: "Swift developer with a focus on iOS applications.",
-    facebook: "https://facebook.com/oliviamartinez",
-    twitter: "https://twitter.com/oliviamartinez",
-    linkedin: "https://linkedin.com/in/oliviamartinez"
-  },
-];
-
-const skills = [
-  { name: "JavaScript", description: "A versatile scripting language." },
-  { name: "Python", description: "Great for data science and web development." },
-  { name: "React", description: "A library for building user interfaces." },
-  { name: "Node.js", description: "JavaScript runtime built on Chrome's V8 engine." },
-  { name: "CSS", description: "Style sheets for styling web pages." },
-  { name: "HTML", description: "The standard markup language for documents." },
-  { name: "SQL1", description: "Language for managing databases." },
-  { name: "SQL2", description: "Language for managing databases." },
-  { name: "SQL3", description: "Language for managing databases." },
-  { name: "SQL4", description: "Language for managing databases." },
-  { name: "SQL5", description: "Language for managing databases." },
-  { name: "SQL6", description: "Language for managing databases." },
-  { name: "SQL7", description: "Language for managing databases." },
-  { name: "SQL8", description: "Language for managing databases." },
-  { name: "SQL9", description: "Language for managing databases." },
-  { name: "SQL10", description: "Language for managing databases." },
-  { name: "SQL11", description: "Language for managing databases." },
-  { name: "SQL12", description: "Language for managing databases." },
-  // Thêm nhiều kỹ năng hơn ở đây
-];
+interface Skill {
+  id: number;
+  name: string;
+}
 
 const MentorList: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [selectedSkills, setSelectedSkills] = useState<Skill[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(500000);
+  const [maxPrice, setMaxPrice] = useState(1000000);
   const minPriceRef = useRef(minPrice);
   const maxPriceRef = useRef(maxPrice);
   const [selectedRatings, setSelectedRatings] = useState<string[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const filteredSkills = skills.filter(skill => skill.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const skillDropdownToggle = useRef<HTMLDivElement | null>(null);
+  const skillContainerDropdownRef = useRef<HTMLDivElement | null>(null);
+  const [skills, setSkills] = useState<SkillResponse[]>([]);
+  const [mentors, setMentors] = useState<mentorResponse[]>([]);
+  const skillListRef = useRef<HTMLUListElement | null>(null);
 
-  const handleSkillSelect = (skill: string) => {
-    setSelectedSkills(prev =>
-      prev.includes(skill) ? prev.filter(s => s !== skill) : [...prev, skill]
-    );
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const [selectedMentor, setSelectedMentor] = useState<mentor | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const handleShowModal = (mentor: mentorResponse) => {
+    setSelectedMentor(mentor);
+    setShowModal(true);
   };
 
+  const [showChevronUp, setShowChevronUp] = useState(false);
+  const [showChevronDown, setShowChevronDown] = useState(true);
 
-  const handleSortChange = (a: string, b: string) => { };
+  const handleScroll = (event: React.UIEvent<HTMLUListElement>) => {
+    const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
 
-  const handleRatingChange = (rating: string) => {
-    if (selectedRatings.includes(rating)) {
-      setSelectedRatings(selectedRatings.filter(r => r !== rating));
-    } else {
-      setSelectedRatings([...selectedRatings, rating]);
+    setShowChevronUp(scrollTop > 0);
+    setShowChevronDown(scrollTop < scrollHeight - clientHeight);
+  };
+
+  const scrollToTop = () => {
+    if (skillListRef.current) {
+      skillListRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
     }
   };
 
+  const scrollToBottom = () => {
+    if (skillListRef.current) {
+      skillListRef.current.scrollTo({
+        top: skillListRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedMentor(null);
+  };
+  const handleClosePopup = () => {
+    setShowModal(false);
+  };
+
+  const handleContact = () => {
+
+  }
+
+  const handleBook = () => {
+    handleClosePopup();
+  };
+
+  const isSkillSelectedName = (skillName: string) => {
+    return selectedSkills.find(skill => skill.name === skillName) !== undefined;
+  };
+
+  const isSkillSelectedId = (skillId: number) => {
+    return selectedSkills.find(skill => skill.id === skillId) !== undefined;
+  };
+
+  
+
+
+  //Chuyển url pattern thành dữ liệu
   useEffect(() => {
-    const svgPaths = {
-      facebookLogo: () => import('../../assets/svg/facebook-logo-30.svg'),
-      twitterLogo: () => import('../../assets/svg/twitter-logo-30.svg'),
-      linkedinLogo: () => import('../../assets/svg/linkedin-logo-30.svg'),
-    };
+    const query = new URLSearchParams(location.search);
+    const skillsFromURL = query.get('skills')?.split(',').map(Number) || [];
+    const minPriceFromURL = Number(query.get('minPrice')) || minPriceRef.current;
+    const maxPriceFromURL = Number(query.get('maxPrice')) || maxPriceRef.current;
+    const ratingsFromURL = query.get('ratings')?.split(',') || [];
+    const pageFromURL = Number(query.get('page')) || 1;
 
-    const loadAndSetSvgs = async () => {
-      const svgMap = await loadSvgs(svgPaths);
-      setSvgData(svgMap);
-    };
+    if (skills.length > 0) {
+      const skillsWithNames = skillsFromURL.map(skillId => {
+        const skill = skills.find(s => s.skillId === skillId);
+        return skill ? { id: skill.skillId, name: skill.skillName } : null;
+      }).filter((skill): skill is { id: number; name: string } => skill !== null);
 
-    loadAndSetSvgs();
+      setSelectedSkills(skillsWithNames);
+    }
+
+    setMinPrice(minPriceFromURL);
+    setMaxPrice(maxPriceFromURL);
+    setSelectedRatings(ratingsFromURL);
+    setCurrentPage(pageFromURL);
   }, []);
+
+  //Chuyển dữ liệu thành url 
+  const updateUrl = () => {
+    const query = new URLSearchParams();
+
+    if (selectedSkills.length > 0) {
+      query.set('skills', selectedSkills.map(skill => skill.id).sort((a, b) => a - b).join(','));
+    }
+
+    query.set('minPrice', String(minPrice));
+    query.set('maxPrice', String(maxPrice));
+
+    if (selectedRatings.length > 0) {
+      query.set('ratings', selectedRatings.sort((a: any, b: any) => a - b).join(','));
+    }
+    query.set('page', String(currentPage))
+    
+    setMentors([]);
+
+    const getMentors = async () => {
+      const mentors = await getAllMentors({
+        skillIds: selectedSkills.map(skill => skill.id),
+        prices: {
+          min: minPrice,
+          max: maxPrice,
+        },
+        rating: selectedRatings.map(Number),
+      });
+      if (mentors) {
+        setMentors(mentors);
+      }
+    }
+
+    getMentors();
+    navigate({ search: query.toString() });
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  }
+
+  // Hàm xử lý khi chọn kỹ năng
+  const handleSkillSelect = (skillId: number) => {
+    setSelectedSkills(prev => {
+      const skillExists = prev.some(s => s.id === skillId);
+      const skill = skills.find(s => s.skillId === skillId);
+
+      if (!skill) {
+        console.warn(`Kỹ năng với ID ${skillId} không tồn tại.`);
+        return prev;
+      }
+
+      const updatedSkills = skillExists
+        ? prev.filter(s => s.id !== skillId)
+        : [...prev, { id: skillId, name: skill.skillName }];
+
+      return updatedSkills;
+    });
+  };
+
+  const handleRatingChange = (rating: string) => {
+    setSelectedRatings(prev => {
+      const newSelectedRatings = prev.includes(rating)
+        ? prev.filter(r => r !== rating)
+        : [...prev, rating];
+
+      return newSelectedRatings;
+    });
+  };
+
+
+  const handlePriceChange = (min: number, max: number) => {
+    setMinPrice(min);
+    setMaxPrice(max);
+  };
+
+  useEffect(() => {
+    updateUrl();
+  }, [selectedSkills,minPrice, maxPrice, selectedRatings, currentPage]);
+
+  const handleSortChange = (a: string, b: string) => { };
+
+  const filteredSkills = skills.filter(skill =>
+    skill.skillName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    skill.skillDescription.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (skillContainerDropdownRef.current && !skillContainerDropdownRef.current.contains(event.target as Node) && skillDropdownToggle.current && !skillDropdownToggle.current.contains(event.target as Node)) {
         setDropdownOpen(false);
       }
     };
@@ -238,16 +222,34 @@ const MentorList: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const svgPaths = {
+          facebookLogo: () => import('../../assets/svg/facebook-logo-30.svg'),
+          twitterLogo: () => import('../../assets/svg/twitter-logo-30.svg'),
+          linkedinLogo: () => import('../../assets/svg/linkedin-logo-30.svg'),
+        };
+        const svgMap = await loadSvgs(svgPaths);
+        const skills = await getAllSkills();
+
+        setSvgData(svgMap);
+        if (skills) {
+          setSkills(skills)
+        }
+      } catch (error: any) {
+      }
+    };
+    getData();
+  }, []);
 
   return (
     <section className={`${styles['py-6']}`}>
       <div className={`${styles['container']}`}>
         <div className={`row`}>
-
-
           {/* Sidebar */}
           <div className={`${styles['col-12']} ${styles['col-md-4']} ${styles['col-lg-3']} ${styles['mb-6']} ${styles['w-25']}`}>
-            <div className={`${styles['card']} ${styles['mt-20']}`}>
+            <div className={`${styles['card']} ${styles['mt-20']} ${styles['sidebar-container']}`}>
               <div className={`${styles['card-body']}`}>
                 <h5 className={`${styles['card-title']}`}>Filter Mentors</h5>
 
@@ -257,6 +259,7 @@ const MentorList: React.FC = () => {
                   <label className={`${styles['form-label']}`}>Filter by Skill</label>
                   <div className={`${styles['dropdown']} ${styles['position-relative']}`}>
                     <div
+                      ref={skillDropdownToggle}
                       className="form-control d-flex justify-content-between align-items-center cursor-pointer"
                       onClick={() => setDropdownOpen(!dropdownOpen)}
                     >
@@ -266,67 +269,92 @@ const MentorList: React.FC = () => {
 
                     {/* Dropdown Menu */}
                     {dropdownOpen && (
-                      <div ref={dropdownRef} className={`dropdown-menu show w-100 mt-1 ${styles['dropdown-menu-custom']}`}>
+                      <div
+                        ref={skillContainerDropdownRef}
+                        className={`dropdown-menu show w-100 mt-1 p-3 shadow-lg border-0 ${styles['dropdown-menu-custom']}`}
+                      >
                         <div className="d-flex">
-                          <div className={`flex-grow-1 me-2 ${styles['skill-search-tab']}`}>
+                          {/* Search & Skill List Section */}
+                          <div className={`flex-grow-1 me-3 ${styles['skill-search-tab']}`}>
                             <input
                               type="text"
                               placeholder="Search skills..."
                               value={searchTerm}
-                              onChange={e => setSearchTerm(e.target.value)}
-                              className="form-control mb-2"
+                              onChange={(e) => setSearchTerm(e.target.value)}
+                              className="form-control mb-3"
                             />
-                            <ul className={`${styles['skill-list']} list-group`}>
-                              {filteredSkills.length > 0 ? (
-                                filteredSkills.map(skill => (
-                                  <li
-                                    key={skill.name}
-                                    className={`list-group-item d-flex justify-content-between align-items-center ${selectedSkills.includes(skill.name) ? 'bg-light' : ''}`}
-                                    onClick={() => handleSkillSelect(skill.name)}
-                                  >
-                                    <span>
-                                      <strong>{skill.name}</strong>
-                                      <p className="mb-0 text-muted" style={{ fontSize: '12px' }}>
-                                        {skill.description}
-                                      </p>
-                                    </span>
-                                    {selectedSkills.includes(skill.name) && (
-                                      <span className="badge bg-primary">Selected</span>
-                                    )}
-                                  </li>
-                                ))
-                              ) : (
-                                <li className="list-group-item text-muted">No skills found</li>
+                            <div className="position-relative">
+                              {showChevronUp && (
+                                <i
+                                  className={`fa-thin fa-chevrons-up fa-beat-fade text-muted position-absolute top-0 start-50 translate-middle ${styles['z-3']} ${styles['cursor-pointer']}`}
+                                  onClick={scrollToTop}
+                                />
                               )}
-                            </ul>
+                              <ul
+                                ref={skillListRef}
+                                onScroll={handleScroll}
+                                className={`${styles['skill-list']} list-group overflow-auto`}
+                                style={{ maxHeight: '18.75rem', padding: '1rem 0' }}
+                              >
+                                {filteredSkills.length > 0 ? (
+                                  filteredSkills.map((skill, index) => (
+                                    <li
+                                      key={skill.skillId + '-' + index}
+                                      className={`list-group-item d-flex justify-content-between align-items-center rounded 
+                                        ${isSkillSelectedName(skill.skillName) ? 'bg-light' : ''}`}
+                                      onClick={() => handleSkillSelect(skill.skillId)}
+                                    >
+                                      <span>
+                                        <strong>{skill.skillName}</strong>
+                                        <p className="mb-0 text-muted" style={{ fontSize: '12px' }}>
+                                          {skill.skillDescription}
+                                        </p>
+                                      </span>
+                                      {isSkillSelectedName(skill.skillName) && (
+                                        <span className="badge bg-primary">Selected</span>
+                                      )}
+                                    </li>
+                                  ))
+                                ) : (
+                                  <li className="list-group-item text-muted">No skills found</li>
+                                )}
+                              </ul>
+                              {showChevronDown && (
+                                <i
+                                  className={`fa-thin fa-chevrons-down fa-beat-fade text-muted position-absolute bottom-0 start-50 translate-middle ${styles['z-3']} ${styles['cursor-pointer']}`}
+                                  onClick={scrollToBottom}
+                                />
+                              )}
+                            </div>
+
                           </div>
 
-                          {/* Phần kỹ năng đã chọn */}
-                          <div className={`flex-shrink-0 ${styles['selected-skills-tab']}`}>
-                            <strong>Selected Skills:</strong>
+                          {/* Selected Skills Section */}
+                          <div className={`flex-shrink-0 ${styles['selected-skills-tab']}`} style={{ minWidth: '200px' }}>
+                            <h6 className="mb-2 text-primary">Selected Skills</h6>
                             {selectedSkills.length > 0 ? (
-                              <div className="d-flex flex-wrap mt-1">
-                                {selectedSkills.map(skill => (
-                                  <div key={skill} className={`badge bg-secondary me-2 ${styles['mb-2']}`}>
-                                    {skill}
+                              <div className="d-flex flex-wrap mt-1 overflow-auto" style={{ maxHeight: '18.75rem' }}>
+                                {selectedSkills.slice().reverse().map((skill) => (
+                                  <span key={skill.id} className="badge bg-secondary me-2 mb-2 p-2">
+                                    {skill.name}
                                     <button
                                       type="button"
-                                      className="btn-close btn-close-white"
-                                      aria-label="Close"
-                                      onClick={() => handleSkillSelect(skill)}
+                                      className="btn-close btn-close-white ms-1"
+                                      aria-label="Remove"
+                                      onClick={() => handleSkillSelect(skill.id)} // Gọi hàm để bỏ chọn kỹ năng
+                                      style={{ fontSize: '8px' }}
                                     ></button>
-                                  </div>
-
+                                  </span>
                                 ))}
                               </div>
                             ) : (
                               <p className="text-muted mt-2">No skills selected</p>
                             )}
                           </div>
-
                         </div>
                       </div>
                     )}
+
                   </div>
                 </div>
 
@@ -338,11 +366,15 @@ const MentorList: React.FC = () => {
                     <MultiRangeSlider
                       min={minPriceRef.current}
                       max={maxPriceRef.current}
+                      current={{
+                        min: minPrice,
+                        max: maxPrice
+                      }}
                       onChange={({ min, max }) => {
-                        setMinPrice(min);
-                        setMaxPrice(max);
+                        handlePriceChange(min, max);
                       }}
                       showInput={true}
+                      showButton={true}
                     />
                   </div>
                 </div>
@@ -351,7 +383,7 @@ const MentorList: React.FC = () => {
                 <div className="mb-3">
                   <label className="form-label">Rating</label>
                   <div className="d-flex flex-column">
-                    {["All", "5", "4", "3", "2", "1", "0"].map(rating => (
+                    {["5", "4", "3", "2", "1", "0"].map(rating => (
                       <div key={rating} className="d-flex align-items-center mb-2">
                         {/* Checkbox */}
                         <input
@@ -369,15 +401,13 @@ const MentorList: React.FC = () => {
                         {/* Stars with extra margin */}
                         <div className="d-flex">
                           {rating !== "All" && [...Array(Number(rating))].map((_, i) => (
-                            <i key={i} className="fa-solid fa-star me-1"></i>
+                            <i key={i} className="fa-solid fa-star me-1" style={{ color: "#FFD43B", }}></i>
                           ))}
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
-
-
               </div>
             </div>
           </div>
@@ -385,108 +415,138 @@ const MentorList: React.FC = () => {
           {/* Mentor List */}
           <div className="col-12 col-md-8 col-lg-9">
             <div className="d-flex justify-content-between mb-3">
-              <label>Sort by:</label>
+              <label className={`${styles['mt-015']}`}>Sort by:</label>
               <div className="sort-bar d-flex justify-content-between align-items-center mb-4">
                 <div className="sort-option d-flex align-items-center">
                   <label className="me-2">Name</label>
-                  <select className="form-select me-3" onChange={e => handleSortChange('name', e.target.value)}>
+                  <select className="form-select me-3" onChange={e => handleSortChange('name', e.target.value)} defaultValue="">
+                    <option value="none">Select an option</option>
                     <option value="asc">Asc</option>
                     <option value="desc">Desc</option>
                   </select>
                 </div>
                 <div className="sort-option d-flex align-items-center">
                   <label className="me-2">Experience</label>
-                  <select className="form-select me-3" onChange={e => handleSortChange('experience', e.target.value)}>
+                  <select className="form-select me-3" onChange={e => handleSortChange('experience', e.target.value)} defaultValue="">
+                    <option value="none">Select an option</option>
                     <option value="asc">Asc</option>
                     <option value="desc">Desc</option>
                   </select>
                 </div>
                 <div className="sort-option d-flex align-items-center">
                   <label className="me-2">Rating</label>
-                  <select className="form-select me-3" onChange={e => handleSortChange('rating', e.target.value)}>
+                  <select className="form-select me-3" onChange={e => handleSortChange('rating', e.target.value)} defaultValue="">
+                    <option value="none">Select an option</option>
                     <option value="asc">Asc</option>
                     <option value="desc">Desc</option>
                   </select>
                 </div>
                 <div className="sort-option d-flex align-items-center">
                   <label className="me-2">Price</label>
-                  <select className="form-select" onChange={e => handleSortChange('price', e.target.value)}>
+                  <select className="form-select" onChange={e => handleSortChange('price', e.target.value)} defaultValue="">
+                    <option value="none">Select an option</option>
                     <option value="asc">Asc</option>
                     <option value="desc">Desc</option>
                   </select>
                 </div>
               </div>
             </div>
-            <div className="row">
-              {mentorsx.map((mentor) => (
-                <div className={`${styles['col-12']} ${styles['col-md-6']} ${styles['col-lg-4']} ${styles['mb-6']}`}>
+            <div className={`row ${styles['mentors-container']}`}>
+              {mentors.length === 0 ? (
+                <LoadingError
+                  type="loading"
+                  message="loading mentors list..."
+                />
+              ) : (mentors.map((mentor) => (
+                <div key={mentor.email} className={`${styles['col-12']} ${styles['col-md-6']} ${styles['col-lg-4']} ${styles['mb-6']}`}>
                   <div className={`${styles['card']}`}>
                     <img
                       className={`${styles['img']} ${styles['card-img-top']}`}
-                      src={mentor.background}
+                      src={mentor.backgroundUrl}
                       alt=""
                     />
                     <div className={`${styles['mt-n8']} ${styles['card-body']} ${styles['text-center']}`}>
                       <img
                         className={`${styles['img']} ${styles['mb-6']} ${styles['img-fluid']} ${styles['rounded-2']}`}
-                        src={mentor.avatar}
+                        src={mentor.avatarUrl}
                         style={{ width: 64, height: 64 }}
                         alt=""
                       />
-                      <h6 className={`${styles['h6']} ${styles['card-title']} ${styles['mb-2']}`}>{mentor.name}</h6>
+                      <h6 className={`${styles['h6']} ${styles['card-title']} ${styles['mb-2']}`}>{mentor.fullName}</h6>
                       <p className={`${styles['p']} ${styles['card-text']}`}>Influencer &amp; Social Media Content</p>
                       <a className={`${styles['a']} ${styles['d-inline-block']} ${styles['mb-6']} ${styles['text-decoration-none']}`} href="#">
                         {mentor.email}
                       </a>
-                      <div className={`${styles['d-flex']} ${styles['mb-6']} ${styles['justify-content-center']} ${styles['align-items-center']}`}>
-                        <a className={`${styles['a']} ${styles['me-2']}`} href="#">
+                      {/* <div className={`${styles['d-flex']} ${styles['mb-6']} ${styles['justify-content-center']} ${styles['align-items-center']}`}>
+                        <a className={`${styles['a']} ${styles['me-2']}`} href={mentor.facebook} target="_blank" rel="noopener noreferrer">
                           {svgData['facebookLogo'] && (<img
                             className={`${styles['img']} ${styles['img-fluid']}`}
                             src={svgData['facebookLogo']}
                             alt=""
                           />)}
                         </a>
-                        <a className={`${styles['a']} ${styles['me-2']}`} href="#">
+                        <a className={`${styles['a']} ${styles['me-2']}`} href={mentor.twitter} target="_blank" rel="noopener noreferrer">
                           {svgData['twitterLogo'] && (<img
                             className={`${styles['img']} ${styles['img-fluid']}`}
                             src={svgData['twitterLogo']}
                             alt=""
                           />)}
                         </a>
-                        <a className={`${styles['a']} ${styles['me-2']}`} href="#">
+                        <a className={`${styles['a']} ${styles['me-2']}`} href={mentor.linkedin} target="_blank" rel="noopener noreferrer">
                           {svgData['linkedinLogo'] && (<img
                             className={`${styles['img']} ${styles['img-fluid']}`}
                             src={svgData['linkedinLogo']}
                             alt=""
                           />)}
                         </a>
-                      </div>
-                      <div className={`${styles['mb-8']}`}>
-                        <a
-                          className={`${styles['a']} ${styles['text-decoration-none']} ${styles['badge']} ${styles['me-2']} ${styles['bg-transparent']} ${styles['border']} ${styles['text-dark']} ${styles['fw-bold']}`}
-                          href="#"
-                        >
-                          Marketing
-                        </a>
-                        <a
-                          className={`${styles['a']} ${styles['text-decoration-none']} ${styles['badge']} ${styles['bg-transparent']} ${styles['border']} ${styles['text-dark']} ${styles['fw-bold']}`}
-                          href="#"
-                        >
-                          Development
-                        </a>
-                      </div>
-                      <a
+                      </div> */}
+                      {/* <div className={`${styles['mb-8']} d-flex flex-wrap justify-content-center`}>
+                        {mentor.skills.map((skill) => (
+                          <a
+                            key={skill.skillId}
+                            className={`${styles['a']} ${styles['text-decoration-none']} ${styles['badge']} ${styles['bg-transparent']} ${styles['border']} ${styles['text-dark']} ${styles['fw-bold']} me-2 mb-2`}
+                            href="#"
+                          >
+                            {skill.skillName}
+                          </a>
+                        ))}
+                      </div> */}
+                      <button
                         className={`${styles['a']} ${styles['btn']} ${styles['w-100']} ${styles['btn-outline-dark']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['justify-content-center']}`}
-                        href="#"
+                        onClick={() => handleShowModal(mentor)}
                       >
                         <i className={`fa-light fa-user ${styles['me-2']}`} />
-
                         <span>Profile</span>
-                      </a>
+                      </button>
+                      <div className="d-flex justify-content-between text-center mt-5 mb-2">
+                        <div>
+                          <p className="mb-2 h5">8471</p>
+                          <p className="text-muted mb-0">Wallets Balance</p>
+                        </div>
+                        <div className="px-3">
+                          <p className="mb-2 h5">8512</p>
+                          <p className="text-muted mb-0">Income amounts</p>
+                        </div>
+                        <div>
+                          <p className="mb-2 h5">4751</p>
+                          <p className="text-muted mb-0">Total Transactions</p>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
                 </div>
-              ))}
+              )))}
+              
+            </div>
+
+            <div className="d-flex justify-content-center mt-3">
+              <Pagination
+                totalItems={9999}
+                itemsPerPage={9}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+              />
             </div>
           </div>
 
