@@ -1,5 +1,6 @@
 import { postData } from "../services/apiService";
-import { LoginResponse, User } from "../types";
+import { LoginResponse, SignUpResponse } from "../types";
+import { User } from "../types/User";
 
 export const fetchUserFromToken = async (token: string): Promise<User | null> => {
   try {
@@ -10,12 +11,12 @@ export const fetchUserFromToken = async (token: string): Promise<User | null> =>
   }
 };
 
-interface signIn {
+interface SignInCredentials {
   email: string;
   password: string;
 }
 
-export const signIn = async (credentials: signIn) => {
+export const signIn = async (credentials: SignInCredentials ) => {
   try {
     const response = await postData<LoginResponse>("/user/login", credentials);
     return response.data;
@@ -24,7 +25,7 @@ export const signIn = async (credentials: signIn) => {
   }
 }
 
-interface signUp {
+interface signUpCredentials {
   fullName: string;
   birthDate: string;
   address: string;
@@ -33,9 +34,9 @@ interface signUp {
   password: string;
 }
 
-export const signUp = async (credentials: signUp) => {
+export const signUp = async (credentials: signUpCredentials) => {
   try {
-    const response = await postData<LoginResponse>("/user/register", credentials);
+    const response = await postData<SignUpResponse>("/user/register", credentials);
     return response.data;
   } catch (error) {
     throw error;
