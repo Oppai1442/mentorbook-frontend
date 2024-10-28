@@ -11,3 +11,11 @@ export const changeIcon = (iconUrl: string) => {
         document.head.appendChild(link);
     }
 };
+
+export const convertKeys = (obj: Record<string, any>, keyMap: Record<string, string>): Record<string, any> => {
+    return Object.keys(obj).reduce((acc, key) => {
+        const newKey = keyMap[key] || key;
+        acc[newKey] = obj[key];
+        return acc;
+    }, {} as Record<string, any>);
+};
