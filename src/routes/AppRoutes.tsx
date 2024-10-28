@@ -6,8 +6,9 @@ import { MentorList } from '../pages/MentorList';
 import { FAQs } from '../pages/FAQs';
 import { ToS } from '../pages/Tos';
 import { Policy } from '../pages/Policy';
-
 import { NotFound } from '../pages/NotFound';
+import { Contribute } from '../pages/Contribute';
+import { Dashboard } from '../pages/Dashboard';
 
 const routes = [
   { path: '/', element: Home },
@@ -17,6 +18,8 @@ const routes = [
   { path: '/FAQs', element: FAQs },
   { path: '/ToS', element: ToS },
   { path: '/Policy', element: Policy },
+  { path: '/dashboard', element: Dashboard },
+  { path: '/contribute', element: Contribute },
   { path: '*', element: NotFound },
 ];
 
