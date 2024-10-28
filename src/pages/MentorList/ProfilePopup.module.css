@@ -1,0 +1,34 @@
+.popup-content {
+    width: 100%;
+    max-width: 600px; /* Maximum width for the popup */
+    border-radius: 0.5rem;
+  }
+  
+  .avatar {
+    border-radius: 50%; /* Circular avatar */
+  }
+  
+  .feedback-container {
+    max-height: 300px; /* Limit height for feedback section */
+    overflow-y: auto; /* Enable scrolling if content overflows */
+    padding: 0.5rem; /* Padding around feedback items */
+  }
+  
+  .feedback-item {
+    border-bottom: 1px solid #e9ecef; /* Divider between feedback items */
+    padding: 0.5rem 0; /* Padding for feedback items */
+  }
+  
+  .feedback-avatar {
+    width: 40px; /* Width for feedback avatars */
+    height: 40px; /* Height for feedback avatars */
+  }
+  
+  .feedback-header {
+    display: flex;
+    justify-content: space-between; /* Space between name and time */
+  }
+  
+  .feedback-content {
+    flex-grow: 1; /* Allow content to grow */
+  }
