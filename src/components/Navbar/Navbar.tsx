@@ -163,11 +163,11 @@ const Navbar: React.FC = () => {
                         <li>
                           <Link
                             className={`${styles["dropdown-item"]}`}
-                            to="/user/account/profile"
+                            to="/dashboard"
                             onClick={() => handleItemClick()}
                           >
                             <i className="fa-light fa-user" />
-                            Profile
+                            Dashboard
                           </Link>
                         </li>
                         <li>
