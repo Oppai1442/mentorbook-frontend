@@ -1,3 +1,5 @@
+import { SkillResponse } from "./Response";
+
 export interface User {
     id: number;
     fullName: string;
@@ -12,12 +14,15 @@ export interface mentor {
     email: string;
     avatarUrl: string;
     backgroundUrl: string;
-    skills: skill[]
+    skills: SkillResponse[]
+    price: number;
+    rating: number;
+    totalBooked: number;
+    role: string;
 }
 
-export interface skill {
-    length: number;
-    skillId: number;
-    skillName: string;
-    skillDescription: string;
+export interface Skill {
+    id: number;
+    name: string;
+    description: string;
 }
