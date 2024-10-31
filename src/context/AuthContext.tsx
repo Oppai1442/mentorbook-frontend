@@ -1,7 +1,7 @@
 import React, { createContext, useState, ReactNode, useContext, useEffect } from "react";
 import { Auth } from "../components/Auth";
 import { fetchUserFromToken } from "../services";
-import { User } from "../types/User";
+import { User } from "../types/Model";
 
 interface AuthContextType {
   user: User | null;

@@ -1,6 +1,6 @@
 import { postData } from "../services/apiService";
 import { LoginResponse, SignUpResponse } from "../types";
-import { User } from "../types/User";
+import { User } from "../types/Model";
 
 export const fetchUserFromToken = async (token: string): Promise<User | null> => {
   try {
