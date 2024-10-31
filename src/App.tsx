@@ -37,6 +37,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const App: React.FC = () => {
   return (
+    // App.tsx
     <Router>
       <Layout>
         <Routes>
@@ -44,12 +45,23 @@ const App: React.FC = () => {
             <Route
               key={route.path}
               path={route.path}
-              element={<route.element />}
-            />
+              element={route.element}
+            >
+              {route.children &&
+                route.children.map((child) => (
+                  <Route
+                    key={child.path}
+                    path={child.path}
+                    element={child.element}
+                  />
+                ))
+              }
+            </Route>
           ))}
         </Routes>
       </Layout>
     </Router>
+
   );
 };
 
