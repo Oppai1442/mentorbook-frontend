@@ -1,4 +1,4 @@
-import { mentorResponse } from "../types/Response";
+import { MentorResponse } from "../types/Response";
 import { postData } from "./apiService";
 
 interface requestBody {
@@ -12,15 +12,15 @@ interface requestBody {
     sorting?: {
         name?: string,
         experience?: string,
-        rating?: number,
-        price?: number
+        rating?: string,
+        price?: string
     }
 }
 
-export const getAllMentors = async (data: requestBody = {} as requestBody) => {
+export const getAllMentors = async (data: requestBody) => {
     try {
-        const response = await postData<mentorResponse[]>(`/api/mentor/get-all-mentors`, data);
-        console.log(data)
+        const response = await postData<MentorResponse>(`/api/mentor/get-mentors`, data);
+        
         return response.data
     } catch (error) {
         throw error;
