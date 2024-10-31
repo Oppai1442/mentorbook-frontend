@@ -21,7 +21,6 @@
 
 .auth-container {
   min-width: 32rem;
-  min-height: 48.5rem;
 }
 
 .a {
@@ -462,6 +461,7 @@
   margin-left: auto !important;
 }
 
+
 .mt-4 {
   margin-top: 1rem !important;
 }
@@ -537,6 +537,10 @@
 
 .fs-10 {
   font-size: 0.75rem !important;
+}
+
+.gap-3 {
+  gap: .75rem !important
 }
 
 .fw-medium {
