@@ -285,52 +285,49 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
                 <label className={`${styles['form-check-label']} ${styles['text-white']}`} htmlFor="rememberMe">Remember me</label>
               </div>)}
               {isSignIn() && (<Link
-                className={`${isHandling ? "disabled" : ""} ${styles["btn"]} ${styles["fs-9"]} ${styles["ms-1"]} ${styles["p-0"]}  ${styles["text-secondary-light"]}`}
+                className={`${isHandling ? "disabled" : ""} ${styles["btn"]} ${styles["fs-9"]} ${styles["p-0"]} ${styles["mt-4"]}  ${styles["text-secondary-light"]}`}
                 to="#"
               >
                 Forgot password?
               </Link>)}
               <div
-                className={`${styles["d-flex"]} ${styles["mt-8"]} ${styles["mb-10"]} ${styles["align-items-center"]}`}
+                className={`${styles["d-flex"]} ${styles["mt-8"]} ${styles["align-items-center"]}`}
               >
                 <div className={`${styles["w-100"]} ${styles["border-top"]}`} />
                 <span
                   className={`${styles["d-inline-block"]} ${styles["flex-shrink-0"]} ${styles["mx-5"]} ${styles["fs-10"]} ${styles["fw-medium"]} ${styles["text-secondary-light"]}`}
                 >
-                  or {isSignIn() ? "sign in" : "sign up"} with email
+                  or {isSignIn() ? "sign in" : "sign up"} with
                 </span>
                 <div className={`${styles["w-100"]} ${styles["border-top"]}`} />
               </div>
-              <Link
-                className={`${isHandling ? "disabled" : ""} ${styles["btn"]} ${styles["mb-2"]} ${styles["w-100"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
-                to="#"
-              >
-                {svgData['googleLogo'] && (
-                  <img
-                    className={`${styles["img"]} ${styles["img-fluid"]}`}
-                    src={svgData['googleLogo']}
-                    alt=""
-                  />
-                )}
-                <span className={`${styles["ms-4"]} ${styles["fw-medium"]}`}>
-                  {isSignIn() ? "Sign in" : "Sign up"} with Google
-                </span>
-              </Link>
-              <Link
-                className={`${isHandling ? "disabled" : ""} ${styles["btn"]} ${styles["w-100"]} ${styles["bg-dark"]} ${styles["bg-opacity-50"]}`}
-                to="#"
-              >
-                {svgData['appleLogo'] && (
-                  <img
-                    className={`${styles["img"]} ${styles["img-fluid"]}`}
-                    src={svgData['appleLogo']}
-                    alt=""
-                  />
-                )}
-                <span className={`${styles["ms-4"]} ${styles["fw-medium"]}`}>
-                  {isSignIn() ? "Sign in" : "Sign up"} with Apple
-                </span>
-              </Link>
+              <div className={`${styles["d-flex"]} ${styles["justify-content-center"]} ${styles["gap-3"]} ${styles["mt-4"]}`}>
+                <button
+                  className={`${isHandling ? "disabled" : ""} ${styles["btn"]}`}
+                  aria-label="Sign in with Google"
+                >
+                  {svgData['googleLogo'] && (
+                    <img src={svgData['googleLogo']} alt="Google icon" className={`${styles["img-fluid"]}`} />
+                  )}
+                </button>
+
+                <button
+                  className={`${isHandling ? "disabled" : ""} ${styles["btn"]}`}
+                  aria-label="Sign in with Apple"
+                >
+                  {svgData['appleLogo'] && (
+                    <img src={svgData['appleLogo']} alt="Apple icon" className={`${styles["img-fluid"]}`} />
+                  )}
+                </button>
+
+                <button
+                  className={`${isHandling ? "disabled" : ""} ${styles["btn"]}`}
+                  aria-label="Sign in with Email"
+                >
+                  <i className="fa-solid fa-envelope" style={{ color: "#ffffff" }} />
+                </button>
+              </div>
+
             </form>
             <div className={`${isHandling ? "disabled" : ""} ${styles["text-center"]} ${styles["mt-4"]}`}>
               {isSignIn() ? (
