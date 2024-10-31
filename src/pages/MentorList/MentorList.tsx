@@ -4,20 +4,17 @@ import styles from "./MentorList.module.css";
 import { loadSvgs } from "../../utils";
 import { MultiRangeSlider } from "../../components/multiRangerSlider";
 import { getAllMentors, getAllSkills } from "../../services";
-import { mentorResponse, SkillResponse } from "../../types/Response";
 import { Pagination } from "../../components/Pagination";
-import { mentor } from "../../types/User";
+import { mentor, Skill } from "../../types/Model";
 import ProfilePopup from "./ProfilePopup";
 import { LoadingError } from "../../components/LoadingError";
+import { useAuth } from "../../context";
 
-interface Skill {
-  id: number;
-  name: string;
-}
 
 const MentorList: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const {} = useAuth();
 
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
   const [selectedSkills, setSelectedSkills] = useState<Skill[]>([]);
@@ -30,15 +27,21 @@ const MentorList: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const skillDropdownToggle = useRef<HTMLDivElement | null>(null);
   const skillContainerDropdownRef = useRef<HTMLDivElement | null>(null);
-  const [skills, setSkills] = useState<SkillResponse[]>([]);
-  const [mentors, setMentors] = useState<mentorResponse[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [mentors, setMentors] = useState<mentor[]>([]);
+  const [totalMentors, setTotalMentors] = useState<number>(0);
   const skillListRef = useRef<HTMLUListElement | null>(null);
-
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [sortOptions, setSortOptions] = useState({
+    name: 'none',
+    experience: 'none',
+    rating: 'none',
+    price: 'none',
+  });
 
   const [selectedMentor, setSelectedMentor] = useState<mentor | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const handleShowModal = (mentor: mentorResponse) => {
+  const handleShowModal = (mentor: mentor) => {
     setSelectedMentor(mentor);
     setShowModal(true);
   };
@@ -96,31 +99,59 @@ const MentorList: React.FC = () => {
     return selectedSkills.find(skill => skill.id === skillId) !== undefined;
   };
 
-  
-
-
-  //Chuyển url pattern thành dữ liệu
+  //cái này cần phải đứng trên cùng
   useEffect(() => {
-    const query = new URLSearchParams(location.search);
-    const skillsFromURL = query.get('skills')?.split(',').map(Number) || [];
-    const minPriceFromURL = Number(query.get('minPrice')) || minPriceRef.current;
-    const maxPriceFromURL = Number(query.get('maxPrice')) || maxPriceRef.current;
-    const ratingsFromURL = query.get('ratings')?.split(',') || [];
-    const pageFromURL = Number(query.get('page')) || 1;
+    const init = async () => {
+      try {
+        const svgPaths = {
+          facebookLogo: () => import('../../assets/svg/facebook-logo-30.svg'),
+          twitterLogo: () => import('../../assets/svg/twitter-logo-30.svg'),
+          linkedinLogo: () => import('../../assets/svg/linkedin-logo-30.svg'),
+        };
+        const svgMap = await loadSvgs(svgPaths);
+        const skills = await getAllSkills();
 
-    if (skills.length > 0) {
-      const skillsWithNames = skillsFromURL.map(skillId => {
-        const skill = skills.find(s => s.skillId === skillId);
-        return skill ? { id: skill.skillId, name: skill.skillName } : null;
-      }).filter((skill): skill is { id: number; name: string } => skill !== null);
+        setSvgData(svgMap);
+        if (skills) {
+          setSkills(skills)
+          loadDataFromUrl(skills);
+        }
+      } catch (error: any) {
+      }
+    };
 
-      setSelectedSkills(skillsWithNames);
+    const loadDataFromUrl = async (skills: Skill[]) => {
+      const query = new URLSearchParams(location.search);
+      const skillsFromURL = query.get('skills')?.split(',').map(Number) || [];
+      const minPriceFromURL = Number(query.get('minPrice')) || minPriceRef.current;
+      const maxPriceFromURL = Number(query.get('maxPrice')) || maxPriceRef.current;
+      const ratingsFromURL = query.get('ratings')?.split(',') || [];
+      const pageFromURL = Number(query.get('page')) || 1;
+
+      const sortFromUrl = {
+        name: query.get('sortByName') || 'none',
+        experience: query.get('sortByExperience') || 'none',
+        rating: query.get('sortByRating') || 'none',
+        price: query.get('sortByPrice') || 'none',
+      }
+
+      if (skills.length > 0) {
+        const skillsWithNames = skillsFromURL.map(skillId => {
+            const skill = skills.find(s => s.id === skillId);
+            return skill ? { id: skill.id, name: skill.name, description: skill.description } : null;
+        }).filter((skill): skill is Skill => skill !== null);
+    
+        setSelectedSkills(skillsWithNames);
     }
 
-    setMinPrice(minPriceFromURL);
-    setMaxPrice(maxPriceFromURL);
-    setSelectedRatings(ratingsFromURL);
-    setCurrentPage(pageFromURL);
+      setMinPrice(minPriceFromURL);
+      setMaxPrice(maxPriceFromURL);
+      setSelectedRatings(ratingsFromURL);
+      setCurrentPage(pageFromURL);
+      setSortOptions(sortFromUrl)
+    }
+
+    init();
   }, []);
 
   //Chuyển dữ liệu thành url 
@@ -138,20 +169,34 @@ const MentorList: React.FC = () => {
       query.set('ratings', selectedRatings.sort((a: any, b: any) => a - b).join(','));
     }
     query.set('page', String(currentPage))
-    
+
+    query.set('sortByName', sortOptions.name);
+    query.set('sortByExperience', sortOptions.experience);
+    query.set('sortByRating', sortOptions.rating);
+    query.set('sortByPrice', sortOptions.price);
+
     setMentors([]);
 
     const getMentors = async () => {
-      const mentors = await getAllMentors({
-        skillIds: selectedSkills.map(skill => skill.id),
+      const response = await getAllMentors({
+        page: currentPage - 1,
+        skillIds: selectedSkills.map(skill => skill.id).sort((a: any, b: any) => a - b),
         prices: {
           min: minPrice,
           max: maxPrice,
         },
-        rating: selectedRatings.map(Number),
+        rating: selectedRatings.map(Number).sort((a: any, b: any) => a - b),
+        sorting: {
+          name: sortOptions.name,
+          experience: sortOptions.experience,
+          rating: sortOptions.rating,
+          price: sortOptions.price,
+        }
       });
-      if (mentors) {
-        setMentors(mentors);
+      if (response) {
+        console.log(response.mentors)
+        setMentors(response.mentors);
+        setTotalMentors(response.totalFound);
       }
     }
 
@@ -167,7 +212,7 @@ const MentorList: React.FC = () => {
   const handleSkillSelect = (skillId: number) => {
     setSelectedSkills(prev => {
       const skillExists = prev.some(s => s.id === skillId);
-      const skill = skills.find(s => s.skillId === skillId);
+      const skill = skills.find(s => s.id === skillId);
 
       if (!skill) {
         console.warn(`Kỹ năng với ID ${skillId} không tồn tại.`);
@@ -176,7 +221,7 @@ const MentorList: React.FC = () => {
 
       const updatedSkills = skillExists
         ? prev.filter(s => s.id !== skillId)
-        : [...prev, { id: skillId, name: skill.skillName }];
+        : [...prev, { id: skill.id, name: skill.name, description: skill.description }];
 
       return updatedSkills;
     });
@@ -200,13 +245,18 @@ const MentorList: React.FC = () => {
 
   useEffect(() => {
     updateUrl();
-  }, [selectedSkills,minPrice, maxPrice, selectedRatings, currentPage]);
+  }, [selectedSkills, minPrice, maxPrice, selectedRatings, currentPage, sortOptions]);
 
-  const handleSortChange = (a: string, b: string) => { };
+  const handleSortChange = (sortType: string, sortMode: string) => {
+    setSortOptions(prevOptions => ({
+      ...prevOptions,
+      [sortType]: sortMode,
+    }));
+  };
 
   const filteredSkills = skills.filter(skill =>
-    skill.skillName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    skill.skillDescription.toLowerCase().includes(searchTerm.toLowerCase())
+    skill.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    skill.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
 
@@ -220,27 +270,6 @@ const MentorList: React.FC = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const svgPaths = {
-          facebookLogo: () => import('../../assets/svg/facebook-logo-30.svg'),
-          twitterLogo: () => import('../../assets/svg/twitter-logo-30.svg'),
-          linkedinLogo: () => import('../../assets/svg/linkedin-logo-30.svg'),
-        };
-        const svgMap = await loadSvgs(svgPaths);
-        const skills = await getAllSkills();
-
-        setSvgData(svgMap);
-        if (skills) {
-          setSkills(skills)
-        }
-      } catch (error: any) {
-      }
-    };
-    getData();
   }, []);
 
   return (
@@ -299,18 +328,18 @@ const MentorList: React.FC = () => {
                                 {filteredSkills.length > 0 ? (
                                   filteredSkills.map((skill, index) => (
                                     <li
-                                      key={skill.skillId + '-' + index}
+                                      key={skill.id + '-' + index}
                                       className={`list-group-item d-flex justify-content-between align-items-center rounded 
-                                        ${isSkillSelectedName(skill.skillName) ? 'bg-light' : ''}`}
-                                      onClick={() => handleSkillSelect(skill.skillId)}
+                                        ${isSkillSelectedName(skill.name) ? 'bg-light' : ''}`}
+                                      onClick={() => handleSkillSelect(skill.id)}
                                     >
                                       <span>
-                                        <strong>{skill.skillName}</strong>
+                                        <strong>{skill.name}</strong>
                                         <p className="mb-0 text-muted" style={{ fontSize: '12px' }}>
-                                          {skill.skillDescription}
+                                          {skill.description}
                                         </p>
                                       </span>
-                                      {isSkillSelectedName(skill.skillName) && (
+                                      {isSkillSelectedName(skill.name) && (
                                         <span className="badge bg-primary">Selected</span>
                                       )}
                                     </li>
@@ -419,7 +448,9 @@ const MentorList: React.FC = () => {
               <div className="sort-bar d-flex justify-content-between align-items-center mb-4">
                 <div className="sort-option d-flex align-items-center">
                   <label className="me-2">Name</label>
-                  <select className="form-select me-3" onChange={e => handleSortChange('name', e.target.value)} defaultValue="">
+                  <select className="form-select me-3"
+                    onChange={e => handleSortChange('name', e.target.value)}
+                    value={sortOptions.name}>
                     <option value="none">Select an option</option>
                     <option value="asc">Asc</option>
                     <option value="desc">Desc</option>
@@ -427,7 +458,9 @@ const MentorList: React.FC = () => {
                 </div>
                 <div className="sort-option d-flex align-items-center">
                   <label className="me-2">Experience</label>
-                  <select className="form-select me-3" onChange={e => handleSortChange('experience', e.target.value)} defaultValue="">
+                  <select className="form-select me-3"
+                    onChange={e => handleSortChange('experience', e.target.value)}
+                    value={sortOptions.experience}>
                     <option value="none">Select an option</option>
                     <option value="asc">Asc</option>
                     <option value="desc">Desc</option>
@@ -435,7 +468,9 @@ const MentorList: React.FC = () => {
                 </div>
                 <div className="sort-option d-flex align-items-center">
                   <label className="me-2">Rating</label>
-                  <select className="form-select me-3" onChange={e => handleSortChange('rating', e.target.value)} defaultValue="">
+                  <select className="form-select me-3"
+                    onChange={e => handleSortChange('rating', e.target.value)}
+                    value={sortOptions.rating}>
                     <option value="none">Select an option</option>
                     <option value="asc">Asc</option>
                     <option value="desc">Desc</option>
@@ -443,7 +478,9 @@ const MentorList: React.FC = () => {
                 </div>
                 <div className="sort-option d-flex align-items-center">
                   <label className="me-2">Price</label>
-                  <select className="form-select" onChange={e => handleSortChange('price', e.target.value)} defaultValue="">
+                  <select className="form-select"
+                    onChange={e => handleSortChange('price', e.target.value)}
+                    value={sortOptions.price}>
                     <option value="none">Select an option</option>
                     <option value="asc">Asc</option>
                     <option value="desc">Desc</option>
@@ -458,7 +495,7 @@ const MentorList: React.FC = () => {
                   message="loading mentors list..."
                 />
               ) : (mentors.map((mentor) => (
-                <div key={mentor.email} className={`${styles['col-12']} ${styles['col-md-6']} ${styles['col-lg-4']} ${styles['mb-6']}`}>
+                <div key={mentor.userId} className={`${styles['col-12']} ${styles['col-md-6']} ${styles['col-lg-4']} ${styles['mb-6']}`}>
                   <div className={`${styles['card']}`}>
                     <img
                       className={`${styles['img']} ${styles['card-img-top']}`}
@@ -473,10 +510,10 @@ const MentorList: React.FC = () => {
                         alt=""
                       />
                       <h6 className={`${styles['h6']} ${styles['card-title']} ${styles['mb-2']}`}>{mentor.fullName}</h6>
-                      <p className={`${styles['p']} ${styles['card-text']}`}>Influencer &amp; Social Media Content</p>
-                      <a className={`${styles['a']} ${styles['d-inline-block']} ${styles['mb-6']} ${styles['text-decoration-none']}`} href="#">
-                        {mentor.email}
-                      </a>
+                      <p className={`${styles['p']} ${styles['card-text']}`}>{mentor.role}</p>
+                      {/* <a className={`${styles['d-inline-block']} ${styles['mb-3']} ${styles['text-decoration-none']} ${styles['text-primary']}`} href="#">
+                        {mentor.role}
+                      </a> */}
                       {/* <div className={`${styles['d-flex']} ${styles['mb-6']} ${styles['justify-content-center']} ${styles['align-items-center']}`}>
                         <a className={`${styles['a']} ${styles['me-2']}`} href={mentor.facebook} target="_blank" rel="noopener noreferrer">
                           {svgData['facebookLogo'] && (<img
@@ -503,14 +540,29 @@ const MentorList: React.FC = () => {
                       {/* <div className={`${styles['mb-8']} d-flex flex-wrap justify-content-center`}>
                         {mentor.skills.map((skill) => (
                           <a
-                            key={skill.skillId}
+                            key={skill.id}
                             className={`${styles['a']} ${styles['text-decoration-none']} ${styles['badge']} ${styles['bg-transparent']} ${styles['border']} ${styles['text-dark']} ${styles['fw-bold']} me-2 mb-2`}
                             href="#"
                           >
-                            {skill.skillName}
+                            {skill.name}
                           </a>
                         ))}
                       </div> */}
+                      <div className="d-flex justify-content-between text-center mb-2">
+                        <div>
+                          <p className={`mb-2 ${styles['h6']}`}>{mentor.rating} <i className="fa-solid fa-star-sharp" style={{ color: "#FFD43B" }} />
+                          </p>
+                          <p className="text-muted mb-0">Rating</p>
+                        </div>
+                        <div className="px-3">
+                          <p className={`mb-2 ${styles['h6']}`}>{mentor.totalBooked}</p>
+                          <p className="text-muted mb-0">Total booked</p>
+                        </div>
+                        <div>
+                          <p className={`mb-2 ${styles['h6']}`}>{mentor.price}</p>
+                          <p className="text-muted mb-0">Price (hour)</p>
+                        </div>
+                      </div>
                       <button
                         className={`${styles['a']} ${styles['btn']} ${styles['w-100']} ${styles['btn-outline-dark']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['justify-content-center']}`}
                         onClick={() => handleShowModal(mentor)}
@@ -518,31 +570,44 @@ const MentorList: React.FC = () => {
                         <i className={`fa-light fa-user ${styles['me-2']}`} />
                         <span>Profile</span>
                       </button>
-                      <div className="d-flex justify-content-between text-center mt-5 mb-2">
-                        <div>
-                          <p className="mb-2 h5">8471</p>
-                          <p className="text-muted mb-0">Wallets Balance</p>
-                        </div>
-                        <div className="px-3">
-                          <p className="mb-2 h5">8512</p>
-                          <p className="text-muted mb-0">Income amounts</p>
-                        </div>
-                        <div>
-                          <p className="mb-2 h5">4751</p>
-                          <p className="text-muted mb-0">Total Transactions</p>
-                        </div>
-                      </div>
 
                     </div>
                   </div>
                 </div>
               )))}
-              
+              {selectedMentor && (
+                <ProfilePopup
+                  onBook={handleBook}
+                  onClose={handleClosePopup}
+                  onContact={handleContact}
+                  user={{
+                    avatar: 'link_to_avatar_image',
+                    name: 'John Doe',
+                    address: '123 Main St, City',
+                    email: 'john@example.com',
+                    skills: ['JavaScript', 'React', 'Node.js'],
+                    experience: '5 years',
+                    pricePerHour: 50,
+                    totalBooked: 10,
+                    rating: 4.5,
+                    feedback: [
+                      {
+                        avatar: 'link_to_feedback_avatar',
+                        date: '2024-10-29',
+                        time: '10:00 AM',
+                        message: 'Great mentor!',
+                        fullName: 'Alice Smith',
+                        rating: 5,
+                      },
+                    ],
+                  }}
+                />
+              )}
             </div>
 
             <div className="d-flex justify-content-center mt-3">
               <Pagination
-                totalItems={9999}
+                totalItems={totalMentors}
                 itemsPerPage={9}
                 currentPage={currentPage}
                 onPageChange={handlePageChange}
