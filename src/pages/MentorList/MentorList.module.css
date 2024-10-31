@@ -68,6 +68,11 @@
   position: relative !important;
 }
 
+.text-primary {
+  --bs-text-opacity: 1;
+  color: rgba(204, 255, 0, var(--bs-text-opacity)) !important
+}
+
 @media (min-width: 576px) {
   .container {
     max-width: 640px;
