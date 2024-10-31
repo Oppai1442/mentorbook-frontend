@@ -1,26 +1,21 @@
-import { User } from "./User";
+import { mentor, User } from "./Model";
 
 export interface LoginResponse {
-    token: string; 
+    token: string;
     user: User;
 }
 
 export interface SignUpResponse {
-    token: string; 
+    token: string;
     user: User;
 }
 
-export interface mentorResponse {
-    userId: number;
-    fullName: string;
-    email: string;
-    avatarUrl: string;
-    backgroundUrl: string;
-    skills: SkillResponse[]
+export interface MentorResponse {
+    totalFound: number;
+    mentors: mentor[];
 }
 
 export interface SkillResponse {
-    length: number;
     skillId: number;
     skillName: string;
     skillDescription: string;
