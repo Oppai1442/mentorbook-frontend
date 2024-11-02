@@ -1,135 +1,77 @@
 @import url(https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap);
 .datepicker-controls .button:focus:not(:active) {
-  box-shadow: 0 0 0 0.125em rgba(50, 115, 220, 0.25);
+  box-shadow: 0 0 0 0.125em rgb(50 115 220 / 0.25);
 }
 .datepicker-header .datepicker-controls .button:focus:not(:active) {
-  box-shadow: 0 0 0 0.125em rgba(255, 255, 255, 0.25);
-}
-:root {
-  --bs-font-sans-serif-gfurQ5N0l: "Inter", sans-serif;
+  box-shadow: 0 0 0 0.125em rgb(255 255 255 / 0.25);
 }
 *,
 ::after,
 ::before {
   box-sizing: border-box;
 }
-@media (prefers-reduced-motion: no-preference) {
-  :root {
-  --bs-font-sans-serif-gfurQ5N0l: "Inter", sans-serif;
-}
-}
-body {
-  margin: 0;
-  font-family: var(--bs-font-sans-serif-gfurQ5N0l);
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #374151;
-  background-color: #f2f4f6;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(17, 24, 39, 0);
-}
 .h6,
-h4 {
+.h4 {
   margin-top: 0;
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.3;
   color: #111827;
 }
-h4 {
+.h4 {
   font-size: calc(1.275rem + 0.3vw);
 }
 @media (min-width: 1200px) {
-  h4 {
+  .h4 {
     font-size: 1.5rem;
   }
 }
 .h6 {
   font-size: 1rem;
 }
-p {
+.p {
   margin-top: 0;
   margin-bottom: 1rem;
 }
-ul {
+.ul {
   padding-left: 2rem;
-}
-ul {
   margin-top: 0;
   margin-bottom: 1rem;
 }
-small {
+.small {
   font-size: 0.875em;
 }
-a {
-  color: #1f2937;
-  text-decoration: none;
-}
-a:hover {
-  color: #000;
-  text-decoration: none;
-}
-img,
-svg {
+.img {
   vertical-align: middle;
+  max-width: 100%;
 }
-button {
+.button {
   border-radius: 0;
 }
-button:focus:not(:focus-visible) {
+.button:focus:not(:focus-visible) {
   outline: 0;
 }
-button,
-input {
+.button,
+.input {
   margin: 0;
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
 }
-button {
+.button {
   text-transform: none;
 }
 [role="button"] {
   cursor: pointer;
 }
-button {
+.button {
   -webkit-appearance: button;
 }
 [type="button"]:not(:disabled),
 [type="reset"]:not(:disabled),
 [type="submit"]:not(:disabled),
-button:not(:disabled) {
+.button:not(:disabled) {
   cursor: pointer;
-}
-::-moz-focus-inner {
-  padding: 0;
-  border-style: none;
-}
-::-webkit-datetime-edit-day-field,
-::-webkit-datetime-edit-fields-wrapper,
-::-webkit-datetime-edit-hour-field,
-::-webkit-datetime-edit-minute,
-::-webkit-datetime-edit-month-field,
-::-webkit-datetime-edit-text,
-::-webkit-datetime-edit-year-field {
-  padding: 0;
-}
-::-webkit-inner-spin-button {
-  height: auto;
-}
-::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
-::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-::file-selector-button {
-  font: inherit;
-}
-::-webkit-file-upload-button {
-  font: inherit;
-  -webkit-appearance: button;
 }
 .container-fluid {
   width: 100%;
@@ -176,7 +118,7 @@ button:not(:disabled) {
   -webkit-appearance: none;
   appearance: none;
   border-radius: 0.5rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.07);
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -192,8 +134,7 @@ button:not(:disabled) {
   background-color: #fff;
   border-color: #4d6689;
   outline: 0;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07),
-    0 0 0 0.18rem rgba(31, 41, 55, 0.25);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.07), 0 0 0 0.18rem rgb(31 41 55 / 0.25);
 }
 .form-control::-webkit-date-and-time-value {
   height: 1.5em;
@@ -322,8 +263,8 @@ button:not(:disabled) {
   cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
-  background-color: transparent;
-  border: 0.0625rem solid transparent;
+  background-color: #fff0;
+  border: 0.0625rem solid #fff0;
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   border-radius: 0.5rem;
@@ -340,14 +281,14 @@ button:not(:disabled) {
 }
 .btn:focus {
   outline: 0;
-  box-shadow: 0 0 0 0.18rem rgba(31, 41, 55, 0.25);
+  box-shadow: 0 0 0 0.18rem rgb(31 41 55 / 0.25);
 }
 .btn:active {
-  box-shadow: inset 0 3px 5px rgba(17, 24, 39, 0.125);
+  box-shadow: inset 0 3px 5px rgb(17 24 39 / 0.125);
 }
 .btn:active:focus {
-  box-shadow: 0 0 0 0.18rem rgba(31, 41, 55, 0.25),
-    inset 0 3px 5px rgba(17, 24, 39, 0.125);
+  box-shadow: 0 0 0 0.18rem rgb(31 41 55 / 0.25),
+    inset 0 3px 5px rgb(17 24 39 / 0.125);
 }
 .btn:disabled {
   pointer-events: none;
@@ -366,9 +307,9 @@ button:not(:disabled) {
   vertical-align: 0.255em;
   content: "";
   border-top: 0.3em solid;
-  border-right: 0.3em solid transparent;
+  border-right: 0.3em solid #fff0;
   border-bottom: 0;
-  border-left: 0.3em solid transparent;
+  border-left: 0.3em solid #fff0;
 }
 .dropdown-menu {
   position: absolute;
@@ -385,8 +326,8 @@ button:not(:disabled) {
   background-clip: padding-box;
   border: 0.0625rem solid #e5e7eb;
   border-radius: 0.35rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -2px rgb(0 0 0 / 0.05);
 }
 .dropdown-menu-end {
   --bs-position: end;
@@ -406,7 +347,7 @@ button:not(:disabled) {
   color: #111827;
   text-align: inherit;
   white-space: nowrap;
-  background-color: transparent;
+  background-color: #fff0;
   border: 0;
 }
 .dropdown-item:focus,
@@ -422,7 +363,7 @@ button:not(:disabled) {
 .dropdown-item:disabled {
   color: #4b5563;
   pointer-events: none;
-  background-color: transparent;
+  background-color: #fff0;
 }
 .nav-link {
   display: block;
@@ -446,6 +387,7 @@ button:not(:disabled) {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  padding-right: 0.5rem;
 }
 .navbar > .container-fluid {
   display: flex;
@@ -482,7 +424,7 @@ button:not(:disabled) {
   padding-left: 0.8rem;
 }
 .navbar-dark .navbar-nav .nav-link {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgb(255 255 255 / 0.9);
 }
 .navbar-dark .navbar-nav .nav-link:focus,
 .navbar-dark .navbar-nav .nav-link:hover {
@@ -517,7 +459,7 @@ button:not(:disabled) {
   padding: 0.5rem 1rem;
   color: #374151;
   background-color: #fff;
-  border: 0.0625rem solid rgba(17, 24, 39, 0.125);
+  border: 0.0625rem solid rgb(17 24 39 / 0.125);
 }
 .list-group-item:disabled {
   color: #4b5563;
@@ -743,10 +685,7 @@ button:not(:disabled) {
   box-shadow: none;
   background: #d1d5db;
 }
-img {
-  max-width: 100%;
-}
-button:focus {
+.button:focus {
   outline: 0;
 }
 .avatar {
@@ -756,9 +695,6 @@ button:focus {
 .avatar-md {
   width: 3rem;
   height: 3rem;
-}
-:root {
-  --bs-font-sans-serif-gfurQ5N0l: "Inter", sans-serif;
 }
 .btn-icon-only {
   width: 2.575rem;
@@ -778,7 +714,6 @@ button:focus {
   font-size: 0.875rem;
 }
 .dropdown-menu .dropdown-item .dropdown-icon {
-  height: 1.25rem;
   width: 1.25rem;
 }
 .dropdown-menu .dropdown-item {
@@ -811,7 +746,10 @@ button:focus {
 }
 .toggle-icon {
   height: 1.875rem;
-  margin-top: .75rem;
+  margin-top: 0.75rem;
+}
+.notification-bell {
+  cursor: pointer;
 }
 .notification-bell.unread::before {
   position: absolute;
@@ -833,7 +771,7 @@ button:focus {
 .nav-link:hover {
   color: #1f2937;
 }
-.nav-link:hover img {
+.nav-link:hover .img {
   opacity: inherit;
   transition: all 0.2s ease;
 }
@@ -845,24 +783,16 @@ button:focus {
   height: 3rem;
 }
 .h6,
-h4 {
+.h4 {
   font-family: Inter, sans-serif;
   font-weight: 500;
 }
-p,
-ul li {
+.p,
+.ul li {
   font-family: var(--bs-font-sans-serif-gfurQ5N0l);
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.6;
-}
-a {
-  color: #1f2937;
-  transition: all 0.2s ease;
-}
-a:hover {
-  color: #000;
-  cursor: pointer;
 }
 .font-small {
   font-size: 0.875rem;
@@ -903,6 +833,19 @@ a:hover {
   border-color: #d1d5db;
 }
 .input-group-text {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.07);
 }
-
+.profile {
+  right: 0;
+  left: auto;
+}
+.profile[data-dropdown-profile="true"] {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.notification-container[data-dropdown-notification="true"] {
+  opacity: 1 !important;
+  pointer-events: auto;
+  cursor: pointer;
+}
