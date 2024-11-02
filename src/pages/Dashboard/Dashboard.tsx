@@ -19,7 +19,8 @@ const Dashboard = () => {
   // if (!isLoggedIn) return null;
 
   return (
-    <div className={styles.dashboardLayout}>
+    <>
+      <div className={styles.dashboardLayout}>
       <Sidebar />
       <div className={styles.dashboardMain}>
         <header className={styles.navbar}><Navbar/></header>
@@ -28,6 +29,7 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
