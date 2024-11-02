@@ -8,7 +8,7 @@ import { ToS } from '../pages/Tos';
 import { Policy } from '../pages/Policy';
 import { NotFound } from '../pages/NotFound';
 import { Contribute } from '../pages/Contribute';
-import { Dashboard, Overview, Settings } from '../pages/Dashboard';
+import { Dashboard, Overview, Users, Transaction, Settings } from '../pages/Dashboard';
 
 const routes = [
   { path: '/', element: <Home /> },
@@ -23,6 +23,8 @@ const routes = [
     element: <Dashboard />,
     children: [
       { path: 'overview', element: <Overview /> },
+      { path: 'user-list', element: <Users /> },
+      { path: 'transactions', element: <Transaction /> },
       { path: 'settings', element: <Settings /> },
     ]
   },
