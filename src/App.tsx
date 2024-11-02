@@ -14,6 +14,7 @@ import styles from './styles/App.module.css';
 import './styles/global.css'
 import './assets/fontawesome/css/fontawesome.all.css'
 import { AuthProvider } from './context/AuthContext';
+import { WebSocketProvider } from './context';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -22,15 +23,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <>
-      <ToastProvider>
-        <AuthProvider>
-          {config.showNav && <Navbar />}
-          <main className={`${styles['mainContainer']}`}>{children}</main>
-          {config.showCookie && <CookieConsent />}
-          {config.showChatBubble && <ChatBubble />}
-          {config.showFooter && <Footer />}
-        </AuthProvider>
-      </ToastProvider>
+      <WebSocketProvider url="">
+        <ToastProvider>
+          <AuthProvider>
+            {config.showNav && <Navbar />}
+            <main className={`${styles['mainContainer']}`}>{children}</main>
+            {config.showCookie && <CookieConsent />}
+            {config.showChatBubble && <ChatBubble />}
+            {config.showFooter && <Footer />}
+          </AuthProvider>
+        </ToastProvider>
+      </WebSocketProvider>
     </>
   );
 };
