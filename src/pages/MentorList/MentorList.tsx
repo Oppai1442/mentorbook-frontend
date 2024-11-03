@@ -14,7 +14,7 @@ import { useAuth } from "../../context";
 const MentorList: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {} = useAuth();
+  const { isLoggedIn, renderAuth, showAuthModal } = useAuth();
 
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
   const [selectedSkills, setSelectedSkills] = useState<Skill[]>([]);
@@ -32,6 +32,10 @@ const MentorList: React.FC = () => {
   const [totalMentors, setTotalMentors] = useState<number>(0);
   const skillListRef = useRef<HTMLUListElement | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [sortOptions, setSortOptions] = useState({
     name: 'none',
     experience: 'none',
@@ -137,12 +141,12 @@ const MentorList: React.FC = () => {
 
       if (skills.length > 0) {
         const skillsWithNames = skillsFromURL.map(skillId => {
-            const skill = skills.find(s => s.id === skillId);
-            return skill ? { id: skill.id, name: skill.name, description: skill.description } : null;
+          const skill = skills.find(s => s.id === skillId);
+          return skill ? { id: skill.id, name: skill.name, description: skill.description } : null;
         }).filter((skill): skill is Skill => skill !== null);
-    
+
         setSelectedSkills(skillsWithNames);
-    }
+      }
 
       setMinPrice(minPriceFromURL);
       setMaxPrice(maxPriceFromURL);
@@ -178,26 +182,32 @@ const MentorList: React.FC = () => {
     setMentors([]);
 
     const getMentors = async () => {
-      const response = await getAllMentors({
-        page: currentPage - 1,
-        skillIds: selectedSkills.map(skill => skill.id).sort((a: any, b: any) => a - b),
-        prices: {
-          min: minPrice,
-          max: maxPrice,
-        },
-        rating: selectedRatings.map(Number).sort((a: any, b: any) => a - b),
-        sorting: {
-          name: sortOptions.name,
-          experience: sortOptions.experience,
-          rating: sortOptions.rating,
-          price: sortOptions.price,
+      setLoading(true);
+      try {
+        const response = await getAllMentors({
+          page: currentPage - 1,
+          skillIds: selectedSkills.map(skill => skill.id).sort((a: any, b: any) => a - b),
+          prices: {
+            min: minPrice,
+            max: maxPrice,
+          },
+          rating: selectedRatings.map(Number).sort((a: any, b: any) => a - b),
+          sorting: {
+            name: sortOptions.name,
+            experience: sortOptions.experience,
+            rating: sortOptions.rating,
+            price: sortOptions.price,
+          }
+        });
+        if (response) {
+          setMentors(response.mentors);
+          setTotalMentors(response.totalFound);
         }
-      });
-      if (response) {
-        console.log(response.mentors)
-        setMentors(response.mentors);
-        setTotalMentors(response.totalFound);
+      } catch (error: any) {
+        console.error('An error occurred:', error);
+        setError(error);
       }
+      setLoading(false);
     }
 
     getMentors();
@@ -205,7 +215,11 @@ const MentorList: React.FC = () => {
   };
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    if ( isLoggedIn ) {
+      setCurrentPage(page);
+    } else {
+      showAuthModal("signIn");
+    }
   }
 
   // Hàm xử lý khi chọn kỹ năng
@@ -245,7 +259,14 @@ const MentorList: React.FC = () => {
 
   useEffect(() => {
     updateUrl();
+    console.log('A')
   }, [selectedSkills, minPrice, maxPrice, selectedRatings, currentPage, sortOptions]);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setCurrentPage(1);
+    }
+  }, [isLoggedIn])
 
   const handleSortChange = (sortType: string, sortMode: string) => {
     setSortOptions(prevOptions => ({
@@ -489,12 +510,17 @@ const MentorList: React.FC = () => {
               </div>
             </div>
             <div className={`row ${styles['mentors-container']}`}>
-              {mentors.length === 0 ? (
+              {loading && (<LoadingError
+                type="loading"
+                message="loading mentors list..."
+              />)}
+              {error && (
                 <LoadingError
-                  type="loading"
-                  message="loading mentors list..."
+                  type="error"
+                  message="The map could not be loaded due to a server error."
                 />
-              ) : (mentors.map((mentor) => (
+              )}
+              {mentors.length !== 0 && (mentors.map((mentor) => (
                 <div key={mentor.userId} className={`${styles['col-12']} ${styles['col-md-6']} ${styles['col-lg-4']} ${styles['mb-6']}`}>
                   <div className={`${styles['card']}`}>
                     <img
@@ -540,11 +566,11 @@ const MentorList: React.FC = () => {
                       {/* <div className={`${styles['mb-8']} d-flex flex-wrap justify-content-center`}>
                         {mentor.skills.map((skill) => (
                           <a
-                            key={skill.id}
+                            key={skill.skillId}
                             className={`${styles['a']} ${styles['text-decoration-none']} ${styles['badge']} ${styles['bg-transparent']} ${styles['border']} ${styles['text-dark']} ${styles['fw-bold']} me-2 mb-2`}
                             href="#"
                           >
-                            {skill.name}
+                            {skill.skillName}
                           </a>
                         ))}
                       </div> */}
@@ -605,16 +631,15 @@ const MentorList: React.FC = () => {
               )}
             </div>
 
-            <div className="d-flex justify-content-center mt-3">
+            {totalMentors > 0 && (<div className="d-flex justify-content-center mt-3">
               <Pagination
                 totalItems={totalMentors}
                 itemsPerPage={9}
                 currentPage={currentPage}
                 onPageChange={handlePageChange}
               />
-            </div>
+            </div>)}
           </div>
-
         </div>
       </div>
     </section>
