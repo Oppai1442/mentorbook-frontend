@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './Navbar.module.css'
+import { useAuth } from '../../../context';
 
 
 const Navbar: React.FC = () => {
@@ -7,26 +8,27 @@ const Navbar: React.FC = () => {
     const notifyRef = useRef<HTMLLIElement | null>(null);
     const [toggleProfileDropdown, setProfileDropdown] = useState<boolean>(false);
     const profileRef = useRef<HTMLLIElement | null>(null);
-
+    const { user, logOut } = useAuth();
 
     const handleClickOutside = useCallback(
         (event: MouseEvent) => {
-            
-          if (notifyRef.current && !notifyRef.current.contains(event.target as Node)) {
-            setNotifyDropdown(false);
-          }else if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
-            setProfileDropdown(false);
-          }
+
+            if (notifyRef.current && !notifyRef.current.contains(event.target as Node)) {
+                setNotifyDropdown(false);
+            } else if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+                setProfileDropdown(false);
+            }
         },
         [setNotifyDropdown, setProfileDropdown]
-      );
-    
-      useEffect(() => {
+    );
+
+    useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
-          document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("mousedown", handleClickOutside);
         };
-      }, [handleClickOutside]);
+    }, [handleClickOutside]);
+
     return (
         <>
             <nav className={`${styles['navbar']} ${styles['navbar-top']} ${styles['navbar-expand']} ${styles['navbar-dashboard']} ${styles['navbar-dark']}`}>
@@ -62,7 +64,7 @@ const Navbar: React.FC = () => {
                         </div>
                         {/* Navbar links */}
                         <ul className={`${styles['ul']} ${styles['navbar-nav']} ${styles['align-items-center']}`}>
-                            <li 
+                            <li
                                 ref={notifyRef}
                                 className={`${styles['nav-item']} ${styles['dropdown']}`}
                                 onClick={() => {
@@ -217,14 +219,14 @@ const Navbar: React.FC = () => {
                                         <div
                                             className={`${styles['dropdown-item']} ${styles['text-center']} ${styles['fw-bold']} ${styles['rounded-bottom']} ${styles['py-3']}`}
                                         >
-                                            <i className={`${styles['icon']} ${styles['icon-xxs']} ${styles['text-gray-400']} ${styles['me-1']} fa-light fa-eye fa-lg`}/>
-                                            
+                                            <i className={`${styles['icon']} ${styles['icon-xxs']} ${styles['text-gray-400']} ${styles['me-1']} fa-light fa-eye fa-lg`} />
+
                                             View all
                                         </div>
                                     </div>
                                 </div>
                             </li>
-                            <li 
+                            <li
                                 ref={profileRef}
                                 className={`${styles['nav-item']} ${styles['dropdown']} ${styles['ms-lg-3']}`}
                                 onClick={() => {
@@ -238,18 +240,18 @@ const Navbar: React.FC = () => {
                                         <img
                                             className={`${styles['img']} ${styles['avatar']} ${styles['rounded-circle']}`}
                                             alt="Image placeholder"
-                                            src="../assets/img/team/profile-picture-3.jpg"
+                                            src={user?.avatarUrl}
                                         />
                                         <div className={`${styles['media-body']} ${styles['ms-2']} ${styles['text-dark']} ${styles['align-items-center']} ${styles['d-none']} ${styles['d-lg-block']}`}>
                                             <span className={`${styles['mb-0']} ${styles['font-small']} ${styles['fw-bold']} ${styles['text-gray-900']}`}>
-                                                Bonnie Green
+                                                {user?.fullName}
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                                 <div data-dropdown-profile={toggleProfileDropdown}
-                                className={`${styles['dropdown-menu']} ${styles['dashboard-dropdown']} ${styles['dropdown-menu-end']} ${styles['mt-2']} ${styles['py-1']} ${styles['profile']}`}>
-                                    <div 
+                                    className={`${styles['dropdown-menu']} ${styles['dashboard-dropdown']} ${styles['dropdown-menu-end']} ${styles['mt-2']} ${styles['py-1']} ${styles['profile']}`}>
+                                    <div
                                         className={`${styles['dropdown-item']} ${styles['d-flex']} ${styles['align-items-center']}`}>
                                         <i
                                             className={`${styles['dropdown-icon']} ${styles['text-gray-400']} ${styles['me-2']} fa-duotone fa-solid fa-circle-user fa-lg`}
@@ -276,7 +278,9 @@ const Navbar: React.FC = () => {
                                         Support
                                     </div>
                                     <div role="separator" className={`${styles['dropdown-divider']} ${styles['my-1']}`} />
-                                    <div className={`${styles['dropdown-item']} ${styles['d-flex']} ${styles['align-items-center']}`}>
+                                    <div 
+                                        className={`${styles['dropdown-item']} ${styles['d-flex']} ${styles['align-items-center']}`}
+                                        onClick={logOut}>
                                         <i
                                             className={`${styles['dropdown-icon']} ${styles['me-2']} fa-regular fa-right-from-bracket`}
                                             style={{ color: "#ff1a1a" }}
@@ -290,7 +294,6 @@ const Navbar: React.FC = () => {
                     </div>
                 </div>
             </nav>
-
         </>
     );
 };
