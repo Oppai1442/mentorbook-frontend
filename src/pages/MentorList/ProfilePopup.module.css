@@ -1,34 +1,116 @@
-.popup-content {
-    width: 100%;
-    max-width: 600px; /* Maximum width for the popup */
-    border-radius: 0.5rem;
+/* Center overlay and create a dark background */
+.mainContainer {
+  height: 54rem;
+  width: 71rem;
+}
+
+.modal-body {
+  height: 45rem;
+}
+
+.row {
+  height: 100%;
+}
+
+.col-md-6 {
+  height: 97%;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.modal-centered {
+  position: relative;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+.feedback-container {
+  overflow-y: auto;
+}
+
+.feedbackItem {
+  display: flex;
+  align-items: flex-start;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.avatar {
+  flex: 0 0 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 1rem;
+  border: 2px solid #f0f0f0;
+}
+
+.feedbackDetails {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.feedbackHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.fullname {
+  font-weight: bold;
+  color: #333;
+}
+
+.time {
+  font-size: 0.875rem;
+  color: #888;
+}
+
+
+.comment {
+  margin-top: 0.25rem;
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.feedback-container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .avatar {
-    border-radius: 50%; /* Circular avatar */
+  to {
+    opacity: 1;
   }
-  
-  .feedback-container {
-    max-height: 300px; /* Limit height for feedback section */
-    overflow-y: auto; /* Enable scrolling if content overflows */
-    padding: 0.5rem; /* Padding around feedback items */
+}
+
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
   }
-  
-  .feedback-item {
-    border-bottom: 1px solid #e9ecef; /* Divider between feedback items */
-    padding: 0.5rem 0; /* Padding for feedback items */
+  to {
+    opacity: 0;
   }
-  
-  .feedback-avatar {
-    width: 40px; /* Width for feedback avatars */
-    height: 40px; /* Height for feedback avatars */
-  }
-  
-  .feedback-header {
-    display: flex;
-    justify-content: space-between; /* Space between name and time */
-  }
-  
-  .feedback-content {
-    flex-grow: 1; /* Allow content to grow */
-  }
+}
