@@ -10,6 +10,11 @@ export interface SignUpResponse {
     user: User;
 }
 
+export interface UpdateProfileResponse {
+    token: string;
+    user: User;
+}
+
 export interface MentorResponse {
     totalFound: number;
     mentors: mentor[];
