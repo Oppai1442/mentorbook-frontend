@@ -3,171 +3,123 @@ import React from "react";
 import styles from "./Home.module.css";
 
 const Home: React.FC = () => {
-  return (
-    <>
-      {/* Find the right mentor */}
-      <section
-        className="hero bg-light text-dark py-5"
-        style={{
-          backgroundImage: 'url("path-to-background-image.jpg")',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="container text-center">
-          <h1 className="display-4">Find the Right Mentor for You</h1>
-          <p className="lead">
-            Get professional guidance from experienced mentors across various
-            fields.
-          </p>
-          <a href="/mentors" className="btn btn-primary btn-lg mt-3">
-            Explore Mentors
-          </a>
-        </div>
-      </section>
-
-      {/* How it work */}
-      <section className="how-it-works py-5">
-        <div className="container text-center">
-          <h2 className="mb-4">How It Works</h2>
-          <div className="row">
-            <div className="col-md-4">
-              <i className="fas fa-search fa-3x mb-3" />
-              <h5>Find a Mentor</h5>
-              <p>
-                Browse through hundreds of expert mentors in various fields.
-              </p>
-            </div>
-            <div className="col-md-4">
-              <i className="fas fa-calendar-check fa-3x mb-3" />
-              <h5>Book a Session</h5>
-              <p>Select a suitable time and book a session with your mentor.</p>
-            </div>
-            <div className="col-md-4">
-              <i className="fas fa-comments fa-3x mb-3" />
-              <h5>Start Learning</h5>
-              <p>
-                Get guidance and feedback through personalized mentoring
-                sessions.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* featured mentor */}
-      <section className="featured-mentors bg-light py-5">
-        <div className="container text-center">
-          <h2 className="mb-4">Featured Mentors</h2>
-          <div className="row">
-            <div className="col-md-4">
-              <div className="card">
-                <img
-                  src="mentor1.jpg"
-                  className="card-img-top"
-                  alt="Mentor 1"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">John Doe</h5>
-                  <p className="card-text">Expert in Software Development</p>
-                  <a href="/mentors/john-doe" className="btn btn-primary">
-                    View Profile
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card">
-                <img
-                  src="mentor2.jpg"
-                  className="card-img-top"
-                  alt="Mentor 2"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">Jane Smith</h5>
-                  <p className="card-text">Professional Career Coach</p>
-                  <a href="/mentors/jane-smith" className="btn btn-primary">
-                    View Profile
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card">
-                <img
-                  src="mentor3.jpg"
-                  className="card-img-top"
-                  alt="Mentor 3"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">Michael Johnson</h5>
-                  <p className="card-text">Marketing and Sales Expert</p>
-                  <a
-                    href="/mentors/michael-johnson"
-                    className="btn btn-primary"
-                  >
-                    View Profile
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* What our users say */}
-      <section className="testimonials py-5">
-        <div className="container text-center">
-          <h2 className="mb-4">What Our Users Say</h2>
-          <div className="row">
-            <div className="col-md-4">
-              <blockquote className="blockquote">
-                <p className="mb-0">
-                  "This platform has transformed my career. The mentors are
-                  highly knowledgeable and helpful."
-                </p>
-                <footer className={`${styles["usersName-footer"]} blockquote-footer`}>Alex Turner</footer>
-              </blockquote>
-            </div>
-            <div className="col-md-4">
-              <blockquote className="blockquote">
-                <p className="mb-0">
-                  "I found a mentor who helped me break into the tech industry.
-                  Absolutely life-changing!"
-                </p>
-                <footer className={`${styles["usersName-footer"]} blockquote-footer`}>Sara Williams</footer>
-              </blockquote>
-            </div>
-            <div className="col-md-4">
-              <blockquote className="blockquote">
-                <p className="mb-0">
-                  "Excellent platform to get expert advice. Highly recommend
-                  it!"
-                </p>
-                <footer className={`${styles["usersName-footer"]} blockquote-footer`}>John Markson</footer>
-              </blockquote>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Ready to find your mentor */}
-      <section
-        className="call-to-action text-light text-center py-5"
-        style={{ backgroundColor: "#333741" }}
-      >
+  return  (
+    <div className="homepage">
+      {/* Banner with Video Background */}
+      <section className="banner position-relative text-white text-center d-flex align-items-center justify-content-center" style={{ height: '70vh', overflow: 'hidden' }}>
+        <video autoPlay muted loop className="position-absolute w-100 h-100" style={{ objectFit: 'cover', zIndex: -1 }}>
+          <source src="/path/to/your-video.mp4" type="video/mp4" />
+        </video>
         <div className="container">
-          <h2>Ready to Find Your Mentor?</h2>
-          <p>
-            Sign up now and start your journey towards success with expert
-            guidance!
-          </p>
-          <a href="/register" className="btn btn-outline-light btn-lg">
-            Get Started
-          </a>
+          <h1 className="display-3 fw-bold">Connect with the Best Mentors</h1>
+          <p className="lead">Boost your skills with expert guidance, anytime, anywhere.</p>
+          <button className="btn btn-outline-light btn-lg mt-3">Find Your Mentor</button>
         </div>
       </section>
-    </>
+
+      {/* Services */}
+      <section className="services py-5">
+        <div className="container text-center">
+          <h2 className="display-5 fw-bold mb-4">Our Key Services</h2>
+          <p className="text-muted mb-5">Explore the core services we offer to help you succeed.</p>
+          <div className="row g-4">
+            {[
+              { icon: 'fas fa-chalkboard-teacher', title: 'One-on-One Mentorship', description: 'Personalized sessions tailored to your goals.' },
+              { icon: 'fas fa-calendar-check', title: 'Flexible Scheduling', description: 'Book sessions that fit your busy lifestyle.' },
+              { icon: 'fas fa-cogs', title: 'Comprehensive Skill Sets', description: 'Choose mentors in diverse fields like tech, business, and more.' }
+            ].map((service, index) => (
+              <div key={index} className="col-md-4">
+                <div className="card shadow-sm h-100 text-center">
+                  <div className="card-body">
+                    <i className={`${service.icon} fa-3x text-primary mb-3`}></i>
+                    <h5 className="card-title">{service.title}</h5>
+                    <p className="card-text">{service.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Fields */}
+      <section className="popular-fields py-5 bg-light">
+        <div className="container">
+          <h2 className="text-center display-5 fw-bold mb-4">Explore Popular Fields</h2>
+          <div className="row g-4 text-center">
+            {['Tech', 'Business', 'Design', 'Health', 'Finance', 'Marketing'].map((field, index) => (
+              <div key={index} className="col-md-4">
+                <div className="field-card position-relative overflow-hidden rounded-3 shadow-sm p-4 h-100 d-flex align-items-center justify-content-center" style={{ backgroundImage: `url('/path/to/${field.toLowerCase()}-background.jpg')`, backgroundSize: 'cover' }}>
+                  <h5 className="text-white display-6 fw-bold">{field}</h5>
+                  <div className="overlay position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Mentors */}
+      <section className="featured-mentors py-5">
+        <div className="container">
+          <h2 className="text-center display-5 fw-bold mb-4">Top Mentors</h2>
+          <div className="row g-4">
+            {[1, 2, 3].map((mentor) => (
+              <div key={mentor} className="col-md-4">
+                <div className="card shadow-sm h-100 border-0">
+                  <img src={`/path/to/mentor${mentor}-image.jpg`} className="card-img-top" alt={`Mentor ${mentor}`} />
+                  <div className="card-body text-center">
+                    <h5 className="card-title">Mentor Name {mentor}</h5>
+                    <p className="card-text text-muted">Tech Expert | 10+ years experience</p>
+                    <button className="btn btn-primary btn-sm">View Profile</button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials with Carousel */}
+      <section className="testimonials py-5 bg-light">
+        <div className="container">
+          <h2 className="text-center display-5 fw-bold mb-4">What Our Users Say</h2>
+          <div id="testimonialCarousel" className="carousel slide" data-bs-ride="carousel">
+            <div className="carousel-inner">
+              {[1, 2, 3].map((testimonial, index) => (
+                <div key={testimonial} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+                  <div className="d-flex justify-content-center">
+                    <div className="col-md-8">
+                      <blockquote className="blockquote text-center">
+                        <p className="mb-4">"This platform connected me to the best mentors. It was a life-changing experience!"</p>
+                        <footer className="blockquote-footer">User {testimonial}</footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button className="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+              <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span className="visually-hidden">Previous</span>
+            </button>
+            <button className="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+              <span className="carousel-control-next-icon" aria-hidden="true"></span>
+              <span className="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="call-to-action py-5 text-center text-white" style={{ background: '#0d6efd' }}>
+        <div className="container">
+          <h2 className="display-5 fw-bold mb-3">Start Your Journey Today</h2>
+          <p className="lead mb-4">Sign up now and unlock unlimited mentoring possibilities.</p>
+          <button className="btn btn-outline-light btn-lg">Join Us</button>
+        </div>
+      </section>
+    </div>
   );
 };
 
