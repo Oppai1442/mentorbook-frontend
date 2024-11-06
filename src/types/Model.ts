@@ -18,11 +18,37 @@ export interface mentor {
     email: string;
     avatarUrl: string;
     backgroundUrl: string;
-    skills: SkillResponse[]
+    skills: SkillResponse[];
     price: number;
     rating: number;
     totalBooked: number;
     role: string;
+    description: string;
+    availableTime: MentorAvailability[];
+}
+
+interface MentorAvailability {
+    day: string;
+    timeSlots: TimeSlot[];
+}
+
+interface TimeSlot {
+    start: string;
+    end: string; 
+}
+
+export interface Feedback {
+    feedbackId: string;
+    comment: string;
+    rating: number;
+    feedbackTime: Date;
+    userId: number;
+    fullName: string;
+    userAvatarUrl: string;
+}
+
+export interface mentorDetails {
+    mentor: mentor;
 }
 
 export interface Skill {
