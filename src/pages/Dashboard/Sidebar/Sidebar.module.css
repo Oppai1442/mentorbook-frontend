@@ -763,3 +763,19 @@
   transform: rotate(90deg);
   transition: all .2s ease;
 }
+
+
+.nav-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.nav-divider::before,
+.nav-divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid #ccc; /* Màu đường kẻ */
+  margin: 0 10px; /* Khoảng cách giữa đường kẻ và văn bản */
+}
