@@ -23,7 +23,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <>
-      <WebSocketProvider url="">
+      <WebSocketProvider url="http://localhost:8080/ws">
         <ToastProvider>
           <AuthProvider>
             {config.showNav && <Navbar />}
