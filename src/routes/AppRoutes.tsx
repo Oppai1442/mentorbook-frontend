@@ -8,7 +8,7 @@ import { ToS } from '../pages/Tos';
 import { Policy } from '../pages/Policy';
 import { NotFound } from '../pages/NotFound';
 import { Contribute } from '../pages/Contribute';
-import { Dashboard, Overview, Users, Transaction, Settings } from '../pages/Dashboard';
+import { Dashboard, Overview, Users, Transaction, Settings, MyCalendar } from '../pages/Dashboard';
 
 const routes = [
   { path: '/', element: <Home /> },
@@ -26,6 +26,7 @@ const routes = [
       { path: 'user-list', element: <Users /> },
       { path: 'transactions', element: <Transaction /> },
       { path: 'settings', element: <Settings /> },
+      { path: 'calendar', element: <MyCalendar /> },
     ]
   },
   { path: '/contribute', element: <Contribute /> },
