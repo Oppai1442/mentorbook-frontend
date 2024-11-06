@@ -23,7 +23,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
 
   const [fullName, setFullName] = useState<string>("");
   const [birthDate, setBirthDate] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
@@ -74,7 +74,7 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
           password,
           fullName,
           birthDate,
-          address,
+          gender,
           phoneNumber,
         });
 
@@ -219,14 +219,17 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
                     onChange={(e) => setBirthDate(e.target.value)}
                     required
                   />
-                  <input
+                  <select
                     className={`${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]}`}
-                    type="text"
-                    placeholder="Address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
                     required
-                  />
+                  >
+                    <option value="" disabled>Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
                   <input
                     className={`${styles["input"]} ${styles["bg-transparent"]} ${styles["form-control"]}`}
                     type="tel"
