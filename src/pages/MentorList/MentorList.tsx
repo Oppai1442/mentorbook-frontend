@@ -11,6 +11,35 @@ import { LoadingError } from "../../components/LoadingError";
 import { useAuth } from "../../context";
 
 
+const mentorData = {
+  avatar: "https://via.placeholder.com/80",
+  name: "John Doe",
+  rating: 4.5,
+  totalBooked: 120,
+  email: "johndoe@example.com",
+  major: "Computer Science",
+  description: "Experienced mentor in software development.",
+  availableTime: "Weekdays 10 AM - 6 PM",
+  feedback: [
+    {
+      avatar: "https://via.placeholder.com/40",
+      name: "Jane Smith",
+      time: "2 days ago",
+      content: "John is an amazing mentor. Highly recommend!",
+      rating: 5,
+      totalBooked: 50
+    },
+    {
+      avatar: "https://via.placeholder.com/40",
+      name: "Tom Johnson",
+      time: "1 week ago",
+      content: "Very knowledgeable and helpful.",
+      rating: 4,
+      totalBooked: 30
+    }
+  ]
+};
+
 const MentorList: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,7 +66,7 @@ const MentorList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [sortOptions, setSortOptions] = useState({
-    name: 'none',
+    bookings: 'none',
     experience: 'none',
     rating: 'none',
     price: 'none',
@@ -133,7 +162,7 @@ const MentorList: React.FC = () => {
       const pageFromURL = Number(query.get('page')) || 1;
 
       const sortFromUrl = {
-        name: query.get('sortByName') || 'none',
+        bookings: query.get('sortByBookings') || 'none',
         experience: query.get('sortByExperience') || 'none',
         rating: query.get('sortByRating') || 'none',
         price: query.get('sortByPrice') || 'none',
@@ -174,7 +203,7 @@ const MentorList: React.FC = () => {
     }
     query.set('page', String(currentPage))
 
-    query.set('sortByName', sortOptions.name);
+    query.set('sortByBookings', sortOptions.bookings);
     query.set('sortByExperience', sortOptions.experience);
     query.set('sortByRating', sortOptions.rating);
     query.set('sortByPrice', sortOptions.price);
@@ -193,7 +222,7 @@ const MentorList: React.FC = () => {
           },
           rating: selectedRatings.map(Number).sort((a: any, b: any) => a - b),
           sorting: {
-            name: sortOptions.name,
+            bookings: sortOptions.bookings,
             experience: sortOptions.experience,
             rating: sortOptions.rating,
             price: sortOptions.price,
@@ -259,7 +288,6 @@ const MentorList: React.FC = () => {
 
   useEffect(() => {
     updateUrl();
-    console.log('A')
   }, [selectedSkills, minPrice, maxPrice, selectedRatings, currentPage, sortOptions]);
 
   useEffect(() => {
@@ -468,10 +496,10 @@ const MentorList: React.FC = () => {
               <label className={`${styles['mt-015']}`}>Sort by:</label>
               <div className="sort-bar d-flex justify-content-between align-items-center mb-4">
                 <div className="sort-option d-flex align-items-center">
-                  <label className="me-2">Name</label>
+                  <label className="me-2">Bookings</label>
                   <select className="form-select me-3"
-                    onChange={e => handleSortChange('name', e.target.value)}
-                    value={sortOptions.name}>
+                    onChange={e => handleSortChange('bookings', e.target.value)}
+                    value={sortOptions.bookings}>
                     <option value="none">Select an option</option>
                     <option value="asc">Asc</option>
                     <option value="desc">Desc</option>
@@ -601,33 +629,8 @@ const MentorList: React.FC = () => {
                   </div>
                 </div>
               )))}
-              {selectedMentor && (
-                <ProfilePopup
-                  onBook={handleBook}
-                  onClose={handleClosePopup}
-                  onContact={handleContact}
-                  user={{
-                    avatar: 'link_to_avatar_image',
-                    name: 'John Doe',
-                    address: '123 Main St, City',
-                    email: 'john@example.com',
-                    skills: ['JavaScript', 'React', 'Node.js'],
-                    experience: '5 years',
-                    pricePerHour: 50,
-                    totalBooked: 10,
-                    rating: 4.5,
-                    feedback: [
-                      {
-                        avatar: 'link_to_feedback_avatar',
-                        date: '2024-10-29',
-                        time: '10:00 AM',
-                        message: 'Great mentor!',
-                        fullName: 'Alice Smith',
-                        rating: 5,
-                      },
-                    ],
-                  }}
-                />
+              {showModal && (
+                <ProfilePopup mentor={mentorData} onClose={() => setShowModal(false)} />
               )}
             </div>
 
