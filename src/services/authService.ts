@@ -1,5 +1,5 @@
 import { postData } from "../services/apiService";
-import { LoginResponse, SignUpResponse } from "../types";
+import { LoginResponse, SignUpResponse, UpdateProfileResponse } from "../types";
 import { User } from "../types/Model";
 
 export const fetchUserFromToken = async (token: string): Promise<User | null> => {
@@ -28,7 +28,7 @@ export const signIn = async (credentials: SignInCredentials ) => {
 interface signUpCredentials {
   fullName: string;
   birthDate: string;
-  address: string;
+  gender: string;
   phoneNumber: string;
   email: string;
   password: string;
@@ -42,3 +42,16 @@ export const signUp = async (credentials: signUpCredentials) => {
     throw error;
   }
 }
+
+export const updateProfileService = async (userData: User) => {
+  try {
+    const response = await postData<UpdateProfileResponse>("/user/update", userData);
+    if (response.data === null) {
+      throw new Error("Failed to update user profile");
+    }
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
