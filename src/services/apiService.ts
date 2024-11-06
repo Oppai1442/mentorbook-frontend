@@ -21,14 +21,14 @@ interface ApiRequest {
 }
 
 const apiRequest = async <T>(request: ApiRequest): Promise<ApiResponse<T>> => {
-  const { url, method, data,
-    header = { "Content-Type": "application/json" },
-    timeout = 5000
-  } = request;
+  const { url, method, data, header = {}, timeout = 5000 } = request;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
   const fullUrl = url.startsWith("http") ? url : `${BASE_URL}${url}`;
+
+  const headers = data instanceof FormData ? header : { "Content-Type": "application/json", ...header };
+  const body = data instanceof FormData ? data : data ? JSON.stringify(data) : null;
 
   let responseData: any;
   let result: ApiResponse<T> = {
@@ -46,8 +46,8 @@ const apiRequest = async <T>(request: ApiRequest): Promise<ApiResponse<T>> => {
   try {
     const response = await fetch(fullUrl, {
       method,
-      headers: header,
-      body: data ? JSON.stringify(data) : null,
+      headers,
+      body,
       signal: controller.signal,
     });
 
@@ -64,7 +64,7 @@ const apiRequest = async <T>(request: ApiRequest): Promise<ApiResponse<T>> => {
       (error as any).response = response;
       throw error;
     }
-    
+
     result = {
       data: responseData?.data || responseData,
       message: null,
@@ -75,9 +75,7 @@ const apiRequest = async <T>(request: ApiRequest): Promise<ApiResponse<T>> => {
       url: response.url,
       redirected: response.redirected,
       type: response.type,
-    }
-
-
+    };
   } catch (error: any) {
     clearTimeout(timeoutId);
     throw error;
@@ -87,21 +85,21 @@ const apiRequest = async <T>(request: ApiRequest): Promise<ApiResponse<T>> => {
 };
 
 // GET request
-export const getData = <T>(url: string) => {
-  return apiRequest<T>({ url, method: "GET" });
+export const getData = <T>(url: string, header: { [key: string]: string } = {}) => {
+  return apiRequest<T>({ url, method: "GET", header });
 };
 
 // POST request
-export const postData = <T>(url: string, data: any) => {
-  return apiRequest<T>({ url, method: "POST", data });
+export const postData = <T>(url: string, data: any, header: { [key: string]: string } = {}) => {
+  return apiRequest<T>({ url, method: "POST", data, header });
 };
 
 // PUT request
-export const putData = <T>(url: string, data: any) => {
-  return apiRequest<T>({ url, method: "PUT", data });
+export const putData = <T>(url: string, data: any, header: { [key: string]: string } = {}) => {
+  return apiRequest<T>({ url, method: "PUT", data, header });
 };
 
 // DELETE request
-export const deleteData = <T>(url: string) => {
-  return apiRequest<T>({ url, method: "DELETE" });
+export const deleteData = <T>(url: string, header: { [key: string]: string } = {}) => {
+  return apiRequest<T>({ url, method: "DELETE", header });
 };
