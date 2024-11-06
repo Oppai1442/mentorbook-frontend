@@ -4,7 +4,7 @@ interface imageUrlResponse {
     url: string;
 }
 
-export const uploadAvatar = async (formData : any) => {
+export const userUploadProfile = async (formData : any) => {
   try {
     const response = await postData<imageUrlResponse>(`/api/images/upload`, formData);
     

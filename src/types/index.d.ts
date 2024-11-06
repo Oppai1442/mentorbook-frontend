@@ -1,2 +1,1 @@
-export { default as LoginResponse } from './Response';
-export { default as SignUpResponse } from './Response';
+export { LoginResponse, SignUpResponse, UpdateProfileResponse } from './Response';
