@@ -1,9 +1,85 @@
-// Settings.tsx
-import React from 'react';
-import styles from './Settings.module.css'
+import React, { useEffect, useState } from 'react';
+import styles from './Settings.module.css';
+import { useAuth } from '../../../context';
+import { User } from '../../../types/Model';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { userUploadProfile } from '../../../services';
 
 const Settings: React.FC = () => {
+  const { user, updateProfile } = useAuth();
+  const [birthDate, setBirthDate] = useState<Date | null>(null);
+  const [userData, setUserData] = useState<User | null>(user);
 
+  useEffect(() => {
+    if (user) {
+      setUserData(user);
+      if (user.birthDate) {
+        setBirthDate(new Date(user.birthDate));
+      }
+    }
+    console.log(userData);
+  }, [user]);
+
+  const handleDateChange = (date: Date | null) => {
+    setBirthDate(date);
+    setUserData((prevData) =>
+      prevData && date ? { ...prevData, birthDate: date } : prevData
+    );
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { id, value } = event.target;
+
+
+    setUserData((prevData) => prevData ? { ...prevData, [id]: value } : null);
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (userData) {
+      updateProfile(userData);
+    }
+  };
+
+  const handleProfilePhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const formData = new FormData();
+      formData.append("image", event.target.files[0]);
+
+      try {
+        const response = await userUploadProfile(formData);
+        
+        if (response && userData) {
+            const newAvatarUrl = response.url;
+            setUserData((prevData) => prevData ? { ...prevData, avatarUrl: newAvatarUrl } : null);
+            updateProfile(userData);
+        }
+      } catch (error) {
+        console.error("Failed to upload profile photo:", error);
+      }
+    }
+  };
+
+  // Xử lý upload ảnh cho cover photo
+  const handleCoverPhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const formData = new FormData();
+      formData.append("image", event.target.files[0]);
+
+      // try {
+      //   const response = await axios.post("/api/images/upload", formData, {
+      //     headers: { "Content-Type": "multipart/form-data" },
+      //   });
+      //   const newBackgroundUrl = `/api/images/uploads/${event.target.files[0].name}`;
+      //   setUserData((prevData) => prevData ? { ...prevData, backgroundUrl: newBackgroundUrl } : null);
+      //   updateProfile({ ...userData, backgroundUrl: newBackgroundUrl });
+      // } catch (error) {
+      //   console.error("Failed to upload cover photo:", error);
+      // }
+    }
+  };
 
   return (
     <>
@@ -11,31 +87,21 @@ const Settings: React.FC = () => {
         <div className={`${styles['col-12']} ${styles['col-xl-8']}`}>
           <div className={`${styles['card']} ${styles['card-body']} ${styles['border-0']} ${styles['shadow']} ${styles['mb-4']}`}>
             <h2 className={`${styles['h2']} ${styles['h5']} ${styles['mb-4']}`}>General information</h2>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className={`${styles['row']}`}>
-                <div className={`${styles['col-md-6']} ${styles['mb-3']}`}>
-                  <div>
-                    <label className={`${styles['label']}`} htmlFor="first_name">First Name</label>
-                    <input
-                      className={`${styles['input']} ${styles['form-control']}`}
-                      id="first_name"
-                      type="text"
-                      placeholder="Enter your first name"
-                    />
-                  </div>
-                </div>
-                <div className={`${styles['col-md-6']} ${styles['mb-3']}`}>
-                  <div>
-                    <label className={`${styles['label']}`} htmlFor="last_name">Last Name</label>
-                    <input
-                      className={`${styles['input']} ${styles['form-control']}`}
-                      id="last_name"
-                      type="text"
-                      placeholder="Also your last name"
-                    />
-                  </div>
+                <div className={`${styles['mb-3']}`}>
+                  <label className={`${styles['label']}`} htmlFor="fullName">Full Name</label>
+                  <input
+                    className={`${styles['input']} ${styles['form-control']}`}
+                    id="fullName"
+                    type="text"
+                    value={userData?.fullName || ""}
+                    onChange={handleInputChange}
+                    placeholder="Enter your full name"
+                  />
                 </div>
               </div>
+
               <div className={`${styles['row']} ${styles['align-items-center']}`}>
                 <div className={`${styles['col-md-6']} ${styles['mb-3']}`}>
                   <label className={`${styles['label']}`} htmlFor="birthday">Birthday</label>
@@ -43,185 +109,64 @@ const Settings: React.FC = () => {
                     <span className={`${styles['input-group-text']}`}>
                       <i className={`${styles['icon']} ${styles['icon-xs']} fa-solid fa-calendar-week`}></i>
                     </span>
-                    <input
-                      data-datepicker=""
-                      className={`${styles['input']} ${styles['form-control']} ${styles['datepicker-input']}`}
-                      id="birthday"
-                      type="text"
-                      placeholder="dd/mm/yyyy"
+                    <DatePicker
+                      selected={birthDate}
+                      onChange={handleDateChange}
+                      dateFormat="yyyy/MM/dd"
+                      className={`${styles['datePicker']} ${styles['form-control']}`}
+                      placeholderText="yyyy/mm/dd"
+                      showPopperArrow={false}
+                      showYearDropdown
+                      showMonthDropdown
+                      dropdownMode="select"
+                      minDate={new Date(1950, 0, 1)}
+                      maxDate={new Date()}
                     />
                   </div>
                 </div>
+
                 <div className={`${styles['col-md-6']} ${styles['mb-3']}`}>
                   <label className={`${styles['label']}`} htmlFor="gender">Gender</label>
                   <select
                     className={`${styles['select']} ${styles['form-select']} ${styles['mb-0']}`}
                     id="gender"
+                    value={userData?.gender || ""}
+                    onChange={handleInputChange}
                     aria-label="Gender select example"
                   >
-                    <option>Gender</option>
-                    <option value={1}>Female</option>
-                    <option value={2}>Male</option>
+                    <option value="">Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
               </div>
+
               <div className={`${styles['row']}`}>
                 <div className={`${styles['col-md-6']} ${styles['mb-3']}`}>
-                  <div className={`${styles['form-group']}`}>
-                    <label className={`${styles['label']}`} htmlFor="email">Email</label>
-                    <input
-                      className={`${styles['input']} ${styles['form-control']}`}
-                      id="email"
-                      type="email"
-                      placeholder="name@company.com"
-                    />
-                  </div>
+                  <label className={`${styles['label']}`} htmlFor="email">Email</label>
+                  <input
+                    className={`${styles['input']} ${styles['form-control']}`}
+                    id="email"
+                    type="email"
+                    value={userData?.email || ""}
+                    onChange={handleInputChange}
+                    placeholder="name@company.com"
+                  />
                 </div>
                 <div className={`${styles['col-md-6']} ${styles['mb-3']}`}>
-                  <div className={`${styles['form-group']}`}>
-                    <label className={`${styles['label']}`} htmlFor="phone">Phone</label>
-                    <input
-                      className={`${styles['input']} ${styles['form-control']}`}
-                      id="phone"
-                      type="number"
-                      placeholder="+12-345 678 910"
-                    />
-                  </div>
+                  <label className={`${styles['label']}`} htmlFor="phone">Phone</label>
+                  <input
+                    className={`${styles['input']} ${styles['form-control']}`}
+                    id="phone"
+                    type="text"
+                    value={userData?.phone || ""}
+                    onChange={handleInputChange}
+                    placeholder="+12-345 678 910"
+                  />
                 </div>
               </div>
-              <h2 className={`${styles['h2']} ${styles['h5']} ${styles['my-4']}`}>Location</h2>
-              <div className={`${styles['row']}`}>
-                <div className={`${styles['col-sm-9']} ${styles['mb-3']}`}>
-                  <div className={`${styles['form-group']}`}>
-                    <label className={`${styles['label']}`} htmlFor="address">Address</label>
-                    <input
-                      className={`${styles['input']} ${styles['form-control']}`}
-                      id="address"
-                      type="text"
-                      placeholder="Enter your home address"
-                    />
-                  </div>
-                </div>
-                <div className={`${styles['col-sm-3']} ${styles['mb-3']}`}>
-                  <div className={`${styles['form-group']}`}>
-                    <label className={`${styles['label']}`} htmlFor="number">Number</label>
-                    <input
-                      className={`${styles['input']} ${styles['form-control']}`}
-                      id="number"
-                      type="number"
-                      placeholder="No."
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className={`${styles['row']}`}>
-                <div className={`${styles['col-sm-4']} ${styles['mb-3']}`}>
-                  <div className={`${styles['form-group']}`}>
-                    <label className={`${styles['label']}`} htmlFor="city">City</label>
-                    <input
-                      className={`${styles['input']} ${styles['form-control']}`}
-                      id="city"
-                      type="text"
-                      placeholder="City"
-                    />
-                  </div>
-                </div>
-                <div className={`${styles['col-sm-4']} ${styles['mb-3']}`}>
-                  <label className={`${styles['label']}`} htmlFor="state">State</label>
-                  <div
-                    className={`${styles['choices']}`}
-                    data-type="select-one"
-                    role="combobox"
-                    tabIndex={0}
-                    aria-autocomplete="list"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                    dir="ltr"
-                  >
-                    <div className={`${styles['choices__inner']}`}>
-                      <select
-                        className={`${styles['select']} ${styles['form-select']} ${styles['w-100']} ${styles['mb-0']} ${styles['choices__input']} ${styles['is-hidden']}`}
-                        id="state"
-                        name="state"
-                        aria-label="State select example"
-                        tabIndex={-1}
-                        aria-hidden="true"
-                        data-choice="active"
-                      >
-                        <option value="State">
-                          State
-                        </option>
-                      </select>
-                      <div className={`${styles['choices__list']} ${styles['choices__list--single']}`}>
-                        <div
-                          className={`${styles['choices__item']} ${styles['choices__item--selectable']}`}
-                          data-item=""
-                          data-id={1}
-                          data-value="State"
-                          aria-selected="true"
-                        >
-                          State
-                        </div>
-                      </div>
-                    </div>
 
-
-                    <div
-                      className={`${styles['choices__list']} ${styles['choices__list--dropdown']}`}
-                      aria-expanded="false"
-                    >
-                      <input
-                        type="text"
-                        className={`${styles['input']} ${styles['choices__input']} ${styles['choices__input--cloned']}`}
-                        autoComplete="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
-                        role="textbox"
-                        aria-autocomplete="list"
-                        placeholder=""
-                      />
-                      <div className={`${styles['choices__list']}`} dir="ltr" role="listbox">
-                        <div
-                          className={`${styles['choices__item']} ${styles['choices__item--choice']} ${styles['choices__item--selectable']} ${styles['is-highlighted']}`}
-                          data-select-text="Press to select"
-                          data-choice=""
-                          data-id={1}
-                          data-value="AL"
-                          data-choice-selectable=""
-                          id="choices--state-item-choice-1"
-                          role="option"
-                          aria-selected="true"
-                        >
-                          Alabama
-                        </div>
-                        <div
-                          className={`${styles['choices__item']} ${styles['choices__item--choice']} ${styles['choices__item--selectable']}`}
-                          data-select-text="Press to select"
-                          data-choice=""
-                          data-id={2}
-                          data-value="AK"
-                          data-choice-selectable=""
-                          id="choices--state-item-choice-2"
-                          role="option"
-                        >
-                          Alaska
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className={`${styles['col-sm-4']}`}>
-                  <div className={`${styles['form-group']}`}>
-                    <label className={`${styles['label']}`} htmlFor="zip">ZIP</label>
-                    <input
-                      className={`${styles['input']} ${styles['form-control']}`}
-                      id="zip"
-                      type="tel"
-                      placeholder="ZIP"
-                    />
-                  </div>
-                </div>
-              </div>
               <div className={`${styles['mt-3']}`}>
                 <button
                   className={`${styles['button']} ${styles['btn']} ${styles['btn-gray-800']} ${styles['mt-2']} ${styles['animate-up-2']}`}
@@ -237,9 +182,9 @@ const Settings: React.FC = () => {
             <ul className={`${styles['ul']} ${styles['list-group']} ${styles['list-group-flush']}`}>
               <li className={`${styles['li']} ${styles['list-group-item']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['justify-content-between']} ${styles['px-0']} ${styles['border-bottom']}`}>
                 <div>
-                  <h3 className={`${styles['h3']} ${styles['h6']} ${styles['mb-1']}`}>Company News</h3>
+                  <h3 className={`${styles['h3']} ${styles['h6']} ${styles['mb-1']}`}>News Notification</h3>
                   <p className={`${styles['p']} ${styles['small']} ${styles['pe-4']}`}>
-                    Get Rocket news, announcements, and product updates
+                    Get Rocket news, announcements, and changes
                   </p>
                 </div>
                 <div>
@@ -308,19 +253,19 @@ const Settings: React.FC = () => {
               <div className={`${styles['card']} ${styles['shadow']} ${styles['border-0']} ${styles['text-center']} ${styles['p-0']}`}>
                 <div
                   className={`${styles['profile-cover']} ${styles['rounded-top']}`}
-                  data-background="../assets/img/profile-cover.jpg"
-                  style={{ background: 'url("../assets/img/profile-cover.jpg")' }}
+                  data-background={userData?.backgroundUrl}
+                  style={{ background: `url(${userData?.backgroundUrl})` }}
                 />
                 <div className={`${styles['card-body']} ${styles['pb-5']}`}>
                   <img
-                    src="./volt10_files/profile-picture-1.jpg"
+                    src={userData?.avatarUrl}
                     className={`${styles['img']} ${styles['avatar-xl']} ${styles['rounded-circle']} ${styles['mx-auto']} ${styles['mt-n7']} ${styles['mb-4']}`}
                     alt="Neil Portrait"
                   />
-                  <h4 className={`${styles['h4']} ${styles['h3']}`}>Neil Sims</h4>
+                  <h4 className={`${styles['h4']} ${styles['h3']}`}>{userData?.fullName}</h4>
                   <h5 className={`${styles['h5']} ${styles['fw-normal']}`}>Senior Software Engineer</h5>
                   <p className={`${styles['p']} ${styles['text-gray']} ${styles['mb-4']}`}>New York, USA</p>
-                  <div
+                  {/* <div
                     className={`${styles['btn']} ${styles['btn-sm']} ${styles['btn-gray-800']} ${styles['d-inline-flex']} ${styles['align-items-center']} ${styles['me-2']}`}
                   >
                     <i className={`${styles['icon-xs']} ${styles['me-1']} fa-solid fa-user-plus`}></i>
@@ -330,7 +275,7 @@ const Settings: React.FC = () => {
                     className={`${styles['btn']} ${styles['btn-sm']} ${styles['btn-secondary']}`}
                   >
                     Send Message
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -342,15 +287,17 @@ const Settings: React.FC = () => {
                     {/* Avatar */}
                     <img
                       className={`${styles['img']} ${styles['rounded']} ${styles['avatar-xl']}`}
-                      src="./volt10_files/profile-picture-3.jpg"
+                      src={userData?.avatarUrl}
                       alt="change avatar"
                     />
                   </div>
                   <div className={`${styles['file-field']}`}>
                     <div className={`${styles['d-flex']} ${styles['justify-content-xl-center']} ${styles['ms-xl-3']}`}>
                       <div className={`${styles['d-flex']}`}>
-                      <i className={`${styles['icon']} ${styles['text-gray-500']} ${styles['me-2']} fa-solid fa-paperclip-vertical fa-2xl`} ></i>
-                      <input className={`${styles['input']}`} type="file" />
+                        <i className={`${styles['icon']} ${styles['text-gray-500']} ${styles['me-2']} fa-solid fa-paperclip-vertical fa-2xl`} ></i>
+                        <input className={`${styles['input']}`} type="file"
+                          accept="image/png, image/jpeg, image/jpg"
+                          onChange={handleProfilePhotoUpload} />
                         <div className={`${styles['d-md-block']} ${styles['text-left']}`}>
                           <div className={`${styles['fw-normal']} ${styles['text-dark']} ${styles['mb-1']}`}>
                             Choose Image
@@ -373,7 +320,7 @@ const Settings: React.FC = () => {
                     {/* Avatar */}
                     <img
                       className={`${styles['img']} ${styles['rounded']} ${styles['avatar-xl']}`}
-                      src="./volt10_files/profile-cover.jpg"
+                      src={userData?.backgroundUrl}
                       alt="change cover"
                     />
                   </div>
@@ -381,7 +328,9 @@ const Settings: React.FC = () => {
                     <div className={`${styles['d-flex']} ${styles['justify-content-xl-center']} ${styles['ms-xl-3']}`}>
                       <div className={`${styles['d-flex']}`}>
                         <i className={`${styles['icon']} ${styles['text-gray-500']} ${styles['me-2']} fa-solid fa-paperclip-vertical fa-2xl`} ></i>
-                        <input className={`${styles['input']}`} type="file" />
+                        <input className={`${styles['input']}`} type="file"
+                          accept="image/png, image/jpeg, image/jpg"
+                          onChange={handleCoverPhotoUpload} />
                         <div className={`${styles['d-md-block']} ${styles['text-left']}`}>
                           <div className={`${styles['fw-normal']} ${styles['text-dark']} ${styles['mb-1']}`}>
                             Choose Image
@@ -395,227 +344,6 @@ const Settings: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        className={`${styles['datepicker']} ${styles['datepicker-dropdown']} ${styles['datepicker-orient-bottom']} ${styles['datepicker-orient-left']}`}
-        style={{ top: "228.333px", left: "341.215px" }}
-      >
-        <div className={`${styles['datepicker-picker']}`}>
-          <div className={`${styles['datepicker-header']}`}>
-            <div className={`${styles['datepicker-title']}`} style={{ display: "none" }} />
-            <div className={`${styles['datepicker-controls']}`}>
-              <button type="button" className={`${styles['button']} ${styles['btn']} ${styles['prev-btn']}`}>
-                «
-              </button>
-              <button type="button" className={`${styles['button']} ${styles['btn']} ${styles['view-switch']}`}>
-                November 2024
-              </button>
-              <button type="button" className={`${styles['button']} ${styles['btn']} ${styles['next-btn']}`}>
-                »
-              </button>
-            </div>
-          </div>
-          <div className={`${styles['datepicker-main']}`}>
-            <div className={`${styles['datepicker-view']}`}>
-              <div className={`${styles['days']}`}>
-                <div className={`${styles['days-of-week']}`}>
-                  <span className={`${styles['dow']}`}>Su</span>
-                  <span className={`${styles['dow']}`}>Mo</span>
-                  <span className={`${styles['dow']}`}>Tu</span>
-                  <span className={`${styles['dow']}`}>We</span>
-                  <span className={`${styles['dow']}`}>Th</span>
-                  <span className={`${styles['dow']}`}>Fr</span>
-                  <span className={`${styles['dow']}`}>Sa</span>
-                </div>
-                <div className={`${styles['datepicker-grid']}`}>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['prev']}`}
-                    data-date={1729962000000}
-                  >
-                    27
-                  </span>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['prev']}`}
-                    data-date={1730048400000}
-                  >
-                    28
-                  </span>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['prev']}`}
-                    data-date={1730134800000}
-                  >
-                    29
-                  </span>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['prev']}`}
-                    data-date={1730221200000}
-                  >
-                    30
-                  </span>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['prev']}`}
-                    data-date={1730307600000}
-                  >
-                    31
-                  </span>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['focused']}`}
-                    data-date={1730394000000}
-                  >
-                    1
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1730480400000}>
-                    2
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1730566800000}>
-                    3
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1730653200000}>
-                    4
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1730739600000}>
-                    5
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1730826000000}>
-                    6
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1730912400000}>
-                    7
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1730998800000}>
-                    8
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1731085200000}>
-                    9
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1731171600000}>
-                    10
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1731258000000}>
-                    11
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1731344400000}>
-                    12
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1731430800000}>
-                    13
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1731517200000}>
-                    14
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1731603600000}>
-                    15
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1731690000000}>
-                    16
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1731776400000}>
-                    17
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1731862800000}>
-                    18
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1731949200000}>
-                    19
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1732035600000}>
-                    20
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1732122000000}>
-                    21
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1732208400000}>
-                    22
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1732294800000}>
-                    23
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1732381200000}>
-                    24
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1732467600000}>
-                    25
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1732554000000}>
-                    26
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1732640400000}>
-                    27
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1732726800000}>
-                    28
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1732813200000}>
-                    29
-                  </span>
-                  <span className={`${styles['datepicker-cell']} ${styles['day']}`} data-date={1732899600000}>
-                    30
-                  </span>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['next']}`}
-                    data-date={1732986000000}
-                  >
-                    1
-                  </span>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['next']}`}
-                    data-date={1733072400000}
-                  >
-                    2
-                  </span>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['next']}`}
-                    data-date={1733158800000}
-                  >
-                    3
-                  </span>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['next']}`}
-                    data-date={1733245200000}
-                  >
-                    4
-                  </span>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['next']}`}
-                    data-date={1733331600000}
-                  >
-                    5
-                  </span>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['next']}`}
-                    data-date={1733418000000}
-                  >
-                    6
-                  </span>
-                  <span
-                    className={`${styles['datepicker-cell']} ${styles['day']} ${styles['next']}`}
-                    data-date={1733504400000}
-                  >
-                    7
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={`${styles['datepicker-footer']}`}>
-            <div className={`${styles['datepicker-controls']}`}>
-              <button
-                type="button"
-                className={`${styles['button']} ${styles['btn']} ${styles['today-btn']}`}
-                style={{ display: "none" }}
-              >
-                Today
-              </button>
-              <button
-                type="button"
-                className={`${styles['button']} ${styles['btn']} ${styles['clear-btn']}`}
-                style={{ display: "none" }}
-              >
-                Clear
-              </button>
             </div>
           </div>
         </div>
