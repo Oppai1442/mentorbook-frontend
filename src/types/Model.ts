@@ -5,7 +5,11 @@ export interface User {
     fullName: string;
     email: string;
     avatarUrl: string;
+    backgroundUrl: string;
     role: string;
+    phone: number;
+    gender: string;
+    birthDate: Date;
 }
 
 export interface mentor {
