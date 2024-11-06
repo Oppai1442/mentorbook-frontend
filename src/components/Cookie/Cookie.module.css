@@ -10,12 +10,6 @@
   --bs-border-radius-xxl-cfRP4hhkO: 2rem;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   :root {
     --bs-body-color-SuqBiYO7Z: #fff;
