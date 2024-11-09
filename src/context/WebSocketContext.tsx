@@ -20,7 +20,7 @@ const WebSocketProvider: React.FC<{ url: string; children: React.ReactNode }> = 
 
         ws.onopen = () => {
             setIsConnected(true);
-            console.log('Connected to WebSocket');
+            // console.log('Connected to WebSocket');
             if (reconnectTimeoutRef.current) {
                 clearTimeout(reconnectTimeoutRef.current);
                 reconnectTimeoutRef.current = null;
@@ -29,7 +29,7 @@ const WebSocketProvider: React.FC<{ url: string; children: React.ReactNode }> = 
 
         ws.onclose = () => {
             setIsConnected(false);
-            console.log('Disconnected from WebSocket, trying to reconnect in 3 seconds...');
+            // console.log('Disconnected from WebSocket, trying to reconnect in 3 seconds...');
             reconnectTimeoutRef.current = setTimeout(connect, 3000);
         };
 

@@ -10,6 +10,26 @@ export interface User {
     phone: number;
     gender: string;
     birthDate: Date;
+    verified: boolean;
+    createdDate: moment.Moment;
+    lastActivity: moment.Moment;
+    status: string;
+}
+
+export interface User2 {
+    userId: number;
+    fullName: string;
+    email: string;
+    avatarUrl: string;
+    backgroundUrl: string;
+    role: string;
+    phone: number;
+    gender: string;
+    birthDate: Date;
+    verified: boolean;
+    createdDate: moment.Moment;
+    lastActivity: moment.Moment;
+    status: string;
 }
 
 export interface mentor {

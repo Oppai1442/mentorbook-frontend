@@ -3,6 +3,7 @@ import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { loadSvgs } from "../../utils";
 import styles from "./Footer.module.css";
+import websiteLogo from '../../assets/svg/website-logo.png';
 
 const Footer: React.FC = () => {
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
@@ -12,7 +13,6 @@ const Footer: React.FC = () => {
         twitterLogo: () => import('../../assets/svg/twitter-logo-30.svg'),
         discordLogo: () => import('../../assets/svg/discord-logo.svg'),
         telegramLogo: () => import('../../assets/svg/telegram-logo.svg'),
-        websiteLogo: () => import('../../assets/svg/website-logo.svg'),
     };
 
     const loadAndSetSvgs = async () => {
@@ -36,18 +36,15 @@ const Footer: React.FC = () => {
               className={`${styles["col-xl-3"]} ${styles["mb-12"]} ${styles["mb-xl-0"]}`}
             >
               <div className={`${styles["mw-xs"]}`}>
-                {svgData['websiteLogo'] && (
                   <img
                     className={`${styles["img"]} ${styles["img-fluid"]} ${styles["mb-7"]}`}
-                    src={svgData['websiteLogo']}
+                    src={websiteLogo}
                     alt=""
                   />
-                )}
                 <p
                   className={`${styles["p"]} ${styles["pe-10"]} ${styles["text-secondary-light"]}`}
                 >
-                  Nightsable is a strategic branding agency focused on brand
-                  creation, rebrands, and brand
+                  MentorNest is a platform that provides mentor booking services for people around the world
                 </p>
               </div>
             </div>
@@ -207,7 +204,7 @@ const Footer: React.FC = () => {
             <span
               className={`${styles["d-inline-block"]} ${styles["mb-6"]} ${styles["mb-sm-0"]} ${styles["fs-9"]} ${styles["fw-medium"]} ${styles["text-secondary-light"]}`}
             >
-              © 2023 Nightsablestudio.co
+              © 2024 MentorNest
             </span>
             <div>
               <Link

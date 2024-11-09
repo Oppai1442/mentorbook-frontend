@@ -4,17 +4,36 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5); /* Optional dark overlay */
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1050; /* Ensure it appears above other elements */
+  z-index: 1050;
 }
 
+.loading-Container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30rem;
+  height: 13rem;
+  background-color: white;
+  border-radius: 1rem;
+}
+
+
+.row::-webkit-scrollbar {
+  display: none;
+}
 .row {
   min-height: 41.75rem;
   max-height: 41.75rem;
   overflow-y: auto;
+  
 }
 
 .col-md-6-extend {

@@ -18,7 +18,6 @@ const Settings: React.FC = () => {
         setBirthDate(new Date(user.birthDate));
       }
     }
-    console.log(userData);
   }, [user]);
 
   const handleDateChange = (date: Date | null) => {

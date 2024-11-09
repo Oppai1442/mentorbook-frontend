@@ -30,6 +30,8 @@
   position: relative;
   overflow: hidden;
   padding: 0 1rem 0 1rem;
+  background-color: rgb(158, 158, 158);
+  overflow-y: hidden;
 }
 
 /* Navbar */
@@ -45,7 +47,11 @@
 .dashboardContent {
   flex: 1;
   padding: 20px;
-  background-color: grey;
-  overflow-y: auto;
   position: relative;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.dashboardContent::-webkit-scrollbar {
+  display: none;
 }

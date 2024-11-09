@@ -150,7 +150,7 @@ const Policy: React.FC = () => {
 
       <footer className="text-center my-4">
         <p className={`styles.footerText ${styles.p}`}>
-          <i className="fas fa-copyright"></i> 2024 MentorNest Website. All Rights Reserved.
+          <i className="fas fa-copyright"></i> 2024 MentorNest. All Rights Reserved.
         </p>
       </footer>
     </div>

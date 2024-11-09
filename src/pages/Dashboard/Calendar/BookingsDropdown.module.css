@@ -1,0 +1,155 @@
+@import url(https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap);
+
+/* Dropdown container */
+.dropdown {
+  position: relative;
+}
+
+/* Button styling */
+.button {
+  display: flex;
+  align-items: center;
+  border-radius: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-transform: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid transparent;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.button:focus {
+  outline: 0;
+  box-shadow: 0 0 0 0.18rem rgba(31, 41, 55, 0.25);
+}
+
+.button:hover {
+  color: #374151;
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #374151;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 0.5rem;
+}
+
+.btn-link {
+  font-weight: 400;
+  color: #1f2937;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  color: #000;
+  text-decoration: none;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+  position: absolute;
+  z-index: 1000;
+  margin: 0;
+  padding: 0.5rem 0;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.35rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-menu-xs {
+  min-width: 120px;
+  max-width: 120px;
+  box-shadow: 0 2px 5px rgba(140, 152, 164, 0.2);
+}
+
+.dropdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 1rem;
+  cursor: pointer;
+  background-color: transparent;
+  color: #111827;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.dropdown-item:hover {
+  background-color: #f2f4f6;
+}
+
+.dropdown-item:active {
+  background-color: #e5e7eb;
+}
+
+.fw-bold {
+  font-weight: 500 !important;
+}
+
+/* Icon styling */
+.icon {
+  height: 2rem;
+  margin-left: auto;
+}
+
+.icon-xxs {
+  height: 1rem;
+}
+
+.small {
+  font-size: 0.875em;
+}
+
+.text-dark {
+  color: #374151;
+}
+
+.m-0 {
+  margin: 0 !important;
+}
+
+.p-1 {
+  padding: 0.25rem !important;
+}
+
+.pb-0 {
+  padding-bottom: 0 !important;
+}
+
+.ps-3 {
+  padding-left: 1rem !important;
+}
+
+.ms-auto {
+  margin-left: auto !important;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.align-items-center {
+  align-items: center !important;
+}
+
+.rounded-bottom {
+  border-bottom-right-radius: 0.5rem !important;
+  border-bottom-left-radius: 0.5rem !important;
+}

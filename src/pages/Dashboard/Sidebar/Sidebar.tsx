@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Sidebar.module.css';
-import websiteLogo from '../../../assets/svg/website-logo.svg';
+import websiteLogo from '../../../assets/svg/website-logo.png';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context';
 

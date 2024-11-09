@@ -16,7 +16,7 @@ const ToS: React.FC = () => {
           <i className="fas fa-shield-alt"></i> General Terms
         </h2>
         <p className={`${styles.p}`}>
-          These Terms of Service ("Terms") govern your access to and use of the MentorNest Website ("Website"). By using the Website, you agree to these Terms and any applicable laws. If you do not agree, you should stop using the Website immediately.
+          These Terms of Service ("Terms") govern your access to and use of the MentorNest ("Website"). By using the Website, you agree to these Terms and any applicable laws. If you do not agree, you should stop using the Website immediately.
         </p>
         <p className={`${styles.p}`}>
           We may revise these Terms at any time, and by continuing to use the Website after changes are made, you agree to be bound by the updated Terms. You are responsible for reviewing these Terms periodically for changes.
@@ -128,7 +128,7 @@ const ToS: React.FC = () => {
 
       <footer className="text-center my-4">
         <p className={`${styles.footerText} ${styles.p}`}>
-          <i className="fas fa-copyright"></i> 2024 MentorNest Website. All Rights Reserved.
+          <i className="fas fa-copyright"></i> 2024 MentorNest. All Rights Reserved.
         </p>
       </footer>
     </div>

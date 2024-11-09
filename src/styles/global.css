@@ -1,20 +1,26 @@
 * {
-    user-select: none !important;
+  user-select: none !important;
 }
 
-*, *::before, *::after {
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 a {
-    text-decoration: none !important;
+  text-decoration: none !important;
 }
 
 a:hover {
-    text-decoration: underline !important;
+  text-decoration: underline !important;
 }
 
 .disabled {
   pointer-events: none;
   opacity: 0.5;
+}
+
+.rbc-current-time-indicator {
+  display: none;
 }

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { loadSvgs } from "../../utils";
 import { useAuth } from "../../context";
 import styles from "./Navbar.module.css";
+import websiteLogo from '../../assets/svg/website-logo.png';
 
 const Navbar: React.FC = () => {
   const [svgData, setSvgData] = useState<{ [key: string]: string | null }>({});
@@ -13,7 +14,6 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const svgPaths = {
-      websiteLogo: () => import("../../assets/svg/website-logo.svg"),
     };
 
     const loadAndSetSvgs = async () => {
@@ -81,13 +81,11 @@ const Navbar: React.FC = () => {
             className={`${styles["a"]} ${styles["navbar-brand"]}`}
             to={pathList["home"]}
           >
-            {svgData["websiteLogo"] && (
-              <img
-                className={`${styles["img-fluid"]} ${styles["img"]}`}
-                src={svgData["websiteLogo"]}
-                alt=""
-              />
-            )}
+          <img
+            className={`${styles["img-fluid"]} ${styles["img"]}`}
+            src={websiteLogo}
+            alt=""
+          />
           </Link>
           <div className={`${styles["collapse"]} ${styles["navbar-collapse"]}`}>
             <ul
@@ -163,7 +161,7 @@ const Navbar: React.FC = () => {
                         <li>
                           <Link
                             className={`${styles["dropdown-item"]}`}
-                            to="/dashboard"
+                            to="/dashboard/settings"
                             onClick={() => handleItemClick()}
                           >
                             <i className="fa-light fa-user" />

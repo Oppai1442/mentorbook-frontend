@@ -6,6 +6,8 @@ import { useToast, useAuth } from "../../context";
 import { signIn, signUp } from "../../services";
 import { LoadingError } from "../../components/LoadingError";
 
+import websiteLogo from '../../assets/svg/website-logo.png';
+
 interface AuthProps {
   mode: "signIn" | "signUp" | null;
   onClose: () => void;
@@ -135,7 +137,6 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
     const svgPaths = {
       googleLogo: () => import('../../assets/svg/google-logo.svg'),
       appleLogo: () => import('../../assets/svg/apple-logo.svg'),
-      websiteLogo: () => import('../../assets/svg/website-logo.svg'),
     };
 
     const loadAndSetSvgs = async () => {
@@ -186,13 +187,11 @@ const Auth: React.FC<AuthProps> = ({ mode: initialMode, onClose }) => {
               className={`${styles["btn"]} ${styles["mb-8"]} ${styles["p-0"]}`}
               to="#"
             >
-              {svgData['websiteLogo'] && (
-                <img
-                  className={`${styles["img"]} ${styles["img-fluid"]}`}
-                  src={svgData['websiteLogo']}
-                  alt=""
-                />
-              )}
+            <img
+              className={`${styles["img"]} ${styles["img-fluid"]}`}
+              src={websiteLogo}
+              alt=""
+            />
             </Link>
             <h5
               className={`${styles["h5"]} ${styles["mb-10"]}`}
